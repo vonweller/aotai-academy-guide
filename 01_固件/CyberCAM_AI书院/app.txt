@@ -1,0 +1,3 @@
+name_cn="鳌台书院AI导览"
+name_en="Aotai AI Guide"
+index=1

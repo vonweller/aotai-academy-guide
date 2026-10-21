@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 临时/日志
+_web.log
+_web.err
+*.log
+
+# 敏感信息（不要外传）
+02_数据/tools/.dashscope_key
+02_数据/tools/.wifi.json
+01_固件/K10_AI书院/secrets.h
+
+# 系统文件
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# 生成产物（体积大，可重新生成）
+02_数据/prizes_src/
+02_数据/relics/raw/
+04_PPT/*.pptx
+
+# 网页依赖
+node_modules/

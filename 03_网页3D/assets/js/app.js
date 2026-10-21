@@ -1,0 +1,1008 @@
+/**
+ * 鳌台书院 · AI 非遗导览 · 五关交互主控
+ * ---------------------------------------------------------------
+ * 流程：开场 → 第1关门口人脸识别 → 小人走到前院 → 第2关问答
+ *      → 讲堂楹联 → 工坊问答 → 亭中结语
+ * 输入：键盘 N/P/空格/L/R/1-5、按钮、K10 语音（经 Flask+MQTT → SSE）
+ * 语音：本地 audio/{lang}/{id}.mp3 优先，缺失用 speechSynthesis
+ */
+import { World, MAP, assetUrl, FALLBACK_MAP } from './scene.js';
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+const STAGE_TITLE = {
+  1: { zh: '第一关 · 门口迎宾', yue: '第一關 · 門口迎賓' },
+  2: { zh: '第二关 · 鳌台溯源', yue: '第二關 · 鰲台溯源' },
+  3: { zh: '第三关 · 讲堂楹联', yue: '第三關 · 講堂楹聯' },
+  4: { zh: '第四关 · 非遗工坊', yue: '第四關 · 非遺工坊' },
+  5: { zh: '第五关 · 留墨寄愿', yue: '第五關 · 留墨寄願' },
+};
+const STAGE_CAM = {
+  // 1 门口：站在门外偏右后方，看门楼与小鳌（Blender 场景门楼中心 z≈17.6）
+  1: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [5.4, 3.8, 25.0], look: [0.2, 3.0, 17.6] } },
+  2: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [8.0, 6.6, 15.5], look: [0, 1.6, 9.0] } },
+  3: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [5.6, 4.6, 7.6], look: [0, 3.2, -2.5] } },
+  4: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [2.6, 4.8, 10.0], look: [9.0, 2.6, 2.0] } },
+  5: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [-1.5, 4.6, -6.0], look: [-6.3, 2.4, -12.6] } },
+};
+
+const STAGE_ICON = { 1: '門', 2: '源', 3: '聯', 4: '藝', 5: '願' };
+const LANG_NAME = { zh: '普通话', yue: '粤语' };
+
+const state = {
+  stage: 1,
+  lang: 'zh',
+  faceOk: false,
+  visitor: '',
+  walking: false,
+  started: false,
+  voiceOn: true,
+  content: null,
+  quizAnswered: {},
+  relicQuiz: null,
+  points: null,
+  backend: false,
+  mqtt: false,
+  device: { cybercam: false, k10: false },
+  speaking: false,
+};
+
+let world;
+let audioEl = null;
+let currentUtter = null;
+let typeTimer = null;
+let sse = null;
+
+// ------------------------------------------------------------------
+// 数据
+// ------------------------------------------------------------------
+async function loadJSON(url, fallback) {
+  try {
+    const r = await fetch(url, { cache: 'no-cache' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } catch (e) {
+    console.info('[app] 读取失败，用兜底:', url, e.message);
+    return fallback;
+  }
+}
+
+async function loadContent() {
+  // 依次尝试：Flask 的 /data、静态 assets/data、以及直接用 file:// 打开时的相对路径
+  const cands = ['/data/content.json', './assets/data/content.json', './data/content.json', '../../02_数据/content.json'];
+  for (const url of cands) {
+    const r = await loadJSON(url, null).catch(() => null);
+    if (r && r.stages) { console.info('[app] content 来源:', url); return r; }
+  }
+  return { stages: [] };
+}
+
+function stageData(n) {
+  const c = state.content;
+  if (!c || !c.stages) return null;
+  return c.stages.find((s) => Number(s.id) === Number(n)) || null;
+}
+
+function textOf(obj, lang) {
+  if (!obj) return '';
+  if (typeof obj === 'string') return obj;
+  return obj[lang] || obj.zh || '';
+}
+
+function linesOf(n) {
+  const st = stageData(n);
+  return (st && st.lines) || [];
+}
+
+function quizOf(n) {
+  const st = stageData(n);
+  return (st && st.quiz && st.quiz[0]) || null;
+}
+
+// ------------------------------------------------------------------
+// UI 基础
+// ------------------------------------------------------------------
+function setSubtitle(text, speaker) {
+  const el = $('#subtitleText');
+  const sp = $('#speaker');
+  if (sp && speaker) sp.textContent = speaker;
+  if (!el) return;
+  el.textContent = '';
+  if (typeTimer) clearInterval(typeTimer);
+  if (!text) return;
+  let i = 0;
+  typeTimer = setInterval(() => {
+    i += 2;
+    el.textContent = text.slice(0, i);
+    if (i >= text.length) { clearInterval(typeTimer); typeTimer = null; }
+  }, 22);
+}
+
+function toast(msg, ms = 2200) {
+  const t = $('#toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function chip(id, text) {
+  const el = $('#' + id);
+  if (el) el.textContent = text;
+}
+
+function renderStagePanel(n) {
+  const panel = $('#stagePanel');
+  if (!panel) return;
+  const st = stageData(n);
+  const quiz = quizOf(n);
+  const lines = linesOf(n);
+  const name = (st && st.name && (st.name[state.lang] || st.name.zh)) || STAGE_TITLE[n][state.lang];
+
+  let html = '<div class="sp-head"><span class="sp-index">' + n + '</span>' +
+    '<div class="sp-title"><strong>' + name + '</strong>' +
+    '<em>' + (state.stage === 1 ? '人脸识别 · 欢迎语' : 'AI 讲解 · 互动') + '</em></div></div>';
+
+  // 人脸关
+  if (n === 1) {
+    html += '<div class="face-box" id="faceBox">' +
+      '<p class="face-tip" id="faceTip">' + (state.faceOk ? '识别成功：' + (state.visitor || '预约访客') : '真实摄像头画面在左侧') + '</p>' +
+      '</div>';
+  } else {
+    html += '<ul class="sp-lines">';
+    lines.slice(1).forEach((ln) => {
+      const t = textOf(ln, state.lang);
+      if (t) html += '<li>' + t + '</li>';
+    });
+    html += '</ul>';
+  }
+
+  // 问答
+  if (quiz) {
+    const q = textOf(quiz.q, state.lang);
+    const answered = state.quizAnswered[n];
+    html += '<div class="quiz"><p class="q">' + q + '</p><div class="opts">';
+    (quiz.options || []).forEach((op) => {
+      const cls = answered
+        ? (op.key === quiz.answer ? 'opt correct' : (op.key === answered.picked ? 'opt wrong' : 'opt dim'))
+        : 'opt';
+      html += '<button class="' + cls + '" data-key="' + op.key + '" type="button" ' +
+        (answered ? 'disabled' : '') + '><b>' + op.key + '</b><span>' +
+        textOf(op, state.lang) + '</span></button>';
+    });
+    html += '</div>';
+    if (answered) {
+      html += '<p class="explain ' + (answered.ok ? 'ok' : 'no') + '">' +
+        (answered.ok ? '✓ ' : '✗ ') + textOf(quiz.explain, state.lang) + '</p>';
+    }
+    html += '</div>';
+  }
+
+  panel.innerHTML = html;
+  panel.classList.add('show');
+
+  panel.querySelectorAll('.opt').forEach((btn) => {
+    btn.addEventListener('click', () => answerQuiz(n, btn.dataset.key));
+  });
+  const sim = $('#simFaceBtn');
+  if (sim) sim.addEventListener('click', () => simulateFace());
+}
+
+function renderProgress() {
+  const nav = $('#progress');
+  if (!nav) return;
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    const cls = i === state.stage ? 'step active' : (i < state.stage ? 'step done' : 'step');
+    html += '<button class="' + cls + '" data-stage="' + i + '" type="button">' +
+      '<span class="dot">' + (i < state.stage ? '✓' : STAGE_ICON[i]) + '</span>' +
+      '<span class="lbl">' + STAGE_TITLE[i][state.lang].split('·')[0].trim() + '</span></button>';
+  }
+  nav.innerHTML = html;
+  nav.querySelectorAll('.step').forEach((b) => {
+    b.addEventListener('click', () => gotoStage(Number(b.dataset.stage)));
+  });
+}
+
+function syncChips() {
+  const dev = state.device || {};
+  chip('chipLang', LANG_NAME[state.lang]);
+  chip('chipStage', '第 ' + state.stage + ' 关');
+  const devTxt = [];
+  if (dev.k10_online) devTxt.push('K10 在线');
+  if (dev.cybercam_online) devTxt.push('CyberCAM 在线');
+  chip('chipNet', (state.mqtt ? 'MQTT 已连接' : (state.backend ? '后端在线' : '本地演示')) +
+       (devTxt.length ? ' · ' + devTxt.join(' · ') : ''));
+  chip('chipScene', world && world.glbLoaded ? 'Blender 场景' : '程序化场景');
+  $$('.lang-btn').forEach((b) => b.classList.toggle('active', b.dataset.lang === state.lang));
+}
+
+// ------------------------------------------------------------------
+// 语音
+// ------------------------------------------------------------------
+function speak(lineId, lang = state.lang, text = '') {
+  if (!state.voiceOn) { setSubtitle(text); return; }
+  stopSpeak();
+  const url = assetUrl('/audio/' + lang + '/' + lineId + '.mp3');
+  const fallback = () => speakTTS(text, lang);
+  if (lineId) {
+    if (!audioEl) audioEl = new Audio();
+    audioEl.onerror = fallback;
+    audioEl.onended = () => { state.speaking = false; };
+    audioEl.src = url;
+    const p = audioEl.play();
+    state.speaking = true;
+    if (p && p.catch) p.catch(() => fallback());
+    return;
+  }
+  fallback();
+}
+
+function speakTTS(text, lang) {
+  if (!text || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'yue' ? 'zh-HK' : 'zh-CN';
+    u.rate = 0.95;
+    u.pitch = 1.02;
+    const voices = window.speechSynthesis.getVoices();
+    const pick = voices.find((v) => v.lang === u.lang) ||
+      voices.find((v) => v.lang && v.lang.startsWith('zh'));
+    if (pick) u.voice = pick;
+    currentUtter = u;
+    window.speechSynthesis.speak(u);
+  } catch (e) {
+    console.info('[tts] 失败', e);
+  }
+}
+
+function stopSpeak() {
+  try { if (audioEl) { audioEl.pause(); audioEl.currentTime = 0; } } catch (e) {}
+  try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) {}
+  state.speaking = false;
+}
+
+function speakStage(n) {
+  const st = stageData(n);
+  if (!st) return;
+  const line = (st.lines && st.lines[0]) || null;
+  if (line) {
+    speak(line.id, state.lang, textOf(line, state.lang));
+    setSubtitle(textOf(line, state.lang));
+  }
+}
+
+function speakLine(line) {
+  if (!line) return;
+  const t = textOf(line, state.lang);
+  setSubtitle(t);
+  speak(line.id, state.lang, t);
+}
+
+// ------------------------------------------------------------------
+// 后端 / MQTT
+// ------------------------------------------------------------------
+async function connectBackend() {
+  try {
+    const r = await fetch('/api/health', { cache: 'no-cache' });
+    if (!r.ok) throw new Error('no backend');
+    const j = await r.json();
+    state.backend = true;
+    state.mqtt = !!j.mqtt;
+    if (j.device) state.device = j.device;
+    syncChips();
+    console.info('[app] 后端在线', j);
+    startSSE();
+    // 每 15 秒刷一次设备在线状态
+    setInterval(async () => {
+      try {
+        const rr = await fetch('/api/health', { cache: 'no-cache' });
+        const h = await rr.json();
+        state.mqtt = !!h.mqtt;
+        if (h.device) state.device = h.device;
+        syncChips();
+      } catch (e) {}
+    }, 15000);
+    return true;
+  } catch (e) {
+    state.backend = false;
+    state.mqtt = false;
+    syncChips();
+    console.info('[app] 无 Flask 后端，纯前端演示');
+    return false;
+  }
+}
+
+function startSSE() {
+  if (sse || !window.EventSource) return;
+  try {
+    sse = new EventSource('/api/stream');
+    sse.onmessage = (ev) => {
+      try { onBackendEvent(JSON.parse(ev.data)); } catch (e) {}
+    };
+    sse.onerror = () => { /* 浏览器自动重连 */ };
+  } catch (e) { sse = null; }
+}
+
+function onBackendEvent(payload) {
+  const { topic, data } = payload || {};
+  if (!topic || !data) return;
+  if (topic === 'aotai/state') {
+    state.mqtt = true;
+    if (data.lang && data.lang !== state.lang) setLang(data.lang, false);
+    if (data.face_ok) { state.faceOk = true; state.visitor = data.visitor || state.visitor; }
+    if (data.stage && Number(data.stage) !== state.stage && !state.walking) gotoStage(Number(data.stage), { silent: true });
+    syncChips();
+    return;
+  }
+  if (topic === 'aotai/cmd' || topic === 'aotai/k10') {
+    const cmd = data.cmd || data.voice_cmd || (data.type === 'voice_cmd' ? data.cmd : null);
+    if (cmd) handleCmd(cmd, data);
+    return;
+  }
+  if (topic === 'aotai/event') {
+    state.mqtt = true;
+    state.device.cybercam = true;
+    if (data.type === 'face_recognized') {
+      state.faceOk = true;
+      state.visitor = data.visitor || '预约访客';
+      renderStagePanel(state.stage);
+      toast('CyberCAM：识别到 ' + state.visitor);
+    } else if (data.type === 'face_unknown') {
+      toast('CyberCAM：未注册访客，可现场按 K 键录入');
+    } else if (data.type === 'lang_changed' && data.lang) {
+      setLang(data.lang, false);
+    } else if (data.type === 'tour_start') {
+      syncTourFromCamera(Number(data.stage || 1), data.lang);
+    } else if (data.type === 'stage_enter' && data.stage) {
+      syncTourFromCamera(Number(data.stage), data.lang);
+    } else if (data.type === 'relic_mode') {
+      showRelicPanel('<p class="rp-tip">把香云纱、莞草编织或千角灯放到 CyberCAM 镜头前</p>');
+    } else if (data.type === 'relic') {
+      relicRecognized(data.key);
+      if (data.id) speak(data.id, data.lang || state.lang, data.name || '');
+    } else if (data.type === 'relic_quiz') {
+      if (data.quiz) relicQuiz(data.key, data.quiz);
+    } else if (data.type === 'relic_quiz_result') {
+      relicQuizResult(data.key, !!data.ok);
+    } else if (data.type === 'relic_pass') {
+      relicPassed(data.key);
+    } else if (data.type === 'speak_stop') {
+      stopSpeak();
+    } else if (data.type === 'speak' && data.id) {
+      speak(data.id, data.lang || state.lang, data.text || '');
+      if (data.text) setSubtitle(data.text);
+    } else if (data.type === 'reset') {
+      resetTour();
+    }
+    syncChips();
+    return;
+  }
+  if (topic === 'aotai/points') {
+    loadPoints(true);
+    if (data && data.gain) toast('积分 +' + data.gain);
+    return;
+  }
+  if (topic === 'web/cmd') {
+    handleCmd(data.cmd || data.action, data);
+  }
+}
+
+function handleCmd(cmd, data) {
+  switch (cmd) {
+    case 'next': nextStage(); break;
+    case 'prev': prevStage(); break;
+    case 'repeat': repeatLine(); break;
+    case 'set_lang': setLang(data.lang || 'zh'); break;
+    case 'lang_yue': setLang('yue'); break;
+    case 'lang_zh': setLang('zh'); break;
+    case 'goto': case 'goto_stage':
+      if (data.stage) gotoStage(Number(data.stage));
+      break;
+    case 'speak':
+      if (data.id) speak(data.id, data.lang || state.lang, data.text || '');
+      break;
+    case 'reset': resetTour(); break;
+    case 'relic_start': hideRelicPanel(); break;
+    case 'quiz':
+      if (data.qid && data.answer) answerQuiz(Number(data.stage || state.stage), data.answer, true);
+      break;
+    default: break;
+  }
+}
+
+async function sendCmd(body) {
+  try {
+    await fetch('/api/cmd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch (e) { /* 纯前端模式忽略 */ }
+}
+
+async function pushState(patch) {
+  try {
+    await fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    });
+  } catch (e) {}
+}
+
+// ------------------------------------------------------------------
+// 关卡流程
+// ------------------------------------------------------------------
+function stopAt(stage) {
+  const st = MAP.stages.find((s) => Number(s.stage) === Number(stage));
+  return (st && st.actorStop) || [0, 0, 0];
+}
+
+function pathBetween(from, to) {
+  const k = from + '-' + to;
+  if (MAP.walkPaths && MAP.walkPaths[k]) return MAP.walkPaths[k];
+  const a = stopAt(from), b = stopAt(to);
+  return [a, [(a[0] + b[0]) / 2, Math.max(a[1], b[1]), (a[2] + b[2]) / 2], b];
+}
+
+function syncTourFromCamera(n, lang) {
+  if (lang) setLang(lang, false);
+  const intro = document.querySelector('#intro');
+  if (intro) { intro.classList.add('hide'); intro.setAttribute('hidden', ''); }
+  state.started = true;
+  state.walking = false;
+  if (world && world.stopWalk) world.stopWalk();
+  n = Math.max(1, Math.min(5, Number(n) || 1));
+  state.stage = n;
+  if (world) world.placeScholar(stopAt(n), [0, 0, 1]);
+  renderProgress();
+  renderStagePanel(n);
+  updateStageCamera(n, true);
+  syncChips();
+  toast('CyberCAM 同步到第 ' + n + ' 关');
+}
+
+function gotoStage(n, opts = {}) {
+  n = Math.max(1, Math.min(5, Number(n) || 1));
+  if (state.walking) {
+    if (opts.force) {
+      world.stopWalk();
+      state.walking = false;
+    } else {
+      // 排队：等走到后立刻前往目标关（演示时连按 N 也能到）
+      state.pendingStage = n;
+      toast('正在赶路，到站后立即前往第 ' + n + ' 关');
+      return;
+    }
+  }
+  const from = state.stage;
+  if (from === n && state.started) {
+    speakStage(n);
+    renderStagePanel(n);
+    return;
+  }
+  state.stage = n;
+  state.quizAnswered[n] = state.quizAnswered[n] || null;
+  renderProgress();
+  syncChips();
+  renderStagePanel(n);
+
+  const pts = pathBetween(from, n);
+  if (world && world.scholar) {
+    if (world.pathVisible) world.showPath(pts);
+    state.walking = true;
+    // 先播一句"前往第X关"
+    const goText = state.lang === 'yue'
+      ? '我哋去第' + n + '關，跟實我行。'
+      : '我们去第' + n + '关，跟着我走。';
+    setSubtitle(goText);
+    const camCfg = STAGE_CAM[n] || STAGE_CAM[1];
+    world.followActor(camCfg.walkOffset);
+    world.walkPath(pts, (MAP.actor && MAP.actor.walkSpeed ? MAP.actor.walkSpeed : 1.6) * 1.8, () => {
+      state.walking = false;
+      onArrive(n);
+      const pend = state.pendingStage;
+      state.pendingStage = null;
+      if (pend && pend !== n) setTimeout(() => gotoStage(pend), 400);
+    });
+  } else {
+    onArrive(n);
+  }
+  if (!opts.silent) {
+    pushState({ stage: n, lang: state.lang });
+    sendCmd({ cmd: 'goto_stage', stage: n });
+  }
+  updateStageCamera(n);
+}
+
+function onArrive(n) {
+  const st = MAP.stages.find((s) => Number(s.stage) === Number(n));
+  if (st && world) {
+    world.placeScholar(st.actorStop || [0, 0, 0], null);
+  }
+  renderStagePanel(n);
+  // 到站后再播讲解
+  setTimeout(() => speakStage(n), 350);
+  if (n === 1 && !state.faceOk) {
+    setTimeout(() => runFaceDetect(), 900);
+  }
+  updateStageCamera(n);
+}
+
+function updateStageCamera(n, instant) {
+  if (!world) return;
+  const cfg = STAGE_CAM[n] || STAGE_CAM[1];
+  if (instant) {
+    world.followActor(null);
+    if (world.camera) world.camera.position.set(cfg.idle.from[0], cfg.idle.from[1], cfg.idle.from[2]);
+    if (world.orbit) {
+      world.orbit.target.set(cfg.idle.look[0], cfg.idle.look[1], cfg.idle.look[2]);
+      world.orbit.update();
+    }
+    return;
+  }
+  world.followActor(null);
+  world.setCameraPreset(cfg.idle);
+}
+
+function nextStage() {
+  if (state.stage >= 5 && !state.walking) {
+    speakStage(5);
+    return;
+  }
+  gotoStage(state.stage + 1);
+}
+
+function prevStage() {
+  if (state.stage <= 1 && !state.walking) { speakStage(1); return; }
+  gotoStage(state.stage - 1);
+}
+
+function repeatLine() {
+  speakStage(state.stage);
+  toast('重播本关讲解');
+}
+
+function setLang(lang, announce = true) {
+  if (lang !== 'zh' && lang !== 'yue') return;
+  if (state.lang === lang) return;
+  state.lang = lang;
+  renderProgress();
+  renderStagePanel(state.stage);
+  syncChips();
+  if (announce) {
+    const t = lang === 'yue' ? '好，我改用粵語同你講。' : '好的，改用普通话为你讲解。';
+    setSubtitle(t);
+    speakTTS(t, lang);
+  }
+  pushState({ lang });
+  sendCmd({ cmd: 'set_lang', lang });
+}
+
+function resetTour() {
+  if (world && world.stopWalk) {
+    try { world.stopWalk(); } catch (e) {}
+  }
+  state.walking = false;
+  state.faceOk = false;
+  state.visitor = '';
+  state.quizAnswered = {};
+  state.stage = 1;
+  if (world && world.scholar) {
+    world.placeScholar(stopAt(1), [0, 0, 0]);
+  }
+  renderProgress();
+  renderStagePanel(1);
+  syncChips();
+  updateStageCamera(1);
+  setSubtitle('回到第一关，门口迎宾。');
+  pushState({ stage: 1, face_ok: false, visitor: '' });
+  sendCmd({ cmd: 'reset' });
+}
+
+function answerQuiz(n, key, fromRemote = false) {
+  const quiz = quizOf(n);
+  if (!quiz || state.quizAnswered[n]) return;
+  const ok = key === quiz.answer;
+  state.quizAnswered[n] = { picked: key, ok };
+  renderStagePanel(n);
+  // 答错必须播“错”的解释，不能一律播正确答案的讲解。
+  const wrong = textOf(quiz.explain_wrong || {}, state.lang);
+  const explain = ok
+    ? (textOf(quiz.explain, state.lang) || '答对了！')
+    : (wrong || textOf(quiz.explain, state.lang) || '再想想哦。');
+  setSubtitle(explain);
+  // 用已生成的 mp3：对 q1_a，错 q1_wrong。浏览器 TTS 在没粤语音色时会落回普通话。
+  const lineId = quiz.qid ? (quiz.qid + (ok ? '_a' : '_wrong')) : '';
+  if (lineId) speak(lineId, state.lang, explain);
+  else speakTTS(explain, state.lang);
+  if (!fromRemote && ok) addPointsLocal('quiz_right');
+  if (!fromRemote) {
+    sendCmd({ cmd: 'quiz', stage: n, qid: quiz.qid, answer: key });
+  }
+  toast(ok ? '✓ 回答正确' : '✗ 再试一次也没关系');
+  if (ok) setTimeout(() => toast('按 N 前往下一关'), 1600);
+}
+
+// ---------- 人脸（网页演示） ----------
+function simulateFace() {
+  state.faceOk = true;
+  state.visitor = state.visitor || '预约访客';
+  renderStagePanel(1);
+  const line = linesOf(1).find((l) => l.id === 's1_welcome_ok') || linesOf(1)[1];
+  if (line) speakLine(line);
+  toast('识别成功：' + state.visitor);
+  pushState({ face_ok: true, visitor: state.visitor });
+}
+
+function runFaceDetect() {
+  toast('门口摄像头正在识别…');
+  const tip = $('#faceTip');
+  if (tip) tip.textContent = '识别中，请正对镜头…';
+  // 尝试请求真实后端（CyberCAM 经 MQTT 上报），3 秒无响应则提示可模拟
+  setTimeout(() => {
+    if (!state.faceOk) {
+      const t = $('#faceTip');
+      if (t) t.textContent = '等待 CyberCAM 上报…（可点「模拟识别」演示）';
+    }
+  }, 2600);
+}
+
+// ------------------------------------------------------------------
+// 事件绑定
+// ------------------------------------------------------------------
+function bindUI() {
+  $$('.lang-btn').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  $$('[data-action]').forEach((b) => {
+    b.addEventListener('click', () => {
+      switch (b.dataset.action) {
+        case 'next': nextStage(); break;
+        case 'prev': prevStage(); break;
+        case 'repeat': repeatLine(); break;
+        case 'reset': resetTour(); break;
+        default: break;
+      }
+    });
+  });
+  const voiceBtn = $('#voiceBtn');
+  if (voiceBtn) voiceBtn.addEventListener('click', () => {
+    state.voiceOn = !state.voiceOn;
+    voiceBtn.classList.toggle('off', !state.voiceOn);
+    voiceBtn.textContent = state.voiceOn ? '🔊 语音' : '🔇 静音';
+    if (!state.voiceOn) stopSpeak();
+  });
+  const pathBtn = $('#pathBtn');
+  if (pathBtn) pathBtn.addEventListener('click', () => {
+    if (!world) return;
+    const v = !world.pathVisible;
+    world.setPathVisible(v);
+    pathBtn.classList.toggle('on', v);
+    if (v) world.showPath(pathBetween(Math.max(1, state.stage - 1), state.stage));
+  });
+  const camBtn = $('#camBtn');
+  if (camBtn) camBtn.addEventListener('click', cycleCamera);
+  const fsBtn = $('#fsBtn');
+  if (fsBtn) fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    else document.exitFullscreen && document.exitFullscreen();
+  });
+  const helpBtn = $('#helpBtn');
+  const helpModal = $('#helpModal');
+  const helpClose = $('#helpClose');
+  if (helpBtn && helpModal) helpBtn.addEventListener('click', () => helpModal.removeAttribute('hidden'));
+  if (helpClose && helpModal) helpClose.addEventListener('click', () => helpModal.setAttribute('hidden', ''));
+  const startBtn = $('#startBtn');
+  if (startBtn) startBtn.addEventListener('click', startTour);
+  const scoreBtn = $('#scoreBtn');
+  if (scoreBtn) scoreBtn.addEventListener('click', openShop);
+  const shopClose = $('#shopClose');
+  const shopModal = $('#shopModal');
+  if (shopClose && shopModal) shopClose.addEventListener('click', () => { shopModal.hidden = true; });
+
+  document.addEventListener('keydown', onKey);
+}
+
+function onKey(e) {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (k === 'n' || k === 'arrowright') { e.preventDefault(); nextStage(); }
+  else if (k === 'p' || k === 'arrowleft') { e.preventDefault(); prevStage(); }
+  else if (k === ' ') { e.preventDefault(); repeatLine(); }
+  else if (k === 'l') { setLang(state.lang === 'zh' ? 'yue' : 'zh'); }
+  else if (k === 'r') { resetTour(); }
+  else if (k === 'c') { cycleCamera(); }
+  else if (k === 'v') { const b = $('#voiceBtn'); if (b) b.click(); }
+  else if (k === 'h') { const b = $('#helpBtn'); if (b) b.click(); }
+  else if (k >= '1' && k <= '5') { gotoStage(Number(k)); }
+}
+
+// ------------------------------------------------------------------
+// 火眼金睛（跟随 CyberCAM 上报）
+// ------------------------------------------------------------------
+const RELIC_INFO = {
+  xiangyunsha: { zh: '香云纱', yue: '香雲紗' },
+  guancao: { zh: '莞草编织', yue: '莞草編織' },
+  qianjiaodeng: { zh: '千角灯', yue: '千角燈' },
+};
+
+function relicOf(key) {
+  const list = (state.content && state.content.relics) || [];
+  return list.find((r) => r.key === key) || null;
+}
+
+function relicName(key) {
+  const r = relicOf(key);
+  if (r && r.name) return r.name[state.lang] || r.name.zh || key;
+  const f = RELIC_INFO[key];
+  return f ? (f[state.lang] || f.zh) : key;
+}
+
+function showRelicPanel(html) {
+  const p = $('#relicPanel');
+  const b = $('#rpBody');
+  if (!p || !b) return;
+  b.innerHTML = html;
+  p.hidden = false;
+}
+
+function relicRecognized(key) {
+  const r = relicOf(key);
+  const text = r ? (r[state.lang] || r.zh || '') : '';
+  showRelicPanel('<p class="rp-name">' + relicName(key) + '</p>' +
+    '<p class="rp-line">' + text + '</p>' +
+    '<p class="rp-tip">讲解结束后会出题，请听题目</p>');
+}
+
+function relicQuiz(key, quiz) {
+  const q = (quiz && quiz.q) ? (quiz.q[state.lang] || quiz.q.zh) : '';
+  const opts = (quiz && quiz.options) || [];
+  let html = '<p class="rp-name">' + relicName(key) + '</p>';
+  html += '<p class="rp-q">' + q + '</p><div class="rp-opts">';
+  opts.forEach((op) => {
+    html += '<button class="rp-opt" type="button" data-k="' + op.key + '">' +
+      '<b>' + op.key + '</b> ' + (op[state.lang] || op.zh) + '</button>';
+  });
+  html += '</div><p class="rp-res" id="rpRes"></p>';
+  showRelicPanel(html);
+  $$('.rp-opt').forEach((b) => {
+    b.addEventListener('click', () => sendCmd({ cmd: 'relic_answer', key: key, answer: b.dataset.k }));
+  });
+  state.relicQuiz = { key: key, quiz: quiz };
+}
+
+function relicQuizResult(key, ok) {
+  const res = $('#rpRes');
+  $$('.rp-opt').forEach((b) => { b.disabled = true; });
+  if (res) res.textContent = ok ? '✓ 答对了，请再拿一次给摄像头认' : '✗ 再想想，听讲解后重试';
+  if (ok && state.relicQuiz) {
+    const q = state.relicQuiz.quiz;
+    $$('.rp-opt').forEach((b) => {
+      if (b.dataset.k === q.answer) b.classList.add('ok');
+    });
+  }
+}
+
+function relicPassed(key) {
+  showRelicPanel('<p class="rp-name">' + relicName(key) + ' · 过关</p>' +
+    '<p class="rp-line">积分已经记上，可以换下一件。</p>');
+}
+
+function hideRelicPanel() {
+  const p = $('#relicPanel');
+  if (p) p.hidden = true;
+  state.relicQuiz = null;
+}
+
+// ------------------------------------------------------------------
+// 积分与兑换
+// ------------------------------------------------------------------
+const ICONS = {
+  badge: '<svg viewBox="0 0 64 64"><circle cx="32" cy="26" r="16" fill="#1b1f22" stroke="#d9b45b" stroke-width="2"/><path d="M20 26c4-7 20-7 24 0" fill="none" stroke="#8b6a2f" stroke-width="2"/><path d="M24 44l8-6 8 6-2 12-6-5-6 5z" fill="#c9a24a"/></svg>',
+  bookmark: '<svg viewBox="0 0 64 64"><path d="M20 8h24v48l-12-9-12 9z" fill="#3b3126" stroke="#d9b45b" stroke-width="2"/><path d="M25 20h14M25 28h14M25 36h9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/></svg>',
+  lantern: '<svg viewBox="0 0 64 64"><rect x="30" y="4" width="4" height="8" fill="#7a5a2a"/><path d="M32 12c12 0 18 9 18 18s-6 18-18 18-18-9-18-18 6-18 18-18z" fill="#a83a32" stroke="#d9b45b" stroke-width="1.6"/><path d="M32 50v8" stroke="#7a5a2a" stroke-width="3"/><path d="M32 54l-5 6h10z" fill="#c94a3a"/></svg>',
+  figure: '<svg viewBox="0 0 64 64"><circle cx="32" cy="16" r="8" fill="#e8d7b4" stroke="#8b6a2f" stroke-width="1.6"/><path d="M18 58c0-12 6-22 14-22s14 10 14 22z" fill="#2a2622" stroke="#d9b45b" stroke-width="1.6"/><path d="M26 40h12" stroke="#c9a24a" stroke-width="2"/></svg>',
+};
+
+async function loadPoints(force) {
+  try {
+    const r = await fetch('/api/points' + (force ? '?t=' + Date.now() : ''), { cache: 'no-store' });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (d && typeof d.score === 'number') {
+      state.points = d;
+      const n = $('#scoreNum');
+      if (n) n.textContent = d.score;
+    }
+    return d;
+  } catch (e) { return null; }
+}
+
+function renderShop() {
+  const p = state.points || { score: 0, who: '—', shop: [] };
+  const who = $('#shopWho'); if (who) who.textContent = p.who || '—';
+  const sc = $('#shopScore'); if (sc) sc.textContent = p.score || 0;
+  const grid = $('#shopGrid');
+  if (!grid) return;
+  grid.innerHTML = (p.shop || []).map((it) => {
+    const owned = (p.redeemed || []).filter((x) => x.id === it.id).length;
+    const can = (p.score || 0) >= it.cost;
+    return '<div class="shop-item' + (can ? '' : ' locked') + '" data-id="' + it.id + '">' +
+      '<div class="thumb">' + (ICONS[it.icon] || ICONS.badge) + '</div>' +
+      '<span class="nm">' + it.name + '</span>' +
+      '<span class="cost">' + it.cost + ' 积分</span>' +
+      (owned ? '<span class="owned">已兑换 ' + owned + ' 个</span>' :
+        '<button class="btn ' + (can ? 'btn-primary' : 'btn-ghost') + '" type="button" ' +
+        (can ? '' : 'disabled ') + 'data-redeem="' + it.id + '">兑换</button>') +
+    '</div>';
+  }).join('');
+  grid.querySelectorAll('[data-redeem]').forEach((b) => {
+    b.addEventListener('click', () => redeem(b.dataset.redeem));
+  });
+}
+
+async function redeem(id) {
+  const msg = $('#shopMsg');
+  try {
+    const r = await fetch('/api/redeem', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id }),
+    });
+    const d = await r.json();
+    if (msg) msg.textContent = d.msg || (d.ok ? '兑换成功' : '积分不够，继续加油');
+    if (d.ok) toast('兑换成功，请到工作人员处领取手办');
+  } catch (e) {
+    if (msg) msg.textContent = '兑换失败，请检查网页后端';
+  }
+  await loadPoints(true);
+  renderShop();
+}
+
+function addPointsLocal(kind) {
+  fetch('/api/add', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ kind: kind }),
+  }).then(() => loadPoints(true)).catch(() => {});
+}
+
+function openShop() {
+  loadPoints(true).then(() => {
+    renderShop();
+    const m = $('#shopModal');
+    if (m) m.hidden = false;
+  });
+}
+
+let camIdx = 0;
+function cycleCamera() {
+  const presets = ['overview', 'gate', 'hall', 'north'];
+  camIdx = (camIdx + 1) % presets.length;
+  const name = presets[camIdx];
+  if (world && MAP.cameraPresets && MAP.cameraPresets[name]) {
+    world.setCameraPreset(MAP.cameraPresets[name]);
+    toast('机位：' + name);
+  }
+}
+
+// ------------------------------------------------------------------
+// 启动
+// ------------------------------------------------------------------
+function startTour() {
+  const intro = $('#intro');
+  if (intro) { intro.classList.add('hide'); setTimeout(() => intro.setAttribute('hidden', ''), 700); }
+  state.started = true;
+  if (world) {
+    world.placeScholar(stopAt(1), [0, 0, 1]);
+    updateStageCamera(1, true);
+  }
+  renderProgress();
+  renderStagePanel(1);
+  syncChips();
+  setTimeout(() => { speakStage(1); runFaceDetect(); }, 700);
+  pushState({ stage: 1, lang: state.lang });
+}
+
+async function boot() {
+  const loading = $('#loading');
+  const setLoad = (t) => { const el = $('#loadingText'); if (el) el.textContent = t; };
+
+  setLoad('读取讲解内容');
+  state.content = await loadContent();
+  // 地图契约（关卡坐标/行走路径）— 以 02_数据/map.json 为准
+  const mapData = await loadJSON('/data/map.json', null).catch(() => null)
+    || await loadJSON('./assets/map.json', null).catch(() => null);
+  if (mapData && mapData.stages) {
+    Object.assign(MAP, mapData);
+    console.info('[app] map.json 已应用:', mapData.stages.length, '关');
+  }
+
+  setLoad('生成三维场景');
+  try {
+    world = new World($('#scene'));
+  } catch (e) {
+    console.error('[app] 三维初始化失败', e);
+    setLoad('WebGL 初始化失败：' + e.message);
+    return;
+  }
+
+  // 轨道控制（简易自实现，避免额外依赖）
+  try {
+    const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+    world.orbit = new OrbitControls(world.camera, world.renderer.domElement);
+    world.orbit.enableDamping = true;
+    world.orbit.dampingFactor = 0.08;
+    world.orbit.minDistance = 4;
+    world.orbit.maxDistance = 70;
+    world.orbit.maxPolarAngle = Math.PI * 0.49;
+    world.orbit.target.set(0, 2, 6);
+    world.orbit.update();
+  } catch (e) {
+    console.info('[app] OrbitControls 不可用，用固定机位', e && e.message);
+  }
+
+  // 尝试加载 Blender 产出的 GLB
+  setLoad('载入 Blender 书院模型');
+  const ok = await world.tryLoadGLB(assetUrl('./assets/aotai_academy.glb'));
+  if (!ok) {
+    console.info('[app] 使用程序化场景演示');
+  }
+
+  world.addScholar();
+  world.placeScholar(stopAt(1), [0, 0, 1]);
+  updateStageCamera(1, true);
+
+  bindUI();
+  await connectBackend();
+
+  renderProgress();
+  syncChips();
+  if (loading) loading.classList.add('hide');
+  setTimeout(() => { if (loading) loading.setAttribute('hidden', ''); }, 600);
+
+  // 开场卡片里的五关列表
+  const ol = $('#introStages');
+  if (ol) {
+    ol.innerHTML = [1, 2, 3, 4, 5].map((n) =>
+      '<li><b>' + STAGE_ICON[n] + '</b><span>' + STAGE_TITLE[n].zh + '</span></li>').join('');
+  }
+  // favicon（内联，避免控制台 404）
+  try {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = 'data:image/svg+xml,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0d1214"/><text x="32" y="44" font-size="34" text-anchor="middle" fill="#d9b45b" font-family="serif">鰲</text></svg>'
+    );
+    document.head.appendChild(link);
+  } catch (e) {}
+  // 语音列表预热
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+  }
+  if (!window._camTick) {
+    window._camTick = setInterval(() => {
+      const img = document.getElementById('camFeed');
+      const tip = document.getElementById('camStatus');
+      if (!img) return;
+      const probe = new Image();
+      const url = '/api/camera.jpg?t=' + Date.now();
+      probe.onload = () => {
+        img.src = url;
+        img.style.display = 'block';
+        if (tip) tip.textContent = 'CyberCAM 实时画面';
+      };
+      probe.onerror = () => {
+        if (tip && !img.getAttribute('src')) tip.textContent = '等待摄像头画面';
+      };
+      probe.src = url;
+    }, 450);
+  }
+  console.info('[app] 就绪');
+}
+
+boot();
+
+window.AOTAI = { state, gotoStage, nextStage, prevStage, setLang, resetTour, get world() { return world; } };

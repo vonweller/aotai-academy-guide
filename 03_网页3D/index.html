@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#10161a" />
+<title>鳌台書院 · AI 非遗导览</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d1214'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%23d9b45b' font-family='serif'%3E%E9%B0%B2%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="scene" aria-label="鳌台书院三维场景"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- 顶栏 -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="seal" aria-hidden="true">鰲</span>
+      <span class="brand-text">
+        <strong>鳌台書院</strong>
+        <em>AI 非遗导览 · 东莞厚街</em>
+      </span>
+    </div>
+    <div class="tools">
+      <div class="lang-switch" role="group" aria-label="语言切换">
+        <button class="lang-btn" data-lang="zh" type="button">普通话</button>
+        <button class="lang-btn" data-lang="yue" type="button">粤 语</button>
+      </div>
+      <button class="tool-btn" id="voiceBtn" type="button" title="语音开关（V）">🔊 语音</button>
+      <button class="tool-btn" id="pathBtn" type="button" title="显示/隐藏行走路径">路径</button>
+      <button class="tool-btn" id="camBtn" type="button" title="切换机位（C）">机位</button>
+      <button class="tool-btn" id="fsBtn" type="button" title="全屏">⛶</button>
+      <button class="tool-btn" id="scoreBtn" type="button" title="我的积分与兑换">🎁 积分 <b id="scoreNum">0</b></button>
+      <button class="tool-btn" id="helpBtn" type="button" title="帮助（H）">?</button>
+    </div>
+  </header>
+
+  <!-- 右侧关卡面板 -->
+  <aside class="live-cam" id="liveCam">
+    <img id="camFeed" alt="CyberCAM 摄像头">
+    <p id="camStatus">等待摄像头画面</p>
+  </aside>
+  <aside class="stage-panel" id="stagePanel" aria-live="polite"></aside>
+
+  <!-- 底部：进度 + 字幕 + 控制 -->
+  <div class="bottom">
+    <div class="bottom-left">
+      <nav class="progress" id="progress" aria-label="关卡进度"></nav>
+    </div>
+    <div class="subtitle-wrap">
+      <div class="subtitle" id="subtitle">
+        <span class="speaker" id="speaker">AI 导览员 · 小鳌</span>
+        <span class="line" id="subtitleText"></span>
+        <span class="typing" id="typing"></span>
+      </div>
+      <div class="subtitle-tip" id="subtitleTip">按 <kbd>空格</kbd> 重播 · <kbd>N</kbd> 下一关 · <kbd>P</kbd> 上一关 · <kbd>L</kbd> 切换语言</div>
+    </div>
+    <div class="bottom-right">
+      <div class="controls">
+        <button class="ctl" data-action="prev" type="button"><b>P</b><span>上一关</span></button>
+        <button class="ctl" data-action="repeat" type="button"><b>空格</b><span>重播</span></button>
+        <button class="ctl primary" data-action="next" type="button"><b>N</b><span>下一关</span></button>
+        <button class="ctl" data-action="reset" type="button"><b>R</b><span>重置</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 状态条 -->
+  <div class="statusbar">
+    <span class="chip" id="chipNet">本地演示</span>
+    <span class="chip" id="chipScene">场景加载中</span>
+    <span class="chip" id="chipLang">普通话</span>
+    <span class="chip" id="chipStage">第 1 关</span>
+  </div>
+
+  <!-- 提示气泡 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- 火眼金睛面板 -->
+  <div class="relic-panel" id="relicPanel" hidden>
+    <div class="rp-head">火眼金睛 · 非遗识物</div>
+    <div class="rp-body" id="rpBody">
+      <p class="rp-tip">把香云纱、莞草编织或千角灯放到 CyberCAM 镜头前</p>
+    </div>
+  </div>
+
+  <!-- 积分与兑换 -->
+  <div class="modal" id="shopModal" hidden>
+    <div class="modal-card shop-card">
+      <h2>我的积分 · 兑换非遗手办</h2>
+      <p class="shop-who">游客：<b id="shopWho">—</b>　积分：<b id="shopScore">0</b></p>
+      <div class="shop-grid" id="shopGrid"></div>
+      <p class="modal-note" id="shopMsg"></p>
+      <button class="btn btn-primary" id="shopClose" type="button">关闭</button>
+    </div>
+  </div>
+
+  <!-- 帮助 -->
+  <div class="modal" id="helpModal" hidden>
+    <div class="modal-card">
+      <h2>操作说明</h2>
+      <ul class="keys">
+        <li><kbd>N</kbd> / <kbd>→</kbd><span>下一关（行走途中按下可加速）</span></li>
+        <li><kbd>P</kbd> / <kbd>←</kbd><span>上一关</span></li>
+        <li><kbd>空格</kbd><span>重播当前讲解</span></li>
+        <li><kbd>L</kbd><span>切换粤语 / 普通话</span></li>
+        <li><kbd>R</kbd><span>回到第一关</span></li>
+        <li><kbd>C</kbd><span>切换机位（场景 / 关卡特写）</span></li>
+        <li><kbd>V</kbd><span>语音开关</span></li>
+        <li><kbd>1</kbd>–<kbd>5</kbd><span>直接前往指定关卡</span></li>
+        <li>鼠标拖拽<span>旋转视角</span> ｜ 滚轮<span>缩放</span></li>
+      </ul>
+      <p class="modal-note">接入 MQTT 后，K10 语音指令「下一关 / 上一关 / 重播 / 粤语 / 普通话」同样可以控制本页面。</p>
+      <button class="btn btn-primary" id="helpClose" type="button">知道了</button>
+    </div>
+  </div>
+
+  <!-- 开场 -->
+  <div class="intro" id="intro">
+    <div class="intro-inner">
+      <div class="intro-title"><span class="seal big">鰲</span><h1>鳌台書院</h1><h2>AI 非遗导览</h2></div>
+      <p class="intro-sub">东莞厚街 · 岭南书院 · 五关非遗之旅</p>
+      <ol class="intro-stages" id="introStages"></ol>
+      <button class="btn btn-primary big" id="startBtn" type="button">开 始 导 览</button>
+      <p class="intro-tip">按 <kbd>N</kbd> 或点击「下一关」沿线行走；<kbd>L</kbd> 切换粤语</p>
+    </div>
+  </div>
+
+  <!-- 加载 -->
+  <div class="loading" id="loading">
+    <div class="loading-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <h3>正在唤醒书院…</h3>
+      <p id="loadingText">加载三维场景</p>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./assets/vendor/three/three.module.js",
+    "three/addons/": "./assets/vendor/three/jsm/"
+  }
+}
+</script>
+<script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+[
+ {
+  "id": "p_points",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "積分又多咗。",
+  "file": "yue/p_points.mp3",
+  "bytes": 13391,
+  "md5": "339d63c36bfbc5873529cb4aba8852e1"
+ },
+ {
+  "id": "p_relic_ask",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "認得喇。而家我出條題目考考你，請喺上面點答案。",
+  "file": "yue/p_relic_ask.mp3",
+  "bytes": 39409,
+  "md5": "4a5d3415e417eccbbcf8734c5e59015e"
+ },
+ {
+  "id": "p_relic_bring",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "答完喇。請將啱啱嗰件嘢攞近啲，我再認一次，認啱就同你加分。",
+  "file": "yue/p_relic_bring.mp3",
+  "bytes": 45836,
+  "md5": "9bee0a28fbdce033bc253edb2ae097bc"
+ },
+ {
+  "id": "p_relic_intro",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "火眼金睛開始喇。請將香雲紗、莞草編織或者千角燈，放喺畫面中間畀我認一認。",
+  "file": "yue/p_relic_intro.mp3",
+  "bytes": 55710,
+  "md5": "8e7cb1cbe624c3fab8d7813e3d81034e"
+ },
+ {
+  "id": "p_relic_pass",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "又認啱喇，呢題過關，積分記低。",
+  "file": "yue/p_relic_pass.mp3",
+  "bytes": 25460,
+  "md5": "83c76eb0b2830d9fbd205df4165d7262"
+ },
+ {
+  "id": "q1_a",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "答啱喇。書院始建於明成化十二年，即係一四七六年，由鄉賢王恪倡議創建，係東莞最早嘅鄉立書院之一。",
+  "file": "yue/q1_a.mp3",
+  "bytes": 68092,
+  "md5": "ce87fe9f9cef8def501c56d277d5a16d",
+  "engine": "edge"
+ },
+ {
+  "id": "q1_opA",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "宋代",
+  "file": "yue/q1_opA.mp3",
+  "bytes": 11824,
+  "md5": "7e6461a93d78351cdaa011a3f3bb5f89",
+  "engine": "edge"
+ },
+ {
+  "id": "q1_opB",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "明代",
+  "file": "yue/q1_opB.mp3",
+  "bytes": 11824,
+  "md5": "41ec19a752490ae25afd19aadf9f20fc",
+  "engine": "edge"
+ },
+ {
+  "id": "q1_opC",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "清代",
+  "file": "yue/q1_opC.mp3",
+  "bytes": 11824,
+  "md5": "0d867be0faf475369956231e0f10afed",
+  "engine": "edge"
+ },
+ {
+  "id": "q1_q",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "我考考你：鰲台書院最早係喺邊個朝代起嘅？",
+  "file": "yue/q1_q.mp3",
+  "bytes": 30946,
+  "md5": "57a62018aa10cac9c26e4194aebe1a3f",
+  "engine": "edge"
+ },
+ {
+  "id": "q2_a",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "答啱喇。香雲紗靠薯莨汁上色，靠河泥固色，一染一曬全睇天氣，所以每一匹布嘅花色都唔太一樣。",
+  "file": "yue/q2_a.mp3",
+  "bytes": 62763,
+  "md5": "9ce6ccf919c3e65b8c859fded8fcfead",
+  "engine": "edge"
+ },
+ {
+  "id": "q2_opA",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "藍靛同石灰",
+  "file": "yue/q2_opA.mp3",
+  "bytes": 14332,
+  "md5": "81383a4d0157cfe316eb70336fd1ed6c",
+  "engine": "edge"
+ },
+ {
+  "id": "q2_opB",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "薯莨汁同河泥",
+  "file": "yue/q2_opB.mp3",
+  "bytes": 15272,
+  "md5": "0bff45ca271350bf3580a57ceaa42ac3",
+  "engine": "edge"
+ },
+ {
+  "id": "q2_opC",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "紅茶同糯米",
+  "file": "yue/q2_opC.mp3",
+  "bytes": 14489,
+  "md5": "db58aeeb9e8e2d01a9b37f2fec0417d7",
+  "engine": "edge"
+ },
+ {
+  "id": "q2_q",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "香雲紗嘅染整，有兩樣最關鍵嘅天然材料，你知唔知係邊兩樣？",
+  "file": "yue/q2_q.mp3",
+  "bytes": 40977,
+  "md5": "909ab39b1a25bb1b42fadc79c207af81",
+  "engine": "edge"
+ },
+ {
+  "id": "relic_guancao",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "認得喇，呢個係莞草編織。莞草又叫鹹水草，生喺東莞嘅河邊。曬乾壓扁之後，一壓一挑，就編成草蓆、草籃同草帽。東莞嘅莞字，就同呢種草有關。呢個係水鄉人家最日常嘅一門非遺手藝。",
+  "file": "yue/relic_guancao.mp3",
+  "bytes": 129845,
+  "md5": "d028620888a3e25ca0761367aa8d98de"
+ },
+ {
+  "id": "relic_guancao_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "再諗諗。莞草又叫鹹水草，生喺東莞嘅河邊。",
+  "file": "yue/relic_guancao_no.mp3",
+  "bytes": 37529,
+  "md5": "17874fd044fa33bdcc15c1540e4afe8c"
+ },
+ {
+  "id": "relic_guancao_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "答啱喇，莞草又叫鹹水草，就喺東莞嘅河邊生，曬乾壓扁就編得。",
+  "file": "yue/relic_guancao_ok.mp3",
+  "bytes": 43014,
+  "md5": "aa63d1f587ff74c2003610add0af20f3"
+ },
+ {
+  "id": "relic_qianjiaodeng",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "認得喇，呢個係東莞千角燈。一個大燈籠四邊插滿好多小燈角，元宵夜點起嚟，好似一座會發光嘅小樓。做一盞燈要紮骨架、糊紙、繪畫、裝角，係東莞燈彩入面最費功夫嘅一種。",
+  "file": "yue/relic_qianjiaodeng.mp3",
+  "bytes": 110097,
+  "md5": "45d1d5395c6d6dbcb1652f56f220f350"
+ },
+ {
+  "id": "relic_qianjiaodeng_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "再諗諗。千角燈係元宵節嘅燈彩。",
+  "file": "yue/relic_qianjiaodeng_no.mp3",
+  "bytes": 30789,
+  "md5": "62aafe37d43f81e7c486e0a350fd5a79"
+ },
+ {
+  "id": "relic_qianjiaodeng_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "答啱喇，千角燈係元宵燈彩，一大盞四邊插滿小燈角，點起嚟好似會發光嘅小樓。",
+  "file": "yue/relic_qianjiaodeng_ok.mp3",
+  "bytes": 49284,
+  "md5": "a1208e1d8223f377901f7fa24e91a883"
+ },
+ {
+  "id": "relic_qianjiaodeng_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "考考你：千角燈係喺咩節日點起嘅？",
+  "file": "yue/relic_qianjiaodeng_q.mp3",
+  "bytes": 26557,
+  "md5": "c136fdac299ed570b52f1156255f7ea5"
+ },
+ {
+  "id": "relic_xiangyunsha",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "認得喇，呢個係香雲紗，又叫莨紗。師傅用薯莨汁將絲綢浸咗又浸，再蓋上河泥晾曬。曬完之後，正面烏黑發亮，反面係棕紅色，着上身仲會沙沙聲。東莞、佛山一帶嘅夏天，好多人都鍾意呢種涼爽嘅老綢。",
+  "file": "yue/relic_xiangyunsha.mp3",
+  "bytes": 134077,
+  "md5": "59a4147e663dbc66a4ed65a7ad6037ef"
+ },
+ {
+  "id": "s1_prompt",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "請正對鏡頭，等我先認一認你。",
+  "file": "yue/s1_prompt.mp3",
+  "bytes": 22796,
+  "md5": "d823e634f1ae3c6f29801bac3b94af59",
+  "engine": "edge"
+ },
+ {
+  "id": "s1_welcome_new",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "歡迎光臨鰲台書院，我係你嘅智能導覽員小鰲。今日我哋一共行五關，先聽書院嘅故事，再聽東莞非遺嘅聲音。",
+  "file": "yue/s1_welcome_new.mp3",
+  "bytes": 70600,
+  "md5": "97898f329625792447244f1ca80b444a",
+  "engine": "edge"
+ },
+ {
+  "id": "s1_welcome_ok",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "預約訪客，歡迎您嚟到非遺博物館AI鰲台書院。認得您喇，跟實小鰲，我哋即刻出發。",
+  "file": "yue/s1_welcome_ok.mp3",
+  "bytes": 57747,
+  "md5": "f9b831c6f323e132bda16617bc5a9b9f",
+  "engine": "edge"
+ },
+ {
+  "id": "s2_move",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "書院最早起喺鳳林長生廟側邊。去到清朝乾隆年間，舊屋年久失修冧咗，族人一齊出力，將佢搬到菊塘坊菊山腳，乾隆二十一年落成。",
+  "file": "yue/s2_move.mp3",
+  "bytes": 82511,
+  "md5": "9233541c477e7b808d8de4cd724c4fcf",
+  "engine": "edge"
+ },
+ {
+  "id": "s2_origin",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "明朝成化十二年，即係一四七六年嘅春天，做過寶慶知府嘅厚街人王恪返到家鄉，倡議族人捐錢，起咗鰲台書院。",
+  "file": "yue/s2_origin.mp3",
+  "bytes": 66681,
+  "md5": "b4fda23c15bc96da39ba480279464fcf",
+  "engine": "edge"
+ },
+ {
+  "id": "s2_rebuild",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "你今日見到嘅書院，係二〇〇八年動工重建、二〇一二年竣工，佔地四千幾平方米，保留咗正門、中堂、奎星樓三進嘅格局。",
+  "file": "yue/s2_rebuild.mp3",
+  "bytes": 73734,
+  "md5": "6bd7523197b2b8e0067bc67eeb473f8c",
+  "engine": "edge"
+ },
+ {
+  "id": "s3_couplet",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "柱上面呢副對聯係：學貴因時，通古今之謂士；地原毓秀，樹梁棟以成材。請跟我讀一次。",
+  "file": "yue/s3_couplet.mp3",
+  "bytes": 60569,
+  "md5": "962830f052302b0cddfefd957c928e17",
+  "engine": "edge"
+ },
+ {
+  "id": "s3_couplet_mean",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "意思係講，讀書貴在順應時代，通曉古今先叫做讀書人；呢片土地本來就鍾靈毓秀，要在呢度培育出棟樑之才。",
+  "file": "yue/s3_couplet_mean.mp3",
+  "bytes": 65114,
+  "md5": "ee5b26575b18567b1f8535296683fe45",
+  "engine": "edge"
+ },
+ {
+  "id": "s3_gate_couplet",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "書院正門仲有一副長聯：鰲海澄波看錦鱗而躍浪，彭峰聳翠兆文筆之生花。寫嘅係呢度出人才嘅底氣。",
+  "file": "yue/s3_gate_couplet.mp3",
+  "bytes": 64644,
+  "md5": "8b14bdac374d417c5452df284b549cf4",
+  "engine": "edge"
+ },
+ {
+  "id": "s3_intro",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "我哋行入講堂。舊時，學生就坐喺呢啲樑柱之間讀書、寫字、聽先生講學。",
+  "file": "yue/s3_intro.mp3",
+  "bytes": 52262,
+  "md5": "1ce74a2effbc2dbd703be5f1d54cda4b",
+  "engine": "edge"
+ },
+ {
+  "id": "s3_three_top",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "狀元莊有恭、榜眼馮願、探花陳伯陶都曾經為書院題寫匾聯，所以佢被叫做東莞唯一有三甲留墨嘅書院。",
+  "file": "yue/s3_three_top.mp3",
+  "bytes": 62449,
+  "md5": "d689d996fd6ed3ed9615828ea0868981",
+  "engine": "edge"
+ },
+ {
+  "id": "s4_guancao",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "仲有莞草編織。鹹水草喺手度一壓一挑，就變成草蓆、草籃、草帽，係水鄉人家最日常嘅手藝。",
+  "file": "yue/s4_guancao.mp3",
+  "bytes": 62920,
+  "md5": "526b18a3db0a0e62febb0a4d554e0a59",
+  "engine": "edge"
+ },
+ {
+  "id": "s4_workshop",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢度係非遺工坊。東莞人靠水食水，一門門老手藝，就係由咁樣嘅院子傳落嚟。",
+  "file": "yue/s4_workshop.mp3",
+  "bytes": 54299,
+  "md5": "af49860fd6900845b4fa167452ad0567",
+  "engine": "edge"
+ },
+ {
+  "id": "s4_xiangyunsha",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "香雲紗又叫莨紗，用薯莨汁反覆浸染，再用河泥蓋住晾曬，正面烏黑發亮，反面棕紅，着上身會沙沙聲。",
+  "file": "yue/s4_xiangyunsha.mp3",
+  "bytes": 64957,
+  "md5": "77eb1cfe0367fb5d35e740a300b08c47",
+  "engine": "edge"
+ },
+ {
+  "id": "s5_bye",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "我係小鰲，多謝你陪我將呢座書院行咗一次。歡迎下次再嚟，亦都歡迎再讀一次嗰副對聯。",
+  "file": "yue/s5_bye.mp3",
+  "bytes": 58688,
+  "md5": "57953c8cca5b0cd7dfccffc97d6a8b44",
+  "engine": "edge"
+ },
+ {
+  "id": "s5_closing",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "五關行完，由明清嘅書聲，到今日嘅手藝，鰲台書院一直守住呢度，將文脈一代一代傳落去。",
+  "file": "yue/s5_closing.mp3",
+  "bytes": 54769,
+  "md5": "85c00cf6027c2f3a7889aee3b3273b27",
+  "engine": "edge"
+ },
+ {
+  "id": "s5_ink",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "古人喺呢度留低墨跡，你都可以留低自己嘅心願。願你似書院嘅學子一樣，讀萬卷書，行萬里路。",
+  "file": "yue/s5_ink.mp3",
+  "bytes": 61979,
+  "md5": "c50e9287d4bf662c449cb3ced680727c",
+  "engine": "edge"
+ },
+ {
+  "id": "s5_route",
+  "lang": "yue",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "離開之前畀你一條參觀路線：正門牌坊，前院天井同假山，講堂楹聯，東側非遺工坊，最後到後園六角亭。",
+  "file": "yue/s5_route.mp3",
+  "bytes": 65114,
+  "md5": "f866fdacb93d778de600da505b1a42b3",
+  "engine": "edge"
+ },
+ {
+  "id": "q1_a",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "答对啦。书院始建于明成化十二年，也就是一四七六年，由乡贤王恪倡议创建，是东莞最早的乡立书院之一。",
+  "file": "zh/q1_a.mp3",
+  "bytes": 68249,
+  "md5": "3e77c057586ba2b07b0b7f1226093c76"
+ },
+ {
+  "id": "q1_opA",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "宋代",
+  "file": "zh/q1_opA.mp3",
+  "bytes": 4458,
+  "md5": "faf8237d7928061a94587ab0387a8ac1"
+ },
+ {
+  "id": "q1_opB",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "明代",
+  "file": "zh/q1_opB.mp3",
+  "bytes": 5398,
+  "md5": "c886af80d8ee117cf9d37da980f6042f"
+ },
+ {
+  "id": "q1_opC",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "清代",
+  "file": "zh/q1_opC.mp3",
+  "bytes": 4928,
+  "md5": "ee51cea743f0598f95f366ddfee97d3b"
+ },
+ {
+  "id": "q1_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "我来考考你：鳌台书院最早是在哪个朝代建起来的？",
+  "file": "zh/q1_q.mp3",
+  "bytes": 26557,
+  "md5": "eedaffc27859c879b6a3002c2ccbfcee"
+ },
+ {
+  "id": "q2_a",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "答对了。香云纱靠薯莨汁上色，靠河泥固色，一染一晒全看天气，所以每一匹布的花色都不太一样。",
+  "file": "zh/q2_a.mp3",
+  "bytes": 56807,
+  "md5": "1b4439dbb0350a2522724321bc00feed"
+ },
+ {
+  "id": "q2_opA",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "蓝靛和石灰",
+  "file": "zh/q2_opA.mp3",
+  "bytes": 9316,
+  "md5": "1b1aa2c88935811f1edefc01d24a463f"
+ },
+ {
+  "id": "q2_opB",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "薯莨汁和河泥",
+  "file": "zh/q2_opB.mp3",
+  "bytes": 9787,
+  "md5": "f1e59caa3bc8c5826688e388e66c1a4b"
+ },
+ {
+  "id": "q2_opC",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "红茶和糯米",
+  "file": "zh/q2_opC.mp3",
+  "bytes": 9316,
+  "md5": "faa9367907a74421de319eed440ccd21"
+ },
+ {
+  "id": "q2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "香云纱的染整里，有两样最关键的天然材料，你知道是哪两样吗？",
+  "file": "zh/q2_q.mp3",
+  "bytes": 36118,
+  "md5": "ad6b33b14b515f126ada7d400aab5686"
+ },
+ {
+  "id": "relic_guancao",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "认出来了，这是莞草编织。莞草又叫咸水草，长在东莞的河边。晒干压扁以后，一压一挑，就能编成草席、草篮和草帽。东莞的莞字，就和这种草有关。这是水乡人家最日常的一门非遗手艺。",
+  "file": "zh/relic_guancao.mp3",
+  "bytes": 116366,
+  "md5": "af02960e2f85d78544e2441f25f73798"
+ },
+ {
+  "id": "relic_qianjiaodeng",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "认出来了，这是东莞千角灯。一个大灯笼四面插满许多小灯角，元宵夜里点起来，像一座会发光的小楼。做一盏灯要扎骨架、糊纸、绘画、装角，是东莞灯彩里最费功夫的一种。",
+  "file": "zh/relic_qianjiaodeng.mp3",
+  "bytes": 102887,
+  "md5": "d7476fa3a89e910db5e4fee36644f3cb"
+ },
+ {
+  "id": "relic_xiangyunsha",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "认出来了，这是香云纱，也叫莨纱。工匠用薯莨汁把丝绸反复浸染，再盖上河泥晾晒。晒完以后，正面乌黑发亮，反面是棕红色，穿在身上还会沙沙响。东莞、佛山一带的夏天，很多人喜欢这种凉快的老绸。",
+  "file": "zh/relic_xiangyunsha.mp3",
+  "bytes": 124516,
+  "md5": "d68251573a11f00d783f06b549f0786c"
+ },
+ {
+  "id": "s1_prompt",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "请正对摄像头，让我先认一认你。",
+  "file": "zh/s1_prompt.mp3",
+  "bytes": 18877,
+  "md5": "06536f879f6f1ed0ee4d1625d3038955"
+ },
+ {
+  "id": "s1_welcome_new",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "欢迎光临鳌台书院，我是你的智能导览员小鳌。今天我们一共走五关，先听书院的故事，再听东莞非遗的声音。",
+  "file": "zh/s1_welcome_new.mp3",
+  "bytes": 61979,
+  "md5": "47c9946a5313c6191d387d7e4b39536f"
+ },
+ {
+  "id": "s1_welcome_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "预约访客，欢迎您来到非遗博物馆AI鳌台书院。认出您了，跟好小鳌，我们这就出发。",
+  "file": "zh/s1_welcome_ok.mp3",
+  "bytes": 46619,
+  "md5": "8cb036238c6c9f54446e40545ee57fbc"
+ },
+ {
+  "id": "s2_move",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "书院最早建在凤林长生庙旁边。到了清朝乾隆年间，老屋年久失修塌了，族人合力把它迁到菊塘坊菊山脚下，乾隆二十一年落成。",
+  "file": "zh/s2_move.mp3",
+  "bytes": 77966,
+  "md5": "39adb76ab44ce4ed6674f10c455fe342"
+ },
+ {
+  "id": "s2_origin",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "明朝成化十二年，也就是一四七六年春天，做过宝庆知府的厚街人王恪回到家乡，倡议族人捐资，建起了鳌台书院。",
+  "file": "zh/s2_origin.mp3",
+  "bytes": 65898,
+  "md5": "c2cb1ae5710830fe7812ddbfc0bd4a50"
+ },
+ {
+  "id": "s2_rebuild",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "今天你看到的书院，是二〇〇八年动工重建、二〇一二年竣工的，占地四千多平方米，保留了正门、中堂、奎星楼三进的格局。",
+  "file": "zh/s2_rebuild.mp3",
+  "bytes": 68719,
+  "md5": "256c3d2ab4f416f315f71d7695cd3b76"
+ },
+ {
+  "id": "s3_couplet",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "柱子上这副对联是：学贵因时，通古今之谓士；地原毓秀，树梁栋以成材。请跟我读一遍。",
+  "file": "zh/s3_couplet.mp3",
+  "bytes": 55867,
+  "md5": "4752ceb439599704d22bd6e49ab0e5cf"
+ },
+ {
+  "id": "s3_couplet_mean",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "意思是说，读书贵在顺应时代，通晓古今才算读书人；这片土地本就钟灵毓秀，要在这里培育出栋梁之才。",
+  "file": "zh/s3_couplet_mean.mp3",
+  "bytes": 64957,
+  "md5": "33ad86961bc1ba79ed6948bd0ede9767"
+ },
+ {
+  "id": "s3_gate_couplet",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "书院正门还有一副长联：鳌海澄波看锦鳞而跃浪，彭峰耸翠兆文笔之生花。写的是这里出人才的底气。",
+  "file": "zh/s3_gate_couplet.mp3",
+  "bytes": 61039,
+  "md5": "4af2aa40ed992696a2f6b194bfced7d6"
+ },
+ {
+  "id": "s3_intro",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "我们走进讲堂。古时候，学生就坐在这样的梁柱之间读书、写字、听先生讲学。",
+  "file": "zh/s3_intro.mp3",
+  "bytes": 49127,
+  "md5": "ab37de6af38a6b28aa704e0ecba21f7b"
+ },
+ {
+  "id": "s3_three_top",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "状元庄有恭、榜眼冯愿、探花陈伯陶都曾为书院题写匾联，所以它被称为东莞唯一有三甲留墨的书院。",
+  "file": "zh/s3_three_top.mp3",
+  "bytes": 61509,
+  "md5": "26be52a4dc3256752b3ffb4876cf27d1"
+ },
+ {
+  "id": "s4_guancao",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "还有莞草编织。咸水草在手里一压一挑，就变成草席、草篮、草帽，这是水乡人家最日常的手艺。",
+  "file": "zh/s4_guancao.mp3",
+  "bytes": 52889,
+  "md5": "4cbc73220fec0507d0d0c8de89008976"
+ },
+ {
+  "id": "s4_workshop",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这里是非遗工坊。东莞人靠水吃水，一门门老手艺，就是从这样的院子里传下来的。",
+  "file": "zh/s4_workshop.mp3",
+  "bytes": 47716,
+  "md5": "5f283af172f619d71aacc9f929506539"
+ },
+ {
+  "id": "s4_xiangyunsha",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "香云纱又叫莨纱，用薯莨汁反复浸染，再用河泥覆盖晾晒，正面乌黑发亮，反面棕红，穿起来沙沙作响。",
+  "file": "zh/s4_xiangyunsha.mp3",
+  "bytes": 66838,
+  "md5": "a4580869fcdbcb728b1554c0e10dfa6e"
+ },
+ {
+  "id": "s5_bye",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "我是小鳌，谢谢你陪我把这座书院走了一遍。欢迎下次再来，也欢迎再来读一遍那副对联。",
+  "file": "zh/s5_bye.mp3",
+  "bytes": 44268,
+  "md5": "998fd5ebf80c76614076df6aca90e9aa"
+ },
+ {
+  "id": "s5_closing",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "五关走完，从明清的书声，到今天的手艺，鳌台书院一直守在这里，把文脉一代一代传下去。",
+  "file": "zh/s5_closing.mp3",
+  "bytes": 51478,
+  "md5": "266438f693f565cddfc158c543e585d3"
+ },
+ {
+  "id": "s5_ink",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "古人在这里留下墨迹，你也可以留下自己的心愿。愿你像书院的学子一样，读万卷书，行万里路。",
+  "file": "zh/s5_ink.mp3",
+  "bytes": 49597,
+  "md5": "feec4eff0aacddc2794f88bdc0f6f903"
+ },
+ {
+  "id": "s5_route",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "离馆前给你一条参观路线：正门牌坊，前院天井和假山，讲堂楹联，东侧非遗工坊，最后到后园六角亭。",
+  "file": "zh/s5_route.mp3",
+  "bytes": 66838,
+  "md5": "8b5f04417d277e47d21f1b55bf49ab45"
+ }
+]
