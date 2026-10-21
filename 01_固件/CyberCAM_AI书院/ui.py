@@ -366,20 +366,27 @@ class UI(object):
             y += 24
         # 答题阶段把选项铺到下方，直接点
         if phase == "answer" and quiz:
-            qtext = quiz.get("q", "")
+            def _loc(v):
+                """题目是 {zh:..., yue:...} 字典，也可能是纯字符串。"""
+                if isinstance(v, dict):
+                    return v.get(lang) or v.get("zh") or ""
+                return str(v or "")
+
+            qtext = _loc(quiz.get("q"))
             draw_text(img, "问：" + qtext[:26], (16, 420), 16, C_GOLD)
             self.buttons = []
             bw = 152
-            for i, op in enumerate(quiz.get("options", [])[:3]):
+            for i, op in enumerate((quiz.get("options") or [])[:3]):
                 bx = 12 + i * (bw + 8)
                 style = "ghost"
                 if quiz_state and quiz_state.get("answered"):
-                    if op["key"] == quiz_state.get("answer"):
+                    if op.get("key") == quiz_state.get("answer"):
                         style = "primary"
-                    elif op["key"] == quiz_state.get("picked"):
+                    elif op.get("key") == quiz_state.get("picked"):
                         style = "danger"
-                b = Button("ropt_" + op["key"], (bx, 476 - 46, bx + bw, 476),
-                           op["key"] + ". " + op["text"], size=15, style=style)
+                b = Button("ropt_" + str(op.get("key")), (bx, 476 - 46, bx + bw, 476),
+                           str(op.get("key")) + ". " + _loc(op.get("text") or op.get(lang))[:8],
+                           size=15, style=style)
                 b.enabled = not (quiz_state or {}).get("answered")
                 self.buttons.append(b)
                 b.draw(img, time.time())
