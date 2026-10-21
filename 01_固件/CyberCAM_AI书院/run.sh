@@ -1,3 +1,3 @@
 #!/bin/sh
 cd /data/app/aotai
-python main.py
+exec python3 -u main.py

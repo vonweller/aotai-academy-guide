@@ -895,13 +895,40 @@ def main():
 
     signal.signal(signal.SIGTERM, term)
     signal.signal(signal.SIGINT, term)
+    # 桌面用 app-launcher 拉起 APP，滑动退出会给 SIGTERM。
+    # 但如果这个进程是被 setsid/脱离方式启动的，父进程会变成 1，
+    # 桌面退出时没人通知它 —— 于是它继续占着摄像头、继续往网页推画面。
+    # 这里检测到「自己成了孤儿」就主动退出，避免后台残留。
+    signal.signal(signal.SIGHUP, term)
 
     app = App(demo=a.demo, use_touch=not a.no_touch,
               use_display=not a.no_display, show_window=a.window)
+
+    # 记下最初的父进程：桌面 app-launcher 拉起时父进程不是 1。
+    # 若中途发现父进程变成 1（被 reparent，说明启动它的进程已退出），
+    # 就主动收工，别在后台占着摄像头。
+    try:
+        ppid0 = os.getppid()
+    except Exception:
+        ppid0 = 0
+
+    def orphaned():
+        if ppid0 == 1:
+            return False        # 本身就是开机自启场景，不判定
+        try:
+            return os.getppid() == 1
+        except Exception:
+            return False
+
     try:
         app.start()
+        tick = 0
         while RUNNING:
             app.step()
+            tick += 1
+            if tick % 30 == 0 and orphaned():
+                log("父进程已退出，APP 收工（避免后台占摄像头）")
+                break
     except KeyboardInterrupt:
         log("Ctrl-C")
     finally:
