@@ -73,6 +73,7 @@ class App(object):
         self.relic_quiz = None
         self.relic_quiz_state = {}
         self.relic_view = {}
+        self.relic_done = []
 
         # ---- 界面 ----
         self.frame = None
@@ -323,10 +324,12 @@ class App(object):
         self.relic_quiz = None
         self.relic_quiz_state = {}
         self.relic_view = {}
+        self.relic_done = []
         self.relic.reset_announce()
         self.cam.ensure()
         self.say("p_relic_intro")
-        self.bus.event("relic_mode", lang=self.lang)
+        self.bus.event("relic_mode", lang=self.lang, done=list(self.relic_done),
+                       need=list(config.RELIC_KEYS))
         self.mark_dirty()
 
     def go_stage(self, stage):
@@ -524,10 +527,35 @@ class App(object):
         self.mark_dirty()
 
     def pass_relic(self, key):
+        """一件过关。记进已完成列表，然后自动进入下一件的识别。"""
         self.award("relic_quiz_right", "复认通过", uniq="rp_%s" % key)
         self.say("p_relic_pass")
-        self.relic_phase = "done"
-        self.bus.event("relic_pass", key=key, lang=self.lang)
+        if key not in self.relic_done:
+            self.relic_done.append(key)
+        self.bus.event("relic_pass", key=key, lang=self.lang,
+                       done=list(self.relic_done),
+                       all=(len(self.relic_done) >= len(config.RELIC_KEYS)))
+        self.mark_dirty()
+        if len(self.relic_done) >= len(config.RELIC_KEYS):
+            self.finish_relic_all()
+        else:
+            # 还有没认的 -> 回到识别态，等他拿下一件
+            self.relic_phase = "recognize"
+            self.relic_key = ""
+            self.relic_quiz = None
+            self.relic_quiz_state = {}
+            self.relic.reset_announce()
+            left = [k for k in config.RELIC_KEYS if k not in self.relic_done]
+            self.subtitle = "还剩 %d 件，请拿下一件放到镜头前" % len(left)
+            self.say("p_relic_next", default="还剩%d件，请拿下一件放到镜头前。" % len(left))
+            self.mark_dirty()
+
+    def finish_relic_all(self):
+        """三件都认完 -> 告诉网页，可以出兑换了。"""
+        self.relic_phase = "all_done"
+        self.say("p_all_done", default="所有任务都完成了，快去看看能换什么。")
+        self.bus.event("relic_all_done", lang=self.lang, done=list(self.relic_done))
+        self.subtitle = "全部认完！快去看兑换"
         self.mark_dirty()
 
     def update_relic(self, frame):

@@ -363,7 +363,10 @@ function onBackendEvent(payload) {
     } else if (data.type === 'stage_enter' && data.stage) {
       syncTourFromCamera(Number(data.stage), data.lang);
     } else if (data.type === 'relic_mode') {
-      showRelicPanel('<p class="rp-tip">把香云纱、莞草编织或千角灯放到 CyberCAM 镜头前</p>');
+      // 相机进入火眼金睛：网页也切到这个环节，保持同步
+      state.relicDone = state.relicDone || {};
+      if (data.lang) setLang(data.lang, false);
+      enterRelicStage();
     } else if (data.type === 'relic') {
       relicRecognized(data.key);
       if (data.id) speak(data.id, data.lang || state.lang, data.name || '');
@@ -372,7 +375,11 @@ function onBackendEvent(payload) {
     } else if (data.type === 'relic_quiz_result') {
       relicQuizResult(data.key, !!data.ok);
     } else if (data.type === 'relic_pass') {
-      relicPassed(data.key);
+      relicPassed(data.key, data.done, data.all);
+    } else if (data.type === 'relic_all_done') {
+      state.relicPassedAll = true;
+      (data.done || []).forEach((k) => { state.relicDone[k] = true; });
+      finishAllTasks();
     } else if (data.type === 'speak_stop') {
       stopSpeak();
     } else if (data.type === 'speak' && data.id) {
@@ -839,11 +846,15 @@ function relicQuizResult(key, ok) {
   }
 }
 
-function relicPassed(key) {
+function relicPassed(key, doneFromCam, allFromCam) {
   state.relicDone[key] = true;
+  // 相机端带来的已完成列表优先（两端进度对齐）
+  if (Array.isArray(doneFromCam)) {
+    doneFromCam.forEach((k) => { state.relicDone[k] = true; });
+  }
   const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'];
   const left = need.filter((k) => !state.relicDone[k]);
-  if (left.length === 0) {
+  if (allFromCam || left.length === 0) {
     state.relicPassedAll = true;
     showRelicPanel('<p class="rp-name">三件全部认完！</p>' +
       '<p class="rp-line">所有任务完成，正在打开兑换…</p>');

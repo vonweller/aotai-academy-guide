@@ -364,7 +364,7 @@ class UI(object):
         for seg in _wrap(history or "可以认：香云纱、莞草编织、千角灯。认准了就用你选的语言讲它的历史。", 12)[:8]:
             draw_text(img, seg, (416, y), 16, C_TEXT)
             y += 24
-        # 答题阶段把选项铺到下方，直接点
+        # 答题阶段：整屏重排，选项放在 footer 之上，保证看得见点得到
         if phase == "answer" and quiz:
             def _loc(v):
                 """题目是 {zh:..., yue:...} 字典，也可能是纯字符串。"""
@@ -373,27 +373,32 @@ class UI(object):
                 return str(v or "")
 
             qtext = _loc(quiz.get("q"))
-            draw_text(img, "问：" + qtext[:26], (16, 420), 16, C_GOLD)
+            # 左侧上方：题干（两行）
+            for i, seg in enumerate(_wrap(qtext, 16)[:2]):
+                draw_text(img, ("问：" if i == 0 else "    ") + seg, (16, 336 + i * 26),
+                          17, C_GOLD)
             self.buttons = []
-            bw = 152
+            # 三个选项：竖排紧凑，屏高 480、底栏占 446 起
+            # 392 / 418 / 444 过高会溢出，改成 366 起步、每项 26 高
             for i, op in enumerate((quiz.get("options") or [])[:3]):
-                bx = 12 + i * (bw + 8)
+                by = 364 + i * 28
                 style = "ghost"
                 if quiz_state and quiz_state.get("answered"):
                     if op.get("key") == quiz_state.get("answer"):
                         style = "primary"
                     elif op.get("key") == quiz_state.get("picked"):
                         style = "danger"
-                b = Button("ropt_" + str(op.get("key")), (bx, 476 - 46, bx + bw, 476),
-                           str(op.get("key")) + ". " + _loc(op.get("text") or op.get(lang))[:8],
-                           size=15, style=style)
+                txt = str(op.get("key")) + ". " + _loc(op.get("text") or op.get(lang))[:11]
+                b = Button("ropt_" + str(op.get("key")), (12, by, 470, by + 26),
+                           txt, size=15, style=style)
                 b.enabled = not (quiz_state or {}).get("answered")
                 self.buttons.append(b)
                 b.draw(img, time.time())
-            self.buttons.append(Button("btn_mode", (486, 476 - 46, 624, 476),
-                                        "返回", size=15, style="ghost"))
-            self.buttons[-1].draw(img, time.time())
-            self.footer_bar(img, "点 A / B / C 答题", "答对再来认一次")
+            # 右侧「返回」按钮，与选项同高
+            rb = Button("btn_mode", (484, 364, 624, 416), "返回", size=16, style="ghost")
+            self.buttons.append(rb)
+            rb.draw(img, time.time())
+            self.footer_bar(img, "点上面的选项答题", "答对再认一次")
             return img
         self.buttons = [
             Button("btn_repeat", (412, 340, 624, 386), "再讲一次", size=20, style="ghost"),
