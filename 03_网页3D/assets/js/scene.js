@@ -31,18 +31,20 @@ export const PALETTE = {
 const FALLBACK_MAP = {
   // 页面坐标 = Blender(x, y) 绕 Y 转 180° => (-x, -y)
   // 门楼 z=-17.6，前院 z=-9.5，讲堂 z=+6.5，工坊 (-8.2, -9.5)，六角亭 z=+13.5
+  // 页面坐标（实机材质分组实测）：门楼 z-32..-30 / 讲堂 z-28..-21 /
+  // 六角亭 z-26..-18 / 前院 z-14..-1 / 工坊 z-12..-3
   stages: [
-    { stage: 1, key: 'gate', name_cn: '门口迎宾', actorStop: [0, 0, -22.0] },
-    { stage: 2, key: 'front_yard', name_cn: '前院溯源', actorStop: [0, 0, -14.0] },
-    { stage: 3, key: 'hall', name_cn: '讲堂楹联', actorStop: [0, 0, 0.0] },
-    { stage: 4, key: 'workshop', name_cn: '庭院工坊', actorStop: [-3.0, 0, -4.0] },
-    { stage: 5, key: 'pavilion', name_cn: '尾声留墨', actorStop: [3.5, 0, 9.0] },
+    { stage: 1, key: 'gate', name_cn: '门口迎宾', actorStop: [0, 0, -29.5] },
+    { stage: 2, key: 'front_yard', name_cn: '前院溯源', actorStop: [-2.2, 0, -23.0] },
+    { stage: 3, key: 'hall', name_cn: '讲堂楹联', actorStop: [-2.2, 0, -23.0] },
+    { stage: 4, key: 'workshop', name_cn: '庭院工坊', actorStop: [-10.5, 0, -8.0] },
+    { stage: 5, key: 'pavilion', name_cn: '尾声留墨', actorStop: [-11.0, 0, -21.0] },
   ],
   walkPaths: {
-    '1-2': [[0, 0, -22.0], [0, 0, -18.5], [0, 0, -16.0], [0, 0, -14.0]],
-    '2-3': [[0, 0, -14.0], [0, 0, -9.0], [0, 0, -3.0], [0, 0, 0.0]],
-    '3-4': [[0, 0, 0.0], [-1.5, 0, -2.0], [-3.0, 0, -4.0]],
-    '4-5': [[-3.0, 0, -4.0], [0, 0, 1.0], [2.0, 0, 6.0], [3.5, 0, 9.0]],
+    '1-2': [[0, 0, -29.5], [-1.0, 0, -27.0], [-2.2, 0, -25.0], [-2.2, 0, -23.0]],
+    '2-3': [[-2.2, 0, -23.0], [-2.2, 0, -24.0], [-2.2, 0, -24.7]],
+    '3-4': [[-2.2, 0, -23.0], [-4.0, 0, -18.0], [-7.0, 0, -12.0], [-10.5, 0, -8.0]],
+    '4-5': [[-10.5, 0, -8.0], [-11.0, 0, -13.0], [-11.0, 0, -18.0], [-11.0, 0, -21.0]],
   },
   cameraPresets: {
     overview: { from: [26, 22, -34], look: [0, 2, -4] },
@@ -841,12 +843,63 @@ export class World {
         console.info('[world] GLB 已加载', size.toArray().map((v) => +v.toFixed(2)));
         // Blender 场景更精细：隐藏程序化场景，只留地面接触阴影
         this.setProceduralVisible(false);
+        this.addPhotoBoards();
         resolve(true);
       }, undefined, (err) => {
         console.info('[world] 未找到 GLB，使用程序化场景（这是正常的）', err && err.message);
         resolve(false);
       });
     });
+  }
+
+  /** 各关卡旁边的真实照片展板：让观众看到「这里真实是什么样」 */
+  addPhotoBoards() {
+    if (this.photoGroup) return;
+    // 实测相机位置：1(7,7.5,-48) 2(6,6,-37) 3(-1,4.2,-34) 4(-2,5,4) 5(-4,5,-12)
+    // 展板放在相机看主体的视线侧边，高度 3.2m
+    const boards = [
+      { stage: 1, file: 'photos/stage1_gate_05.jpg', pos: [-7.5, 3.2, -33.0] },
+      { stage: 2, file: 'photos/stage2_academy2_00.jpg', pos: [-9.0, 3.2, -24.0] },
+      { stage: 3, file: 'photos/stage3_stone_29.jpg', pos: [6.5, 3.2, -28.0] },
+      { stage: 4, file: 'photos/stage4_loom_12.jpg', pos: [-1.0, 3.2, -8.0] },
+      { stage: 5, file: 'photos/stage5_courtyard_03.jpg', pos: [-6.0, 3.2, -22.0] },
+    ];
+    const g = new THREE.Group();
+    g.name = 'photoBoards';
+    const loader = new THREE.TextureLoader();
+    for (const b of boards) {
+      const W = 4.4, H = 3.3;
+      // 底板
+      const panel = new THREE.Group();
+      panel.position.set(b.pos[0], b.pos[1], b.pos[2]);
+      panel.userData.isBoard = true;
+      const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(W + 0.24, H + 0.24, 0.10),
+        new THREE.MeshStandardMaterial({ color: 0x1e1a16, roughness: 0.9 }),
+      );
+      frame.castShadow = true;
+      panel.add(frame);
+      // 照片面
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xffffff, roughness: 0.65, metalness: 0.0,
+        emissive: 0xffffff, emissiveIntensity: 0.28,
+      });
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(W, H), mat);
+      plane.position.z = 0.07;    // 略前移，避免与底板共面闪烁
+      panel.add(plane);
+      g.add(panel);
+      loader.load('/assets/' + b.file, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 4;
+        mat.map = tex;
+        mat.needsUpdate = true;
+      }, undefined, () => {
+        // 加载失败就留纯色板，不影响场景
+      });
+    }
+    this.scene.add(g);
+    this.photoGroup = g;
+    console.info('[world] 照片展板已加载', boards.length, '块');
   }
 
   setProceduralVisible(v) {
@@ -1015,6 +1068,15 @@ export class World {
         this.camera.position.copy(next.clone().add(dir));
       }
       if (this.camTween) this.camTween = null;
+    }
+
+    // 照片展板始终朝向相机（billboard），保证任何机位都看得清
+    if (this.photoGroup) {
+      this.photoGroup.children.forEach((panel) => {
+        if (panel.userData && panel.userData.isBoard) {
+          panel.lookAt(this.camera.position.x, panel.position.y, this.camera.position.z);
+        }
+      });
     }
 
     // 相机

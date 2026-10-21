@@ -1,0 +1,27 @@
+[
+ {
+  "stage": 1,
+  "file": "photos/stage1_gate_05.jpg",
+  "title": "岭南牌坊"
+ },
+ {
+  "stage": 2,
+  "file": "photos/stage2_academy2_00.jpg",
+  "title": "岭南书院实景"
+ },
+ {
+  "stage": 3,
+  "file": "photos/stage3_stone_29.jpg",
+  "title": "讲堂楹联"
+ },
+ {
+  "stage": 4,
+  "file": "photos/stage4_loom_12.jpg",
+  "title": "手工织机"
+ },
+ {
+  "stage": 5,
+  "file": "photos/stage5_courtyard_03.jpg",
+  "title": "庭院一角"
+ }
+]
