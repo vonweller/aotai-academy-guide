@@ -1,7 +1,7 @@
 {
  "visitors": {
   "预约访客": {
-   "score": 359,
+   "score": 50,
    "log": [
     {
      "k": "quiz_right",
@@ -176,9 +176,54 @@
      "n": "千角灯",
      "p": 8,
      "t": 1792599242
+    },
+    {
+     "k": "stage_clear",
+     "n": "第3关",
+     "p": 10,
+     "t": 1792600173
+    },
+    {
+     "k": "stage_clear",
+     "n": "第5关",
+     "p": 10,
+     "t": 1792600199
+    },
+    {
+     "k": "relic_recognize",
+     "n": "莞草編織",
+     "p": 8,
+     "t": 1792600283
+    },
+    {
+     "k": "relic_recognize",
+     "n": "千角燈",
+     "p": 8,
+     "t": 1792600358
     }
    ],
-   "redeemed": [],
+   "redeemed": [
+    {
+     "id": "figure_qianjiaodeng",
+     "t": 1792600329
+    },
+    {
+     "id": "pin_qianjiaodeng",
+     "t": 1792600331
+    },
+    {
+     "id": "pin_guancao",
+     "t": 1792600331
+    },
+    {
+     "id": "pin_xiangyunsha",
+     "t": 1792600331
+    },
+    {
+     "id": "figure_xiangyunsha",
+     "t": 1792600332
+    }
+   ],
    "first": 1792545776
   },
   "测试同学": {

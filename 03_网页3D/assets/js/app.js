@@ -229,7 +229,8 @@ function speak(lineId, lang = state.lang, text = '') {
   if (!state.voiceOn) { setSubtitle(text); return; }
   stopSpeak();
   const url = assetUrl('/audio/' + lang + '/' + lineId + '.mp3');
-  const fallback = () => speakTTS(text, lang);
+  // 兜底不再用浏览器语音合成（机器音）。音频缺失就只显示字幕。
+  const fallback = () => { state.speaking = false; };
   if (lineId) {
     if (!audioEl) audioEl = new Audio();
     audioEl.onerror = fallback;
@@ -243,7 +244,10 @@ function speak(lineId, lang = state.lang, text = '') {
   fallback();
 }
 
+// 浏览器语音合成：只用做最后兜底，且默认关闭（听起来像机器音）
+const ALLOW_BROWSER_TTS = false;
 function speakTTS(text, lang) {
+  if (!ALLOW_BROWSER_TTS) return;
   if (!text || !('speechSynthesis' in window)) return;
   try {
     window.speechSynthesis.cancel();
@@ -368,8 +372,11 @@ function onBackendEvent(payload) {
       if (data.lang) setLang(data.lang, false);
       enterRelicStage();
     } else if (data.type === 'relic') {
-      relicRecognized(data.key);
-      if (data.id) speak(data.id, data.lang || state.lang, data.name || '');
+      relicRecognized(data.key, !!data.spoken || !!data.fromCamera);
+      // 相机已经发声时不要再播一遍，否则粤语和普通话会叠在一起
+      if (!(data.spoken || state.camAudio)) {
+        if (data.id) speak(data.id, data.lang || state.lang, data.name || '');
+      }
     } else if (data.type === 'relic_quiz') {
       if (data.quiz) relicQuiz(data.key, data.quiz);
     } else if (data.type === 'relic_quiz_result') {
@@ -667,7 +674,7 @@ function answerQuiz(n, key, fromRemote = false) {
   // 用已生成的 mp3：对 q1_a，错 q1_wrong。浏览器 TTS 在没粤语音色时会落回普通话。
   const lineId = quiz.qid ? (quiz.qid + (ok ? '_a' : '_wrong')) : '';
   if (lineId) speak(lineId, state.lang, explain);
-  else speakTTS(explain, state.lang);
+  // 没有对应音频就只显示字幕，不退回浏览器 TTS
   if (!fromRemote && ok) addPointsLocal('quiz_right');
   if (!fromRemote) {
     sendCmd({ cmd: 'quiz', stage: n, qid: quiz.qid, answer: key });
@@ -797,7 +804,7 @@ function showRelicPanel(html) {
   p.hidden = false;
 }
 
-function relicRecognized(key) {
+function relicRecognized(key, silentAudio) {
   const r = relicOf(key);
   const text = r ? (r[state.lang] || r.zh || '') : '';
   const name = relicName(key);
@@ -812,8 +819,13 @@ function relicRecognized(key) {
     '<p class="rp-line">' + text + '</p>' +
     '<p class="rp-tip">讲解结束后会出题，请听题目</p>' +
     '</div></div>');
-  // 用预生成音频讲历史（不再用浏览器 TTS，避免机器音）
-  if (r && r.id) speak(r.id, state.lang, text);
+  // 用预生成音频讲历史（不用浏览器 TTS，避免机器音）
+  // 相机端已经播过时，这里只显示卡片不重复发声
+  if (!silentAudio) {
+    if (r && r.id) speak(r.id, state.lang, text);
+  } else {
+    stopSpeak();
+  }
   addPointsLocal('relic_recognize', name);
 }
 

@@ -494,14 +494,22 @@ class App(object):
         text = rel.get(self.lang) or rel.get("zh") or ""
         self.subtitle = text
         self.speaker.say(rel.get("id"), self.lang, text=text)
+        # spoken=True：音频由相机自己播，网页只显示字幕，别再放一遍（否则叠音）
         self.bus.event("relic", id=rel.get("id"), key=key,
-                        name=name, lang=self.lang)
+                        name=name, lang=self.lang, spoken=True)
         quiz = rel.get("quiz")
         if quiz:
             self.bus.event("relic_quiz", key=key, quiz={
                 "q": quiz.get("q"), "options": quiz.get("options"),
                 "answer": quiz.get("answer")}, lang=self.lang)
         self.mark_dirty()
+
+    def stop_speaking(self):
+        """网页在讲话时，设备端让路，避免两边同时出声。"""
+        try:
+            self.speaker.stop()
+        except Exception:
+            pass
 
     def answer_relic(self, key):
         quiz = self.relic_quiz or {}
