@@ -356,15 +356,31 @@ def make_hall():
     return objs
 
 
+# 工坊中心：放在院内东侧（云墙之内），从院子看得见
+WORKSHOP_X, WORKSHOP_Y = 8.2, 9.5
+
+
 def make_workshop():
     objs = []
-    x, y = 9.5, 2.0
+    x, y = WORKSHOP_X, WORKSHOP_Y
     S = bpy.data.materials["Stone"]
     Wd = bpy.data.materials["WallDim"]
+    # 台基与地面
     objs.append(cube("ws_base", (7, 8, 0.5), (x, y, 0.25), S))
-    objs.append(cube("ws_wall", (6.2, 7.2, 3.4), (x, y, 2.2), Wd))
-    objs.append(cube("ws_door", (0.1, 1.6, 2.4), (x - 3.12, y, 1.7), bpy.data.materials["Wood"]))
+    # 三面墙（正面敞开，做成作坊铺面）
+    objs.append(cube("ws_wall_back", (6.2, 0.4, 3.4), (x, y + 3.4, 2.2), Wd))
+    for s in (-1, 1):
+        objs.append(cube("ws_wall_side", (0.4, 6.6, 3.4), (x + s * 2.9, y, 2.2), Wd))
+    # 敞开的正面留两根柱子支撑
+    for s in (-1, 1):
+        objs.append(cyl("ws_col", 0.16, 3.4, (x + s * 2.7, y - 3.3, 2.2),
+                        bpy.data.materials["Red"], verts=10))
+    # 檐下横梁
+    objs.append(cube("ws_beam", (6.4, 0.24, 0.26), (x, y - 3.3, 3.75),
+                     bpy.data.materials["Wood"]))
     objs += make_roof(objs, 6.6, 7.6, 2.2, x, y, 4.0, 0.8)
+    # 室内地面（略高一层）
+    objs.append(cube("ws_floor", (5.8, 6.4, 0.08), (x, y, 0.54), S))
     return objs
 
 
@@ -454,6 +470,15 @@ def build():
     all_objs += make_hall()
     all_objs += make_workshop()
     all_objs += make_pavilion()
+
+    # 扩建：工坊内部与院落陈设（织机 / 染缸 / 草编工位 / 石桌）
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import workshop_detail
+        all_objs += workshop_detail.build_workshop_detail()
+        print("[build] workshop detail added")
+    except Exception as e:
+        print("[build] workshop detail FAILED:", e)
 
     # 合并成一个对象（减少 draw call，含地面）
     scene_objs = [o for o in bpy.data.objects if o.type == 'MESH']
