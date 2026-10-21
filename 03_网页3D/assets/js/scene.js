@@ -29,24 +29,27 @@ export const PALETTE = {
 };
 
 const FALLBACK_MAP = {
+  // 页面坐标 = Blender(x, y) 绕 Y 转 180° => (-x, -y)
+  // 门楼 z=-17.6，前院 z=-9.5，讲堂 z=+6.5，工坊 (-8.2, -9.5)，六角亭 z=+13.5
   stages: [
-    { stage: 1, key: 'gate', name_cn: '门口迎宾', actorStop: [0, 0, 15.2] },
-    { stage: 2, key: 'front_yard', name_cn: '前院溯源', actorStop: [0, 0, 9.6] },
-    { stage: 3, key: 'hall', name_cn: '讲堂楹联', actorStop: [0, 0.6, -1.2] },
-    { stage: 4, key: 'workshop', name_cn: '庭院工坊', actorStop: [8.6, 0, 2.0] },
-    { stage: 5, key: 'pavilion', name_cn: '尾声留墨', actorStop: [-5.8, 0, -12.0] },
+    { stage: 1, key: 'gate', name_cn: '门口迎宾', actorStop: [0, 0, -22.0] },
+    { stage: 2, key: 'front_yard', name_cn: '前院溯源', actorStop: [0, 0, -14.0] },
+    { stage: 3, key: 'hall', name_cn: '讲堂楹联', actorStop: [0, 0, 0.0] },
+    { stage: 4, key: 'workshop', name_cn: '庭院工坊', actorStop: [-3.0, 0, -4.0] },
+    { stage: 5, key: 'pavilion', name_cn: '尾声留墨', actorStop: [3.5, 0, 9.0] },
   ],
   walkPaths: {
-    '1-2': [[0, 0, 15.2], [0, 0, 12.5], [0, 0, 9.6]],
-    '2-3': [[0, 0, 9.6], [-1.2, 0, 6.0], [-1.2, 0, 1.2], [0, 0.3, 0.2], [0, 0.6, -1.2]],
-    '3-4': [[0, 0.6, -1.2], [0, 0, 1.2], [3.2, 0, 1.8], [6.0, 0, 2.0], [8.6, 0, 2.0]],
-    '4-5': [[8.6, 0, 2.0], [6.0, 0, 0.0], [2.0, 0, -4.0], [-2.0, 0, -8.0], [-5.8, 0, -12.0]],
+    '1-2': [[0, 0, -22.0], [0, 0, -18.5], [0, 0, -16.0], [0, 0, -14.0]],
+    '2-3': [[0, 0, -14.0], [0, 0, -9.0], [0, 0, -3.0], [0, 0, 0.0]],
+    '3-4': [[0, 0, 0.0], [-1.5, 0, -2.0], [-3.0, 0, -4.0]],
+    '4-5': [[-3.0, 0, -4.0], [0, 0, 1.0], [2.0, 0, 6.0], [3.5, 0, 9.0]],
   },
   cameraPresets: {
-    overview: { from: [22, 18, 30], look: [0, 2, -2] },
-    gate: { from: [0, 3.2, 26], look: [0, 2, 16] },
-    hall: { from: [0, 5, 12], look: [0, 3, -6] },
-    north: { from: [-14, 12, -26], look: [0, 2, -6] },
+    overview: { from: [26, 22, -34], look: [0, 2, -4] },
+    gate: { from: [0, 3.6, -26], look: [0, 3.6, -17.6] },
+    hall: { from: [0, 6.0, -4], look: [0, 3.0, 6.5] },
+    workshop: { from: [0, 5.0, -3], look: [-8.2, 1.8, -9.5] },
+    north: { from: [14, 12, -2], look: [0, 2, -16] },
   },
 };
 
