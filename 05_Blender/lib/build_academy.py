@@ -480,15 +480,39 @@ def build():
     except Exception as e:
         print("[build] workshop detail FAILED:", e)
 
+    # 扩建：前院碑廊 / 讲堂内景 / 后园曲水
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import scene_extra
+        all_objs += scene_extra.build_forecourt()
+        print("[build] forecourt added")
+        all_objs += scene_extra.build_hall_inside()
+        print("[build] hall inside added")
+        all_objs += scene_extra.build_back_garden()
+        print("[build] back garden added")
+    except Exception as e:
+        print("[build] scene extra FAILED:", e)
+
     # 合并成一个对象（减少 draw call，含地面）
+    # 注意：join 只能合并"选中的网格"，而 bpy.ops 需要正确上下文。
+    # 先按 API 逐对象选中，再确认选中数与场景网格数一致，否则会漏合。
     scene_objs = [o for o in bpy.data.objects if o.type == 'MESH']
+    print("[build] mesh objects before join:", len(scene_objs))
     bpy.ops.object.select_all(action='DESELECT')
     for o in scene_objs:
         o.select_set(True)
     bpy.context.view_layer.objects.active = scene_objs[0]
+    n_before = len([o for o in bpy.data.objects if o.type == 'MESH'])
     bpy.ops.object.join()
     joined = bpy.context.object
     joined.name = "AotaiAcademy"
+    n_after = len([o for o in bpy.data.objects if o.type == 'MESH'])
+    print("[build] join: %d -> %d meshes, verts %d" % (n_before, n_after, len(joined.data.vertices)))
+    # 保险：把漏网的网格删掉，避免导出时混进去
+    for o in list(bpy.data.objects):
+        if o.type == 'MESH' and o is not joined:
+            print("[build] removing leftover mesh:", o.name)
+            bpy.data.objects.remove(o, do_unlink=True)
 
     # 清空变换：所有顶点已在世界坐标，导出即无节点位移
     joined.rotation_euler = (0, 0, 0)
