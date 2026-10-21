@@ -306,11 +306,16 @@ kbd {
 .keys li { display: flex; gap: 10px; align-items: baseline; color: #e6dfd2; }
 .keys li span { color: var(--paper-dim); font-size: 13px; }
 .modal-note { font-size: 12.5px; color: var(--paper-dim); line-height: 1.6; margin: 0 0 18px; }
-.relic-panel { position: fixed; right: 18px; top: 92px; width: 300px; z-index: 7;
+.relic-panel { position: fixed; right: 18px; top: 92px; width: 330px; z-index: 7;
   background: rgba(12, 16, 18, 0.9); border: 1px solid rgba(217, 180, 91, 0.4);
   border-radius: 16px; padding: 14px 16px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
 .relic-panel[hidden] { display: none; }
 .rp-head { font-family: var(--font-serif); font-size: 16px; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 10px; }
+/* 识别卡片：照片 + 讲解 */
+.rp-card { display: flex; flex-direction: column; }
+.rp-photo { width: 100%; height: 150px; object-fit: cover; border-radius: 10px;
+  border: 1px solid rgba(217, 180, 91, 0.35); margin-bottom: 10px; background: #111; }
+.rp-kicker { font-size: 11px; letter-spacing: 0.18em; color: var(--gold); margin: 0 0 4px; opacity: 0.85; }
 .rp-tip { font-size: 13px; line-height: 1.6; color: var(--paper-dim); margin: 0; }
 .rp-list { list-style: none; margin: 8px 0 10px; padding: 0; }
 .rp-list li { font-size: 14px; line-height: 1.9; color: var(--paper); }

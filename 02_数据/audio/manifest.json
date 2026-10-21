@@ -1,5 +1,35 @@
 [
  {
+  "id": "p_all_done",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "好犀利呀，所有任務都完成喇。睇下你嘅積分可以換咩。",
+  "file": "yue/p_all_done.mp3",
+  "bytes": 41604,
+  "md5": "07ca6931efe999209d6c8c534689bfd1"
+ },
+ {
+  "id": "p_lang_yue",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "好，我改用粵語同你講。",
+  "file": "yue/p_lang_yue.mp3",
+  "bytes": 20758,
+  "md5": "ea45e80bec21055eb0b8c668ffd84c5e"
+ },
+ {
+  "id": "p_lang_zh",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "好，改用普通話同你講。",
+  "file": "yue/p_lang_zh.mp3",
+  "bytes": 21385,
+  "md5": "c9d12e2a70a1f8c6dc83956373de771f"
+ },
+ {
   "id": "p_points",
   "lang": "yue",
   "engine": "edge",
@@ -40,6 +70,16 @@
   "md5": "8e7cb1cbe624c3fab8d7813e3d81034e"
  },
  {
+  "id": "p_relic_one",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "認得喇，呢件係。",
+  "file": "yue/p_relic_one.mp3",
+  "bytes": 16526,
+  "md5": "08f73a1d683328f1b124f610cd43c70f"
+ },
+ {
   "id": "p_relic_pass",
   "lang": "yue",
   "engine": "edge",
@@ -48,6 +88,16 @@
   "file": "yue/p_relic_pass.mp3",
   "bytes": 25460,
   "md5": "83c76eb0b2830d9fbd205df4165d7262"
+ },
+ {
+  "id": "p_relic_task",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "五關行完喇，跟住係火眼金睛。請將香雲紗、莞草編織同千角燈，逐件放喺鏡頭前畀我認一認。",
+  "file": "yue/p_relic_task.mp3",
+  "bytes": 62920,
+  "md5": "541e4fdeffd59e2c5ed12d9be6b0e605"
  },
  {
   "id": "q1_a",
@@ -408,6 +458,56 @@
   "bytes": 65114,
   "md5": "f866fdacb93d778de600da505b1a42b3",
   "engine": "edge"
+ },
+ {
+  "id": "p_all_done",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "太厉害了，所有任务都完成了。来看看你的积分可以换什么。",
+  "file": "zh/p_all_done.mp3",
+  "bytes": 31259,
+  "md5": "da89f2995cb090ce262929fcf95568e8"
+ },
+ {
+  "id": "p_lang_yue",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "好，我改用粤语同你讲。",
+  "file": "zh/p_lang_yue.mp3",
+  "bytes": 14489,
+  "md5": "2c98f87aaf85d0ebf738613640aaf7e5"
+ },
+ {
+  "id": "p_lang_zh",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "好的，改用普通话为你讲解。",
+  "file": "zh/p_lang_zh.mp3",
+  "bytes": 14959,
+  "md5": "c449694a460349617fb744136ba19b2b"
+ },
+ {
+  "id": "p_relic_one",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "认出来了，这件是。",
+  "file": "zh/p_relic_one.mp3",
+  "bytes": 13548,
+  "md5": "8e30fcea2fa2c5d98a84da9d3a05f914"
+ },
+ {
+  "id": "p_relic_task",
+  "lang": "zh",
+  "engine": "edge",
+  "voice": "edge-fallback",
+  "text": "五关走完了，接下来是火眼金睛。请把香云纱、莞草编织和千角灯，依次放到镜头前让我认一认。",
+  "file": "zh/p_relic_task.mp3",
+  "bytes": 59942,
+  "md5": "eee1fb63dba0c59619229af91385d326"
  },
  {
   "id": "q1_a",

@@ -93,6 +93,9 @@ def collect_lines():
     }
     for lid, (zh, yue) in fixed.items():
         add(lid, zh, yue)
+    # 顶层 prompts（网页用的系统提示语）
+    for pr in data.get("prompts") or []:
+        add(pr.get("id"), pr.get("zh"), pr.get("yue"))
     return out
 
 

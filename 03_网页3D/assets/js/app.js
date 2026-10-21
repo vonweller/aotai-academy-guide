@@ -575,7 +575,7 @@ function enterRelicStage() {
   const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'].filter((k) => !state.relicDone[k]);
   const names = need.map(relicName).join('、');
   setSubtitle('五关走完了！接下来是火眼金睛：请把「' + names + '」依次放到 CyberCAM 镜头前。');
-  speakTTS('五关走完了，接下来是火眼金睛，请把这三件非遗古物放到镜头前让我认一认。', state.lang);
+  speak('p_relic_task', state.lang, '五关走完了，接下来是火眼金睛，请把三件非遗古物依次放到镜头前。');
   showRelicPanel(
     '<p class="rp-name">火眼金睛 · 最后一道任务</p>' +
     '<p class="rp-line">把下面三件古物依次放到 CyberCAM 镜头前，每认对一件就加积分。</p>' +
@@ -592,7 +592,7 @@ function enterRelicStage() {
 function finishAllTasks() {
   state.relicPassedAll = true;
   setSubtitle('所有任务完成！来看看你的积分可以换什么。');
-  speakTTS('太厉害了，所有任务都完成了。来看看你的积分可以换什么。', state.lang);
+  speak('p_all_done', state.lang, '太厉害了，所有任务都完成了。来看看你的积分可以换什么。');
   toast('全部完成！打开兑换');
   setTimeout(() => openShop(), 900);
 }
@@ -615,9 +615,10 @@ function setLang(lang, announce = true) {
   renderStagePanel(state.stage);
   syncChips();
   if (announce) {
+    const pid = lang === 'yue' ? 'p_lang_yue' : 'p_lang_zh';
     const t = lang === 'yue' ? '好，我改用粵語同你講。' : '好的，改用普通话为你讲解。';
     setSubtitle(t);
-    speakTTS(t, lang);
+    speak(pid, lang, t);
   }
   pushState({ lang });
   sendCmd({ cmd: 'set_lang', lang });
@@ -792,10 +793,21 @@ function showRelicPanel(html) {
 function relicRecognized(key) {
   const r = relicOf(key);
   const text = r ? (r[state.lang] || r.zh || '') : '';
-  showRelicPanel('<p class="rp-name">' + relicName(key) + '</p>' +
+  const name = relicName(key);
+  // 识别卡片：文物照片 + 名称 + 历史讲解（带说明是 AI 正在介绍）
+  showRelicPanel(
+    '<div class="rp-card">' +
+    '<img class="rp-photo" src="/assets/relics/' + key + '.jpg" alt="' + name + '" ' +
+    'onerror="this.style.display=\'none\'">' +
+    '<div class="rp-body">' +
+    '<p class="rp-kicker">AI 识物 · 已认出</p>' +
+    '<p class="rp-name">' + name + '</p>' +
     '<p class="rp-line">' + text + '</p>' +
-    '<p class="rp-tip">讲解结束后会出题，请听题目</p>');
-  addPointsLocal('relic_recognize', relicName(key));
+    '<p class="rp-tip">讲解结束后会出题，请听题目</p>' +
+    '</div></div>');
+  // 用预生成音频讲历史（不再用浏览器 TTS，避免机器音）
+  if (r && r.id) speak(r.id, state.lang, text);
+  addPointsLocal('relic_recognize', name);
 }
 
 function relicQuiz(key, quiz) {
