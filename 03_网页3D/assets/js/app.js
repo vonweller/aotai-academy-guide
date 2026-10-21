@@ -41,6 +41,9 @@ const state = {
   content: null,
   quizAnswered: {},
   relicQuiz: null,
+  // 火眼金睛：三件古物都认过 → 解锁兑换
+  relicDone: {},
+  relicPassedAll: false,
   points: null,
   backend: false,
   mqtt: false,
@@ -468,6 +471,11 @@ function syncTourFromCamera(n, lang) {
 
 function gotoStage(n, opts = {}) {
   n = Math.max(1, Math.min(5, Number(n) || 1));
+  // 首次到达某关：给通关积分（同一关只加一次）
+  if (!opts.silent && n > (state._maxStage || 1)) {
+    state._maxStage = n;
+    addPointsLocal('stage_clear', '第' + n + '关');
+  }
   if (state.walking) {
     if (opts.force) {
       world.stopWalk();
@@ -551,10 +559,42 @@ function updateStageCamera(n, instant) {
 
 function nextStage() {
   if (state.stage >= 5 && !state.walking) {
-    speakStage(5);
+    // 五关走完：进入火眼金睛环节（最后一道任务），而不是停在结尾
+    enterRelicStage();
     return;
   }
   gotoStage(state.stage + 1);
+}
+
+/** 五关结束 → 火眼金睛：提示把三件非遗古物依次交给 CyberCAM 识别 */
+function enterRelicStage() {
+  if (state.relicPassedAll) {
+    finishAllTasks();
+    return;
+  }
+  const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'].filter((k) => !state.relicDone[k]);
+  const names = need.map(relicName).join('、');
+  setSubtitle('五关走完了！接下来是火眼金睛：请把「' + names + '」依次放到 CyberCAM 镜头前。');
+  speakTTS('五关走完了，接下来是火眼金睛，请把这三件非遗古物放到镜头前让我认一认。', state.lang);
+  showRelicPanel(
+    '<p class="rp-name">火眼金睛 · 最后一道任务</p>' +
+    '<p class="rp-line">把下面三件古物依次放到 CyberCAM 镜头前，每认对一件就加积分。</p>' +
+    '<ul class="rp-list">' +
+    ['xiangyunsha', 'guancao', 'qianjiaodeng'].map((k) =>
+      '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
+      (state.relicDone[k] ? '✓ ' : '○ ') + relicName(k) + '</li>').join('') +
+    '</ul>' +
+    '<p class="rp-tip">全部认完就进兑换页面</p>');
+  toast('五关走完！进入火眼金睛');
+}
+
+/** 所有任务完成 → 打开兑换 */
+function finishAllTasks() {
+  state.relicPassedAll = true;
+  setSubtitle('所有任务完成！来看看你的积分可以换什么。');
+  speakTTS('太厉害了，所有任务都完成了。来看看你的积分可以换什么。', state.lang);
+  toast('全部完成！打开兑换');
+  setTimeout(() => openShop(), 900);
 }
 
 function prevStage() {
@@ -755,6 +795,7 @@ function relicRecognized(key) {
   showRelicPanel('<p class="rp-name">' + relicName(key) + '</p>' +
     '<p class="rp-line">' + text + '</p>' +
     '<p class="rp-tip">讲解结束后会出题，请听题目</p>');
+  addPointsLocal('relic_recognize', relicName(key));
 }
 
 function relicQuiz(key, quiz) {
@@ -787,8 +828,23 @@ function relicQuizResult(key, ok) {
 }
 
 function relicPassed(key) {
+  state.relicDone[key] = true;
+  const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'];
+  const left = need.filter((k) => !state.relicDone[k]);
+  if (left.length === 0) {
+    state.relicPassedAll = true;
+    showRelicPanel('<p class="rp-name">三件全部认完！</p>' +
+      '<p class="rp-line">所有任务完成，正在打开兑换…</p>');
+    setTimeout(() => finishAllTasks(), 1200);
+    return;
+  }
   showRelicPanel('<p class="rp-name">' + relicName(key) + ' · 过关</p>' +
-    '<p class="rp-line">积分已经记上，可以换下一件。</p>');
+    '<p class="rp-line">积分已记上。还剩 ' + left.length + ' 件：' +
+    left.map(relicName).join('、') + '</p>' +
+    '<ul class="rp-list">' +
+    need.map((k) => '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
+      (state.relicDone[k] ? '✓ ' : '○ ') + relicName(k) + '</li>').join('') +
+    '</ul>');
 }
 
 function hideRelicPanel() {
@@ -831,7 +887,8 @@ function renderShop() {
     const owned = (p.redeemed || []).filter((x) => x.id === it.id).length;
     const can = (p.score || 0) >= it.cost;
     return '<div class="shop-item' + (can ? '' : ' locked') + '" data-id="' + it.id + '">' +
-      '<div class="thumb">' + (ICONS[it.icon] || ICONS.badge) + '</div>' +
+      '<div class="thumb"><img src="/assets/prizes/' + it.id + '.jpg" alt="' + it.name + '" ' +
+        'onerror="this.style.display=\'none\'"></div>' +
       '<span class="nm">' + it.name + '</span>' +
       '<span class="cost">' + it.cost + ' 积分</span>' +
       (owned ? '<span class="owned">已兑换 ' + owned + ' 个</span>' :
@@ -861,11 +918,17 @@ async function redeem(id) {
   renderShop();
 }
 
-function addPointsLocal(kind) {
+function addPointsLocal(kind, note) {
   fetch('/api/add', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind: kind }),
-  }).then(() => loadPoints(true)).catch(() => {});
+    body: JSON.stringify({ kind: kind, note: note || '' }),
+  }).then((r) => r.json()).then((d) => {
+    loadPoints(true);
+    if (d && d.score != null) {
+      const el = $('#scoreNum');
+      if (el) el.textContent = d.score;
+    }
+  }).catch(() => {});
 }
 
 function openShop() {
@@ -1005,4 +1068,11 @@ async function boot() {
 
 boot();
 
-window.AOTAI = { state, gotoStage, nextStage, prevStage, setLang, resetTour, get world() { return world; } };
+window.AOTAI = {
+  state, gotoStage, nextStage, prevStage, setLang, resetTour,
+  get world() { return world; },
+  // 测试钩子：模拟相机上报
+  __testRelicPass: (k) => relicPassed(k),
+  __testRelicRecognized: (k) => relicRecognized(k),
+  __testOpenShop: () => openShop(),
+};
