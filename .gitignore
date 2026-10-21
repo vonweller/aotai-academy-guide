@@ -25,3 +25,7 @@ desktop.ini
 
 # 缃戦〉渚濊禆
 node_modules/
+
+# 参考图（体积大，按需下载）
+02_数据/refs_src/
+
