@@ -17,8 +17,10 @@ MODEL = os.path.join(ROOT, "model.npz")
 sys.path.insert(0, APP)
 import relic
 
+# 香云纱：02.jpg 是件金龙纹黄袍（不是香云纱），会把模型带偏，剔除。
+# 只留 00（晒莨场）和 01（真织物质感）。
 KEEP = {
-    "xiangyunsha": [0],
+    "xiangyunsha": [0, 1],
     "guancao": [0, 1, 2, 5, 7],
     "qianjiaodeng": [0, 1, 9],
     "other": [0, 1, 2, 6],
@@ -89,12 +91,20 @@ def prepare_images():
             img = imread(files[i])
             imwrite(dst, img)
             items.append((cls, dst, "photo"))
+    # 香云纱补充样本：从 3 张真图取色，生成「更暗 / 更亮」的变化版本。
+    # 之前用纯黑合成图（dark=1.0），和真实晒莨场差距太大，反而把模型带偏了。
     rng = np.random.RandomState(7)
     folder = os.path.join(IMG, "xiangyunsha")
-    for n, kind in enumerate(("black", "black", "brown", "field")):
-        dst = os.path.join(folder, "syn_%s_%d.jpg" % (kind, n))
-        imwrite(dst, make_silk(kind, rng))
-        items.append(("xiangyunsha", dst, "synth"))
+    srcs = sorted(glob.glob(os.path.join(folder, "*.jpg")))
+    for si, sp in enumerate(srcs[:2]):
+        base = imread(sp)
+        if base is None:
+            continue
+        for tag, alpha in (("dark", 0.55), ("lit", 1.35)):
+            img = np.clip(base.astype(np.float32) * alpha, 0, 255).astype(np.uint8)
+            dst = os.path.join(folder, "var_%s_%d.jpg" % (tag, si))
+            imwrite(dst, img)
+            items.append(("xiangyunsha", dst, "synth"))
     return items
 
 

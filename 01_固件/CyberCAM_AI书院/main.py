@@ -74,6 +74,8 @@ class App(object):
         self.relic_quiz_state = {}
         self.relic_view = {}
         self.relic_done = []
+        self._summary_at = 0.0
+        self._summary_done = True
 
         # ---- 界面 ----
         self.frame = None
@@ -558,13 +560,33 @@ class App(object):
             self.say("p_relic_next", default="还剩%d件，请拿下一件放到镜头前。" % len(left))
             self.mark_dirty()
 
+    def next_relic_key(self):
+        """下一件该认的（按 config.RELIC_KEYS 顺序）。"""
+        for k in config.RELIC_KEYS:
+            if k not in self.relic_done:
+                return k
+        return ""
+
     def finish_relic_all(self):
-        """三件都认完 -> 告诉网页，可以出兑换了。"""
+        """三件按顺序都认完 -> 播恭喜 + 总结书院，然后让网页弹兑换。"""
         self.relic_phase = "all_done"
-        self.say("p_all_done", default="所有任务都完成了，快去看看能换什么。")
+        self.subtitle = "恭喜完成！"
+        # 先恭喜，再总结书院
+        self.say("p_congrats", default="恭喜你，三件非遗古物全部认对了！")
         self.bus.event("relic_all_done", lang=self.lang, done=list(self.relic_done))
-        self.subtitle = "全部认完！快去看兑换"
         self.mark_dirty()
+        # 书院总结晚几秒播，避免和恭喜叠在一起
+        self._summary_at = time.time() + 6.0
+        self._summary_done = False
+
+    def tick_summary(self):
+        """恭喜播完后，接着播书院总结。"""
+        if getattr(self, "_summary_done", True):
+            return
+        if time.time() < getattr(self, "_summary_at", 0):
+            return
+        self._summary_done = True
+        self.say("p_summary", default="鳌台书院从明清的书声一路走到今天，把文脉一代代传下来。谢谢你陪小鳌走完这一程。")
 
     def update_relic(self, frame):
         if self.relic_phase == "answer":
@@ -577,6 +599,16 @@ class App(object):
         if not hit.get("id"):
             return
         if self.relic_phase == "recognize" and hit.get("speak"):
+            # 按固定顺序：只接受当前该认的那一件，认成别的就提示
+            want = self.next_relic_key()
+            if want and hit["id"] != want:
+                rel_want = self._relic_of(want) or {}
+                nm = (rel_want.get("name") or {}).get(self.lang) or want
+                self.subtitle = "现在请认：%s" % nm
+                self.say("", default="现在请把%s放到镜头前。" % nm)
+                self.relic.reset_announce()
+                self.mark_dirty()
+                return
             self.relic_key = hit["id"]
             rel = self._relic_of(self.relic_key) or {}
             self.relic_quiz = rel.get("quiz")
@@ -824,6 +856,7 @@ class App(object):
         elif self.state == "relic" and not self.demo:
             self.update_relic(frame)
         self.tick_auto()
+        self.tick_summary()
         # 只在"脏了"时重画：静态页几乎不耗 CPU，视频页跟着相机刷新
         live = self.state in ("face", "relic") and not self.demo
         if live or self.dirty or self._img is None:

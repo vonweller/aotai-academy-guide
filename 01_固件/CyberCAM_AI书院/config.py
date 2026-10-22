@@ -78,5 +78,5 @@ FONT_PATH = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"
 UI_FPS = 20          # 有摄像头的页面（人脸/火眼金睛）
 UI_FPS_IDLE = 8      # 静态页面（语言/功能/关卡），省 CPU
 
-# 火眼金睛要认的物件（顺序即引导顺序）
-RELIC_KEYS = ("xiangyunsha", "guancao", "qianjiaodeng")
+# 火眼金睛固定顺序：莞草 → 千角灯 → 香云纱（现场要求的顺序）
+RELIC_KEYS = ("guancao", "qianjiaodeng", "xiangyunsha")

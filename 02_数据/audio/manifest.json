@@ -10,6 +10,16 @@
   "md5": "07ca6931efe999209d6c8c534689bfd1"
  },
  {
+  "id": "p_congrats",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "恭喜你，莞草編織、千角燈、香雲紗三件非遺古物，全部認啱喇！",
+  "file": "yue/p_congrats.mp3",
+  "bytes": 42544,
+  "md5": "7723a27fe79b892e6e2d434c43f73138"
+ },
+ {
   "id": "p_lang_yue",
   "lang": "yue",
   "engine": "edge",
@@ -80,6 +90,16 @@
   "md5": "08f73a1d683328f1b124f610cd43c70f"
  },
  {
+  "id": "p_relic_order",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "我哋先由莞草編織開始，請你將佢放喺鏡頭前。",
+  "file": "yue/p_relic_order.mp3",
+  "bytes": 32356,
+  "md5": "43125402e0140d4eb7cd5eb23424816d"
+ },
+ {
   "id": "p_relic_pass",
   "lang": "yue",
   "engine": "edge",
@@ -98,6 +118,16 @@
   "file": "yue/p_relic_task.mp3",
   "bytes": 62920,
   "md5": "541e4fdeffd59e2c5ed12d9be6b0e605"
+ },
+ {
+  "id": "p_summary",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "鰲台書院由明清嘅書聲，走到今日嘅手藝，一直守住呢度，將文脈一代一代傳落去。今日你由門口一路認到呢度，都算接過咗一點。多謝你陪小鰲行完呢一程。",
+  "file": "yue/p_summary.mp3",
+  "bytes": 96618,
+  "md5": "639cf9e8c0e623963dfe8152c5a45f5a"
  },
  {
   "id": "q1_a",
@@ -470,6 +500,16 @@
   "md5": "da89f2995cb090ce262929fcf95568e8"
  },
  {
+  "id": "p_congrats",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "恭喜你，莞草编织、千角灯、香云纱三件非遗古物，全部认对了！",
+  "file": "zh/p_congrats.mp3",
+  "bytes": 37529,
+  "md5": "839831248f01561d321abc16018f5700"
+ },
+ {
   "id": "p_lang_yue",
   "lang": "zh",
   "engine": "qwen",
@@ -500,6 +540,16 @@
   "md5": "8e30fcea2fa2c5d98a84da9d3a05f914"
  },
  {
+  "id": "p_relic_order",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "我们先从莞草编织开始，请你把它放到镜头前。",
+  "file": "zh/p_relic_order.mp3",
+  "bytes": 25617,
+  "md5": "6bde349f6b1c42d52c64ec2532d4a935"
+ },
+ {
   "id": "p_relic_task",
   "lang": "zh",
   "engine": "edge",
@@ -508,6 +558,16 @@
   "file": "zh/p_relic_task.mp3",
   "bytes": 59942,
   "md5": "eee1fb63dba0c59619229af91385d326"
+ },
+ {
+  "id": "p_summary",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "鳌台书院从明清的书声，走到今天的手艺，一直守在这里，把文脉一代一代传下来。今天你从门口一路认到这里，也算接过了一点。谢谢你陪小鳌走完这一程。",
+  "file": "zh/p_summary.mp3",
+  "bytes": 77966,
+  "md5": "4f0929d94f5899e7cc32180858cf6fc1"
  },
  {
   "id": "q1_a",

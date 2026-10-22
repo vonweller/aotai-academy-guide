@@ -27,6 +27,9 @@ const STAGE_CAM = {
   5: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [-4.0, 5.0, -12.0], look: [-11.0, 1.6, -21.5] } },
 };
 
+// 火眼金睛固定顺序：莞草 → 千角灯 → 香云纱
+const RELIC_ORDER = ['guancao', 'qianjiaodeng', 'xiangyunsha'];
+
 const STAGE_ICON = { 1: '門', 2: '源', 3: '聯', 4: '藝', 5: '願' };
 const LANG_NAME = { zh: '普通话', yue: '粤语' };
 
@@ -586,7 +589,7 @@ function enterRelicStage() {
     finishAllTasks();
     return;
   }
-  const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'].filter((k) => !state.relicDone[k]);
+  const need = RELIC_ORDER.filter((k) => !state.relicDone[k]);
   const names = need.map(relicName).join('、');
   setSubtitle('五关走完了！接下来是火眼金睛：请把「' + names + '」依次放到 CyberCAM 镜头前。');
   speak('p_relic_task', state.lang, '五关走完了，接下来是火眼金睛，请把三件非遗古物依次放到镜头前。');
@@ -594,7 +597,7 @@ function enterRelicStage() {
     '<p class="rp-name">火眼金睛 · 最后一道任务</p>' +
     '<p class="rp-line">把下面三件古物依次放到 CyberCAM 镜头前，每认对一件就加积分。</p>' +
     '<ul class="rp-list">' +
-    ['xiangyunsha', 'guancao', 'qianjiaodeng'].map((k) =>
+    RELIC_ORDER.map((k) =>
       '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
       (state.relicDone[k] ? '✓ ' : '○ ') + relicName(k) + '</li>').join('') +
     '</ul>' +
@@ -602,13 +605,22 @@ function enterRelicStage() {
   toast('五关走完！进入火眼金睛');
 }
 
-/** 所有任务完成 → 打开兑换 */
+/** 所有任务完成 → 先道喜、再总结书院，最后打开兑换 */
 function finishAllTasks() {
+  if (state._finished) return;
+  state._finished = true;
   state.relicPassedAll = true;
-  setSubtitle('所有任务完成！来看看你的积分可以换什么。');
-  speak('p_all_done', state.lang, '太厉害了，所有任务都完成了。来看看你的积分可以换什么。');
-  toast('全部完成！打开兑换');
-  setTimeout(() => openShop(), 900);
+  setSubtitle('恭喜完成！');
+  toast('全部完成！');
+  // 1) 恭喜
+  speak('p_congrats', state.lang, '恭喜你，三件非遗古物全部认对了！');
+  // 2) 书院总结（等恭喜播完）
+  setTimeout(() => {
+    setSubtitle('鳌台书院从明清的书声，走到今天的手艺，一直守在这里。');
+    speak('p_summary', state.lang, '鳌台书院从明清的书声走到今天的手艺，把文脉一代代传下来。谢谢你陪小鳌走完这一程。');
+  }, 6200);
+  // 3) 总结之后弹出兑换
+  setTimeout(() => openShop(), 12000);
 }
 
 function prevStage() {
@@ -646,6 +658,10 @@ function resetTour() {
   state.faceOk = false;
   state.visitor = '';
   state.quizAnswered = {};
+  state.relicDone = {};
+  state.relicPassedAll = false;
+  state._finished = false;
+  state._maxStage = 1;
   state.stage = 1;
   if (world && world.scholar) {
     world.placeScholar(stopAt(1), [0, 0, 0]);
@@ -864,7 +880,7 @@ function relicPassed(key, doneFromCam, allFromCam) {
   if (Array.isArray(doneFromCam)) {
     doneFromCam.forEach((k) => { state.relicDone[k] = true; });
   }
-  const need = ['xiangyunsha', 'guancao', 'qianjiaodeng'];
+  const need = RELIC_ORDER;
   const left = need.filter((k) => !state.relicDone[k]);
   if (allFromCam || left.length === 0) {
     state.relicPassedAll = true;
