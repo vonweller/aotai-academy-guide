@@ -627,8 +627,11 @@ class App(object):
                 gain = self.award("relic_quiz_right", "火眼金睛答对",
                                   uniq="rq_%s" % self.relic_key)
             self.say(rid + "_ok", default=("答对啦，积分加 %d。" % gain) if gain else "答对啦。")
-            self.relic_phase = "again"
+            # 重置播报状态，否则下一件不会被触发
             self.relic.reset_announce()
+            # 答对即过关，不再要求二次举卡
+            self.pass_relic(self.relic_key)
+            return
         else:
             self.say(rid + "_no", default="再想想。")
             self.relic_quiz_state = {"answered": False}
@@ -714,13 +717,8 @@ class App(object):
         if not hit.get("id"):
             return
         if self.relic_phase == "recognize" and hit.get("speak"):
-            # 按固定顺序：只接受当前该认的那一件，认成别的就提示
-            want = self.next_relic_key()
-            if want and hit["id"] != want:
-                rel_want = self._relic_of(want) or {}
-                nm = (rel_want.get("name") or {}).get(self.lang) or want
-                self.subtitle = "现在请认：%s" % nm
-                self.say("", default="现在请把%s放到镜头前。" % nm)
+            # 不强制顺序：认到哪件就讲哪件，已完成的跳过
+            if hit["id"] in self.relic_done:
                 self.relic.reset_announce()
                 self.mark_dirty()
                 return
@@ -729,7 +727,8 @@ class App(object):
             self.relic_quiz = rel.get("quiz")
             self.say_relic(self.relic_key)
             self.relic_phase = "explain"
-            self._quiz_at = time.time() + 9.0
+            # 先听再答：讲解播完后留 3 秒缓冲再出题
+            self._quiz_at = time.time() + 3.0
         elif self.relic_phase == "again" and hit.get("speak"):
             if hit["id"] == self.relic_key:
                 self.pass_relic(hit["id"])

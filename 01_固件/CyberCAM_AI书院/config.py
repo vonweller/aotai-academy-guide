@@ -85,5 +85,6 @@ RELIC_KEYS = ("houjie_yuexiu", "houjie_shuangshou_hongquan", "aotai_aoyu_brick",
 # 识别已用五候选打印卡样本训练并通过独立验收（30/30 场景、负样本零误报）。
 # 注意：模型对应的是打印卡参考图，不是东莞本地实物；换实物图需重新训练。
 RELIC_RECOGNITION_ENABLED = True
-# Keep device-side FireEye rewards off until the bridge has one authenticated ledger authority.
-RELIC_REWARDS_ENABLED = False
+# 识别积分已按项目要求开启。注意：设备账本无鉴权，同一件重复刷分靠 uniq 去重，
+# 但设备文件本身可被本地改写，正式计分场景需改用服务端账本。
+RELIC_REWARDS_ENABLED = True
