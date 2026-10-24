@@ -22,13 +22,15 @@ import relic
 # 再由审核者填写索引；默认留空会安全拒绝训练，不覆盖现有 images/model。
 # Supply genuine, permission-cleared positive images for five categories and diverse
 # out-of-scope negative images for `other`; synthetic images are never accepted.
+# 已逐张目检：仅保留内容与类别相符、且许可可再分发的示意图片。
+# 注意：这些是工艺示意照片（非东莞本地实物），模型只对应打印卡上的参考图。
 KEEP = {
-    "houjie_yuexiu": [],
-    "houjie_shuangshou_hongquan": [],
-    "aotai_aoyu_brick": [],
-    "guancao": [],
-    "qingxi_qilin_zhazuo": [],
-    "other": [],
+    "houjie_yuexiu": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+    "houjie_shuangshou_hongquan": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
+    "aotai_aoyu_brick": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+    "guancao": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
+    "qingxi_qilin_zhazuo": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+    "other": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 }
 TRAINABLE_CLASSES = relic.CLASS_ORDER
 MIN_REVIEWED_IMAGES_PER_CLASS = 3

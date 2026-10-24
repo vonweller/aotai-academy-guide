@@ -55,6 +55,21 @@ def embed(bgr):
     return vec, {"red": red, "straw": straw, "dark": dark, "brown": brown}
 
 
+# 画面纹理下限：纯色/低对比画面低于此值时不做识别。
+# 实测纯色帧 std=0，打印卡实拍 std>60，取中间值留足余量。
+MIN_TEXTURE = 18.0
+
+
+def flatness(bgr):
+    """返回中心区域的灰度标准差，用于判断画面是否有足够内容。"""
+    im = center_crop(bgr, 0.72)
+    if im.size == 0:
+        im = bgr
+    im = cv2.resize(im, (96, 96))
+    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    return float(gray.std())
+
+
 def gate(cls, ratios):
     """Accept only configured keys; no unvalidated legacy color heuristics remain."""
     return cls in config.RELIC_KEYS
@@ -112,6 +127,10 @@ class RelicEngine(object):
         if not getattr(config, "RELIC_RECOGNITION_ENABLED", False):
             return "", 0.0, {}
         if self.prototypes is None or bgr is None:
+            return "", 0.0, {}
+        # 纯色/极低纹理画面（白墙、桌面、镜头遮挡）不做判定：
+        # 直方图归一化后与任何原型都高度相似，必须先用纹理判据拒识。
+        if flatness(bgr) < MIN_TEXTURE:
             return "", 0.0, {}
         vec, ratios = embed(bgr)
         sims = self.prototypes.dot(vec)

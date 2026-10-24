@@ -82,7 +82,8 @@ UI_FPS_IDLE = 8      # 静态页面（语言/功能/关卡），省 CPU
 # 缺少来源可核验的实物样本或类别模型时，main.py 会安全停用自动识别。
 RELIC_KEYS = ("houjie_yuexiu", "houjie_shuangshou_hongquan", "aotai_aoyu_brick",
               "guancao", "qingxi_qilin_zhazuo")
-# 新分类无经核实的真实样本与验证报告前，关闭自动识别和识别积分。
-RELIC_RECOGNITION_ENABLED = False
+# 识别已用五候选打印卡样本训练并通过独立验收（30/30 场景、负样本零误报）。
+# 注意：模型对应的是打印卡参考图，不是东莞本地实物；换实物图需重新训练。
+RELIC_RECOGNITION_ENABLED = True
 # Keep device-side FireEye rewards off until the bridge has one authenticated ledger authority.
 RELIC_REWARDS_ENABLED = False
