@@ -439,6 +439,78 @@
         2,
         -6
       ]
+    },
+    "relic_houjie_yuexiu": {
+      "from": [
+        6.2,
+        2.6,
+        5.4
+      ],
+      "look": [
+        9.7,
+        1.5,
+        1.6
+      ]
+    },
+    "relic_houjie_shuangshou_hongquan": {
+      "from": [
+        6.0,
+        2.9,
+        1.2
+      ],
+      "look": [
+        9.8,
+        1.6,
+        -1.2
+      ]
+    },
+    "relic_aotai_aoyu_brick": {
+      "from": [
+        6.4,
+        2.4,
+        -1.6
+      ],
+      "look": [
+        9.9,
+        1.7,
+        2.4
+      ]
+    },
+    "relic_guancao": {
+      "from": [
+        5.8,
+        3.1,
+        3.0
+      ],
+      "look": [
+        9.6,
+        1.4,
+        -0.8
+      ]
+    },
+    "relic_qingxi_qilin_zhazuo": {
+      "from": [
+        6.6,
+        2.7,
+        -0.4
+      ],
+      "look": [
+        9.6,
+        1.8,
+        3.0
+      ]
+    },
+    "stageWorkshop": {
+      "from": [
+        3.0,
+        4.2,
+        9.0
+      ],
+      "look": [
+        9.5,
+        1.2,
+        0.5
+      ]
     }
   },
   "actor": {

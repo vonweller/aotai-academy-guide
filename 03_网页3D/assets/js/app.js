@@ -1006,9 +1006,33 @@ function showRelicPanel(html) {
   p.hidden = false;
 }
 
+function focusRelicScene(key) {
+  if (!world || !world.setCameraPreset) return false;
+  const presets = (MAP && MAP.cameraPresets) || {};
+  const preset = presets['relic_' + key];
+  if (!preset) return false;
+  state.relicFocused = key;
+  world.followActor(null);
+  world.setCameraPreset(preset);
+  const tag = $('#chipScene');
+  if (tag) tag.textContent = '识别画面 · ' + relicName(key);
+  return true;
+}
+
+function reloadRelicScene(key) {
+  // 设备认出类别后，把网页镜头切到该项目对应的展陈画面
+  state.relicFocusKey = key;
+  if (!focusRelicScene(key)) {
+    // 机位缺失时退回工坊总视角
+    const presets = (MAP && MAP.cameraPresets) || {};
+    if (presets.stageWorkshop) world && world.setCameraPreset(presets.stageWorkshop);
+  }
+}
+
 function relicRecognized(key, silentAudio) {
   if (!relicRecognitionReady() || !state.relicModelEnabled) return;
   if (!relicOrder().includes(key)) return;
+  reloadRelicScene(key);
   const r = relicOf(key);
   const text = r ? (r[state.lang] || r.zh || '') : '';
   const name = relicName(key);
@@ -1063,6 +1087,14 @@ function relicQuizResult(key, ok) {
 function relicPassed(key, doneFromCam, allFromCam) {
   if (!relicRecognitionReady() || !state.relicModelEnabled || !relicOrder().includes(key)) return;
   state.relicDone[key] = true;
+  // 过关后回到工坊总视角，等下一项
+  const presets = (MAP && MAP.cameraPresets) || {};
+  if (presets.stageWorkshop && world && world.setCameraPreset) {
+    world.setCameraPreset(presets.stageWorkshop);
+  }
+  state.relicFocused = null;
+  const tag = $('#chipScene');
+  if (tag) tag.textContent = '工坊 · 等待下一件';
   // 相机端带来的已完成列表优先（两端进度对齐）
   if (Array.isArray(doneFromCam)) {
     doneFromCam.forEach((k) => { state.relicDone[k] = true; });
