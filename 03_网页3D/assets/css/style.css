@@ -360,7 +360,8 @@ kbd {
 .shop-item.locked { opacity: 0.55; }
 .shop-item .thumb { height: 118px; display: grid; place-items: center; margin-bottom: 8px; }
 .shop-item .thumb svg { width: 74px; height: 74px; }
-.shop-item .thumb img { width: 100%; height: 118px; object-fit: cover; border-radius: 8px; }
+/* 兑换品图必须完整显示，不用 cover 裁切 */
+.shop-item .thumb img { width: 100%; height: 118px; object-fit: contain; border-radius: 8px; }
 .shop-item .nm { display: block; font-size: 13px; color: var(--paper); line-height: 1.35; min-height: 34px; }
 .shop-item .cost { display: block; font-size: 12px; color: var(--gold); margin: 4px 0 8px; }
 .shop-item .btn { width: 100%; padding: 7px 0; font-size: 12.5px; }

@@ -3,840 +3,1140 @@
   "id": "p_congrats_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "今次數字導覽已完成，多謝參與。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "恭喜你，五項非遺展項全部認完喇！",
   "file": "yue/p_congrats_v2.mp3",
-  "bytes": 25774,
-  "md5": "19f7129ecb26122a701b4f7244c88b36"
+  "bytes": 26400,
+  "md5": "13a60c39d914e86d18af042bf6e6281e"
  },
  {
   "id": "p_content_review_done_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "五關講解已全部完成。多謝你陪小鰲行完呢座書院。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "五項非遺都睇過喇。",
   "file": "yue/p_content_review_done_v2.mp3",
-  "bytes": 40977,
-  "md5": "491a7821c49d3c220afcc1f5cfc90dc2"
+  "bytes": 16526,
+  "md5": "a8038a65e4bf1aa7a8fa615f1235c2cc"
  },
  {
   "id": "p_lang_yue",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "好，我改用粵語同你講。",
   "file": "yue/p_lang_yue.mp3",
-  "bytes": 20758,
-  "md5": "ea45e80bec21055eb0b8c668ffd84c5e"
+  "bytes": 20915,
+  "md5": "470a35103f85aa130dd7625a675f8853"
  },
  {
   "id": "p_lang_zh",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "好，改用普通話同你講。",
   "file": "yue/p_lang_zh.mp3",
   "bytes": 21385,
-  "md5": "c9d12e2a70a1f8c6dc83956373de771f"
+  "md5": "9ba5d9143b534ea9f377eee923d73488"
  },
  {
   "id": "p_points",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "積分又多咗。",
   "file": "yue/p_points.mp3",
-  "bytes": 13391,
-  "md5": "6a2ea0fc5013e80ce5a90c40a1494f87"
+  "bytes": 13705,
+  "md5": "5a4b54f4230751e8ef1ecd11f853d042"
  },
  {
   "id": "p_relic_bring_active_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "請將相應類別已核實授權嘅示範相片對準鏡頭；拳架類別只對應靜態姿勢示範圖。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "請將對應嘅非遺相片對準鏡頭。",
   "file": "yue/p_relic_bring_active_v2.mp3",
-  "bytes": 50067,
-  "md5": "08c1caf49b823bf1357c693bef4315a3"
+  "bytes": 22482,
+  "md5": "0f9f76117efab1f2c7476747e8eb9bee"
  },
  {
   "id": "p_relic_bring_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "請睇相應候選類別嘅代表相片；相片來源同授權仍待核實，目前唔會用作自動識別或計分。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "請將對應嘅非遺相片放喺鏡頭前。",
   "file": "yue/p_relic_bring_v2.mp3",
-  "bytes": 53359,
-  "md5": "73b80e3978880da5d5c1742aaee9d640"
+  "bytes": 24363,
+  "md5": "0a2672db91a3af46538b9e0be39d1b21"
  },
  {
   "id": "p_relic_candidate_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係目前嘅候選展項，類別、來源同實物關係仍待核實。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "呢個係今次展陳嘅非遺項目，我嚟同你講解。",
   "file": "yue/p_relic_candidate_v2.mp3",
-  "bytes": 36275,
-  "md5": "ba91947ea02c300fea398b23abb3f2cf"
+  "bytes": 30319,
+  "md5": "dbc31c70cd7fe61191cd663bd4b37311"
  },
  {
   "id": "p_relic_confirm_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "講解結束後，請移開相片，再展示同一類別已核實授權嘅示範相片完成確認。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇，繼續下一件。",
   "file": "yue/p_relic_confirm_v2.mp3",
-  "bytes": 47716,
-  "md5": "91852950cb351c92faea4c913b4a5f1f"
+  "bytes": 19347,
+  "md5": "ac9eee69bb6207fd1916d5490b0d9767"
  },
  {
   "id": "p_relic_intro_active_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "今次圖像識別流程已啟動，請按次序展示相應類別已核實授權嘅相片。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "火眼金睛開始，請將非遺相片放喺鏡頭前。",
   "file": "yue/p_relic_intro_active_v2.mp3",
-  "bytes": 44268,
-  "md5": "40b8425854ea9af868a3795dd2b98048"
+  "bytes": 30162,
+  "md5": "f837fda9ce698a996acb0a08ee4917e9"
  },
  {
   "id": "p_relic_intro_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "目前舊類別模型已停用；新類別來源、授權示範相片、訓練資料同驗證模型仍待核實。自動識別同識別積分都未啟用。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "歡迎嚟到火眼金睛。將非遺相片放喺鏡頭前，認到咗我就同你講解並出題。",
   "file": "yue/p_relic_intro_v2.mp3",
-  "bytes": 73264,
-  "md5": "541ec9e3b1f9c0df2d00fc68542c2b46"
+  "bytes": 49911,
+  "md5": "85f66b304565f1c8ee9aad79059a80e3"
  },
  {
   "id": "p_relic_model_pending_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "目前識別模型仍然係舊類別版本，已安全停用。五個新類別嘅實物相片同訓練資料仍要核實補齊，暫時唔會自動識別，亦唔會計識別積分。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "識別功能正常，將展項相片放喺鏡頭前就可以識別。",
   "file": "yue/p_relic_model_pending_v2.mp3",
-  "bytes": 81885,
-  "md5": "d4d4c6fb1e71a632b669f25fbfcb750f"
+  "bytes": 34864,
+  "md5": "1d9d891f2e9fe35f30d090c830a9dcbd"
  },
  {
   "id": "p_relic_next_active_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "請展示下一項候選類別相應嘅已核實授權相片。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "請展示下一件非遺相片。",
   "file": "yue/p_relic_next_active_v2.mp3",
-  "bytes": 32200,
-  "md5": "f508758287eb423c069013e443e29909"
+  "bytes": 20131,
+  "md5": "24e44151be1bacefaddff2632da1d525"
  },
  {
   "id": "p_relic_next_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "請按次序睇下一件候選展項；相關相片同模型完成核實後，先會啟用自動識別。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "請繼續睇下一件展項。",
   "file": "yue/p_relic_next_v2.mp3",
-  "bytes": 48657,
-  "md5": "02ad9bd0d67561a48c8b5a8d4f244a24"
+  "bytes": 18407,
+  "md5": "53cc990ae25ab0a8d8d38b3153909a1b"
  },
  {
   "id": "p_relic_order_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "火眼金睛先列鰲台書院優先展示候選（具體關聯待核），再列東莞技藝候選（地域同項目名待核）；所有類別暫不自動識別或計分。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "火眼金睛一共五項：厚街粵繡、厚街雙手洪拳、鰲魚磚、莞草編織、清溪麒麟紮作。認到邊一項就講邊一項。",
   "file": "yue/p_relic_order_v2.mp3",
-  "bytes": 75458,
-  "md5": "ed664269927558f0ad7e807d35b4c021"
+  "bytes": 69659,
+  "md5": "901d592a4f2277938c44447f5ce527ac"
  },
  {
   "id": "p_relic_pass_active_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "今次圖像匹配確認完成；呢個唔代表項目來源或歷史關係已核實。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "呢件認啱喇，講得真好。繼續下一件。",
   "file": "yue/p_relic_pass_active_v2.mp3",
-  "bytes": 40663,
-  "md5": "e710b1a6b1d44a9d5e52ab01a48a4fe7"
+  "bytes": 32200,
+  "md5": "2fd26bf9bdb9344c9dce878cf8937357"
  },
  {
   "id": "p_relic_pass_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "候選清單結構已整理；各項來源、實物同模型仍待核實，自動識別仲未啟用。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "呢一項完成喇，繼續下一件。",
   "file": "yue/p_relic_pass_v2.mp3",
-  "bytes": 49911,
-  "md5": "fabf82a276e53049b0fc56f7970530bf"
+  "bytes": 22325,
+  "md5": "c6bf93b3a8dd1372f02706bbf9f76499"
  },
  {
   "id": "p_relic_task_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "火眼金睛環節先睇鰲台書院主題展項，再睇東莞技藝：厚街粵繡、厚街雙手洪拳、鰲魚磚、莞草編織、清溪麒麟紮作。相片識別暫時未開啟。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "火眼金睛一共五項：厚街粵繡、厚街雙手洪拳、鰲魚磚、莞草編織、清溪麒麟紮作。將相片放喺鏡頭前，我嚟講解。",
   "file": "yue/p_relic_task_v2.mp3",
-  "bytes": 91289,
-  "md5": "06fc9b66a9023c23be4d42deb255cefe"
+  "bytes": 74048,
+  "md5": "de81fce7bd26d85aa1f13fc1a9cab72f"
  },
  {
   "id": "p_summary_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "今日我哋聽完咗鰲台書院嘅故事：由明代建院，到清代遷建，再到今日嘅重建；亦讀咗講堂嘅楹聯，認識咗莞草編織、香雲紗呢啲東莞手藝。多謝你陪小鰲行完呢一程。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "今日我哋聽咗鰲台書院嘅故事，亦認識咗厚街粵繡、雙手洪拳、鰲魚磚、莞草編織同清溪麒麟紮作呢啲東莞非遺手藝。多謝你陪小鰲行完呢一程。",
   "file": "yue/p_summary_v2.mp3",
-  "bytes": 97558,
-  "md5": "3d93c131ffa2ee767009d9861cac4f40"
+  "bytes": 85019,
+  "md5": "3c4b6cd3f8279859a321cd0726f2392b"
  },
  {
   "id": "relic_aotai_aoyu_brick_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係本項目擬加入嘅鰲魚磚識別項，暫時當作書院建築細節或展品處理，唔標做非遺項目。佢係咪鰲台書院原物、年代同出處都要核實；目前未有可用嘅實物訓練相片。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "鰲魚磚係嶺南建築上嘅磚雕構件，多用於屋脊、墀頭同牆面裝飾。匠人喺青磚上鑿刻出鰲魚、祥雲同花木，鰲魚取獨佔鰲頭之意，寄託讀書登科嘅期望。",
   "file": "yue/relic_aotai_aoyu_brick_v2.mp3",
-  "bytes": 98028,
-  "md5": "62b309ecd956755e9bc6b84ca53f439b"
+  "bytes": 89408,
+  "md5": "809f56d6fe84c91b4addec5677cef619"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "再諗諗。鳌鱼砖 係東莞非遺嘅代表之一，佢就喺你面前。",
+  "file": "yue/relic_aotai_aoyu_brick_v2_no.mp3",
+  "bytes": 39880,
+  "md5": "3f46ac0faf843c15e1710430a0f873b9"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇！鳌鱼砖 係東莞非遺嘅代表之一。",
+  "file": "yue/relic_aotai_aoyu_brick_v2_ok.mp3",
+  "bytes": 31102,
+  "md5": "17e12fe43ccc60222aaac54d763b5799"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "鰲魚磚 屬於下列邊一類？",
+  "file": "yue/relic_aotai_aoyu_brick_v2_q.mp3",
+  "bytes": 19034,
+  "md5": "5a6f364c86a2eeb6276fb7eea7d84730"
  },
  {
   "id": "relic_guancao_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係本項目提出嘅莞草編織類別。具體材料、製作流程、代表實物同東莞來源，要用有採集地點同授權記錄嘅樣本及官方資料核對；目前模型未有用核實過嘅莞草實物相片訓練。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "莞草編織係東莞水鄉嘅傳統手藝。鹹水草多生於河邊灘地，曬乾壓扁後，喺手上一壓一挑，編成草蓆、草籃、草帽，係水鄉人家最日常嘅器物。",
   "file": "yue/relic_guancao_v2.mp3",
-  "bytes": 105551,
-  "md5": "8079dc52b0eba3d084cad9a77fc47041"
+  "bytes": 87527,
+  "md5": "da07ec75790d49b7d804d07cb387c1c8"
+ },
+ {
+  "id": "relic_guancao_v2_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "再諗諗。莞草编织 係東莞非遺嘅代表之一，佢就喺你面前。",
+  "file": "yue/relic_guancao_v2_no.mp3",
+  "bytes": 41447,
+  "md5": "a744b9ed7b326def1b05f28807a8c33c"
+ },
+ {
+  "id": "relic_guancao_v2_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇！莞草编织 係東莞非遺嘅代表之一。",
+  "file": "yue/relic_guancao_v2_ok.mp3",
+  "bytes": 32827,
+  "md5": "07ccf4a2a0e88ea0a1b97554008a444e"
+ },
+ {
+  "id": "relic_guancao_v2_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "莞草編織 屬於下列邊一類？",
+  "file": "yue/relic_guancao_v2_q.mp3",
+  "bytes": 19974,
+  "md5": "6c7a604002bf60af0c6c0d485bb3152f"
  },
  {
   "id": "relic_houjie_shuangshou_hongquan_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係本項目擬加入嘅厚街雙手洪拳類別。正式項目名稱、厚街傳承脈絡同示範圖像來源仍要核實；相機如果用靜態分類，只代表識別經核實嘅拳架相片，唔代表識別動態拳法。目前模型未訓練。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "厚街雙手洪拳屬南拳體系。練拳講究橋手沉穩、馬步生根，出手求整勁。套路裏有拳法亦有器械，一代代喺武館同村落中傳習至今。",
   "file": "yue/relic_houjie_shuangshou_hongquan_v2.mp3",
-  "bytes": 117620,
-  "md5": "522fa914b3e53efad5ed2c93202c4f91"
+  "bytes": 87997,
+  "md5": "aab8c33c467b200ab9d11555d55c1f68"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "再諗諗。厚街双手洪拳 係東莞非遺嘅代表之一，佢就喺你面前。",
+  "file": "yue/relic_houjie_shuangshou_hongquan_v2_no.mp3",
+  "bytes": 43485,
+  "md5": "be8734c0458b65a176ba47efd1ef9453"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇！厚街双手洪拳 係東莞非遺嘅代表之一。",
+  "file": "yue/relic_houjie_shuangshou_hongquan_v2_ok.mp3",
+  "bytes": 34864,
+  "md5": "891c25ee8567c7321bfaede226c86e9b"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "厚街雙手洪拳 屬於下列邊一類？",
+  "file": "yue/relic_houjie_shuangshou_hongquan_v2_q.mp3",
+  "bytes": 22482,
+  "md5": "6c4bab978bc4fc1207bffa830361a110"
  },
  {
   "id": "relic_houjie_yuexiu_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係本項目擬加入嘅厚街粵繡類別。正式項目名稱、同書院展陳嘅關係、代表實物同來源，仍要等書院展簽或官方資料核實；目前未有核實過嘅訓練相片，暫時唔會自動識別。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "厚街粵繡係東莞嘅傳統刺繡手藝。繡娘以針代筆，用絲線喺綢緞上繡出花鳥魚蟲，針腳細密、色彩濃豔，常用金銀線盤繡，令圖案喺光下泛出層次。",
   "file": "yue/relic_houjie_yuexiu_v2.mp3",
-  "bytes": 101163,
-  "md5": "675bd7f34cbf25096100d77d93eefe96"
+  "bytes": 90662,
+  "md5": "27365179f904dbb23111cab0b9ea37cc"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "再諗諗。厚街粤绣 係東莞非遺嘅代表之一，佢就喺你面前。",
+  "file": "yue/relic_houjie_yuexiu_v2_no.mp3",
+  "bytes": 41447,
+  "md5": "f9409f374077f5ab4f467af9acb8c0a2"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇！厚街粤绣 係東莞非遺嘅代表之一。",
+  "file": "yue/relic_houjie_yuexiu_v2_ok.mp3",
+  "bytes": 32670,
+  "md5": "f7af997e91cd3a28a390b92023fa1dd5"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "厚街粵繡 屬於下列邊一類？",
+  "file": "yue/relic_houjie_yuexiu_v2_q.mp3",
+  "bytes": 20131,
+  "md5": "b99d954a9eed57a32e4de050ac1b6131"
  },
  {
   "id": "relic_qingxi_qilin_zhazuo_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢個係本項目擬加入嘅清溪麒麟紮作類別。正式項目名稱、同麒麟舞嘅關係、傳承資料同實物來源，仍要等權威資料核實；目前唔會將舞蹈動作相片當成紮作實物樣本，模型尚未訓練。",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "清溪麒麟紮作以竹篾紮出骨架，再糊紙、上彩、繪鱗。麒麟頭色彩斑斕、雙目靈動，係麒麟舞嘅核心道具，每逢節慶便隨鑼鼓起舞。",
   "file": "yue/relic_qingxi_qilin_zhazuo_v2.mp3",
-  "bytes": 106649,
-  "md5": "d42ee819b7326ecd3181eeddbacf5d6b"
+  "bytes": 81885,
+  "md5": "08d153154030265db5ad569791654525"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_no",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "再諗諗。清溪麒麟扎作 係東莞非遺嘅代表之一，佢就喺你面前。",
+  "file": "yue/relic_qingxi_qilin_zhazuo_v2_no.mp3",
+  "bytes": 44111,
+  "md5": "a493a0401c618ef561dd32567c2c24f3"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_ok",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "答啱喇！清溪麒麟扎作 係東莞非遺嘅代表之一。",
+  "file": "yue/relic_qingxi_qilin_zhazuo_v2_ok.mp3",
+  "bytes": 35178,
+  "md5": "eabacb7f738c87964bc0a6551a7e2e23"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_q",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
+  "text": "清溪麒麟扎作 屬於下列邊一類？",
+  "file": "yue/relic_qingxi_qilin_zhazuo_v2_q.mp3",
+  "bytes": 22796,
+  "md5": "f4a6405ddcfbe20c06f040577fe8be3e"
  },
  {
   "id": "s1_prompt",
   "lang": "yue",
-  "voice": "zh-HK-HiuMaanNeural",
+  "engine": "edge",
+  "voice": "zh-HK-WanLungNeural",
   "text": "請正對鏡頭，等我先認一認你。",
   "file": "yue/s1_prompt.mp3",
-  "bytes": 22796,
-  "md5": "d823e634f1ae3c6f29801bac3b94af59",
-  "engine": "edge"
+  "bytes": 23109,
+  "md5": "0383a8891cc6afb9e5da86f385196f2e"
  },
  {
   "id": "s1_welcome_new_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "歡迎光臨鰲台書院，我係你嘅智能導覽員小鰲。呢座書院喺東莞厚街，係嶺南書院文化嘅代表之一。今日我哋行五關，先聽書院嘅故事，再睇東莞嘅手藝。",
   "file": "yue/s1_welcome_new_v2.mp3",
-  "bytes": 98655,
-  "md5": "1edacd47d838bbe79e325a17b57e313e"
+  "bytes": 96774,
+  "md5": "bf586a124173da6008bd984495ba07de"
  },
  {
   "id": "s1_welcome_ok_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "預約訪客，歡迎您嚟到鰲台書院。認得您喇，跟實小鰲，我哋即刻出發。",
   "file": "yue/s1_welcome_ok_v2.mp3",
-  "bytes": 49911,
-  "md5": "2bfc7cf2009aea6f72dae88a7fb2e693"
+  "bytes": 50851,
+  "md5": "645feaee9503b8989a9ba5aa376bbbb2"
  },
  {
   "id": "s2_move_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "書院最早起喺鳳林長生廟隔籬。到咗清朝乾隆年間，老屋年久失修塌咗，族人合力將佢遷到菊塘坊菊山腳下，乾隆二十一年落成。",
   "file": "yue/s2_move_v2.mp3",
-  "bytes": 80004,
-  "md5": "632187a203ba012e0c23fe73d0cf70cb"
+  "bytes": 78593,
+  "md5": "fa65838a9b95fc3199fa3bbd93d1df98"
  },
  {
   "id": "s2_origin_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "明朝成化十二年，即係一四七六年春天，做過寶慶知府嘅厚街人王恪返到家鄉，倡議族人捐錢，起咗鰲台書院。",
   "file": "yue/s2_origin_v2.mp3",
-  "bytes": 65741,
-  "md5": "9b0da036b6ebec1305fe7f167196a9b8"
+  "bytes": 63547,
+  "md5": "fcf9db2318599219fb73268a4c3ce5b8"
  },
  {
   "id": "s2_rebuild_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "今日你見到嘅書院，係二〇〇八年動工重建、二〇一二年竣工，佔地四千幾平方米，保留咗正門、中堂、奎星樓三進嘅格局。",
   "file": "yue/s2_rebuild_v2.mp3",
-  "bytes": 73578,
-  "md5": "216463eeef4ba48cf43e0e84d03411c6"
+  "bytes": 69659,
+  "md5": "aa1d90ed4dfd451f6781353d0cd56aa0"
  },
  {
   "id": "s3_couplet_mean_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "意思係話，讀書貴在順應時代，通曉古今先算讀書人；呢片土地本就鍾靈毓秀，要在呢度培育出棟樑之才。",
   "file": "yue/s3_couplet_mean_v2.mp3",
-  "bytes": 62920,
-  "md5": "089a419878808448f17a7c6cb427f987"
+  "bytes": 61039,
+  "md5": "caa861702b14a6ed3dc5f44ad138131b"
  },
  {
   "id": "s3_couplet_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "柱上呢副對聯係：學貴因時，通古今之謂士；地原毓秀，樹梁棟以成材。請跟我讀一次。",
   "file": "yue/s3_couplet_v2.mp3",
-  "bytes": 59315,
-  "md5": "ec0d6ac1f8733d9bdb6e42f033d93d7d"
+  "bytes": 58531,
+  "md5": "8b9b83e417918d937c920bf91e9c43e0"
  },
  {
   "id": "s3_gate_couplet_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "書院正門仲有一副長聯：鰲海澄波看錦鱗而躍浪，彭峰聳翠兆文筆之生花。寫嘅係呢度出人才嘅底氣。",
   "file": "yue/s3_gate_couplet_v2.mp3",
-  "bytes": 64644,
-  "md5": "c4ad5124d18e02deb1821fc18391d1ca"
+  "bytes": 63233,
+  "md5": "8de5e566b0d654858c992b691174579f"
  },
  {
   "id": "s3_intro_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "我哋行入講堂。古時候，學生就坐喺咁樣嘅梁柱之間讀書、寫字、聽先生講學。",
   "file": "yue/s3_intro_v2.mp3",
-  "bytes": 55396,
-  "md5": "9033e69e9fb23416b5ed7147b668f063"
+  "bytes": 54456,
+  "md5": "eddd8ba546c4747e61ed90dc64d9dc76"
  },
  {
   "id": "s3_three_top_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "狀元莊有恭、榜眼馮願、探花陳伯陶都曾經為書院題寫匾聯，所以佢被稱為東莞唯一有三甲留墨嘅書院。",
   "file": "yue/s3_three_top_v2.mp3",
-  "bytes": 61979,
-  "md5": "19eabb50229440129a48b6b0a3ca7ca1"
+  "bytes": 60098,
+  "md5": "fc71baabb2e3874b375083fff1b4f99f"
  },
  {
   "id": "s4_guancao_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "仲有莞草編織。鹹水草喺手上一壓一挑，就變成草蓆、草籃、草帽，呢個係水鄉人家最日常嘅手藝。",
   "file": "yue/s4_guancao_v2.mp3",
-  "bytes": 64957,
-  "md5": "8cb807bffacf8fc8df13ba718bfd5cb6"
+  "bytes": 64174,
+  "md5": "e0566cef920df875aca66e55304fb11f"
  },
  {
   "id": "s4_workshop_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "呢度係非遺工坊。東莞人靠水吃水，一門門老手藝，就係喺咁樣嘅院子傳落嚟。",
   "file": "yue/s4_workshop_v2.mp3",
-  "bytes": 53986,
-  "md5": "388390f2d0a8a2a8ebaac776a2bded90"
+  "bytes": 53516,
+  "md5": "8fbf5a77a6d446ae92c7482431a46d4c"
  },
  {
   "id": "s4_xiangyunsha_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "香雲紗又叫莨紗，用薯莨汁反覆浸染，再用河泥覆蓋晾曬，正面烏黑發亮，反面棕紅，著起身沙沙聲。",
   "file": "yue/s4_xiangyunsha_v2.mp3",
-  "bytes": 63390,
-  "md5": "01308a837bb3e01222699d77356494b8"
+  "bytes": 60882,
+  "md5": "1e633bf3753533d4ca40c258234bfe69"
  },
  {
   "id": "s5_bye_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "我係小鰲，多謝你陪我將呢座書院行咗一次。歡迎下次再嚟，亦歡迎再嚟讀一次嗰副對聯。",
   "file": "yue/s5_bye_v2.mp3",
-  "bytes": 59001,
-  "md5": "b3e54ccb8504f69ef681d58e1434ef0d"
+  "bytes": 59158,
+  "md5": "2dc2dd6e8b755ae2357d224feccff081"
  },
  {
   "id": "s5_closing_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "五關行完，由明清嘅書聲，到今日嘅手藝，鰲台書院一直守喺呢度，將文脈一代一代傳落去。",
   "file": "yue/s5_closing_v2.mp3",
-  "bytes": 54769,
-  "md5": "f37f54b1ad154eeccc4594e09a0f7b16"
+  "bytes": 54299,
+  "md5": "b3130a741bc24f5304e43caf0e4ec580"
  },
  {
   "id": "s5_ink_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "古人喺呢度留低墨跡，你都可以留低自己嘅心願。願你似書院嘅學子一樣，讀萬卷書，行萬里路。",
   "file": "yue/s5_ink_v2.mp3",
-  "bytes": 61979,
-  "md5": "d781010b8669997ae6fc110b46e1b1ae"
+  "bytes": 61196,
+  "md5": "19e5475eeefdaa915dd106b586f6117b"
  },
  {
   "id": "s5_route_v2",
   "lang": "yue",
   "engine": "edge",
-  "voice": "zh-HK-HiuMaanNeural",
+  "voice": "zh-HK-WanLungNeural",
   "text": "離館前俾你一條參觀路線：正門牌坊、前院天井同假山、講堂楹聯、東側非遺工坊，最後到後園六角亭。",
   "file": "yue/s5_route_v2.mp3",
-  "bytes": 64330,
-  "md5": "efce5c67190120e3ba3d9e5cb196c12e"
+  "bytes": 60882,
+  "md5": "b68889fa04ba9b0521905bbc2f3aa92c"
  },
  {
   "id": "p_congrats_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "本次数字导览已完成，多谢参与。",
+  "voice": "Serena",
+  "text": "恭喜你，五项非遗展项全部认完了！",
   "file": "zh/p_congrats_v2.mp3",
-  "bytes": 21698,
-  "md5": "110e06cbcfdda3a2de60e0d95a015228"
+  "bytes": 23579,
+  "md5": "dee54745670686d5fd7233a8b16b8e1b"
  },
  {
   "id": "p_content_review_done_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "五关讲解已全部完成。谢谢你陪小鳌走完这座书院。",
+  "voice": "Serena",
+  "text": "五项非遗都看过了。",
   "file": "zh/p_content_review_done_v2.mp3",
-  "bytes": 28438,
-  "md5": "91c6e6b2f38fe9b0ea8be3f9dfdc1e0e"
+  "bytes": 10257,
+  "md5": "1a038f51ac0f37026a38e156e5215d36"
  },
  {
   "id": "p_lang_yue",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "好，我改用粤语同你讲。",
   "file": "zh/p_lang_yue.mp3",
-  "bytes": 14489,
-  "md5": "2c98f87aaf85d0ebf738613640aaf7e5"
+  "bytes": 14018,
+  "md5": "dc92c9f25c8efc12c6df57db20f632c3"
  },
  {
   "id": "p_lang_zh",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "好的，改用普通话为你讲解。",
   "file": "zh/p_lang_zh.mp3",
-  "bytes": 14959,
-  "md5": "c449694a460349617fb744136ba19b2b"
+  "bytes": 17467,
+  "md5": "2e278e7a12a2fba2e82f80bf63d30bd7"
  },
  {
   "id": "p_points",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "积分又多了。",
   "file": "zh/p_points.mp3",
-  "bytes": 9316,
-  "md5": "59fb467332426ad9c117b9ffb578c47b"
+  "bytes": 7749,
+  "md5": "598e61a00f45fcf9dc8185410076b2af"
  },
  {
   "id": "p_relic_bring_active_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "请把相应类别的已核验授权示范图片对准镜头；拳架类别仅对应静态姿势示范图。",
+  "voice": "Serena",
+  "text": "请把对应的非遗图片对准镜头。",
   "file": "zh/p_relic_bring_active_v2.mp3",
-  "bytes": 48657,
-  "md5": "ab769059076d72884e875ae74c1f5b18"
+  "bytes": 17937,
+  "md5": "2cf0c06acd7b1b6684d211b2e2c6660d"
  },
  {
   "id": "p_relic_bring_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "请查看相应候选类别的代表图片；图片来源与授权仍待核实，当前不用于自动识别或计分。",
+  "voice": "Serena",
+  "text": "请把对应的非遗图片放到镜头前。",
   "file": "zh/p_relic_bring_v2.mp3",
-  "bytes": 56807,
-  "md5": "2585d80501bba79e0e2d93724afa6a2a"
+  "bytes": 23579,
+  "md5": "bb47619db5fd90879ee602fdd3eda112"
  },
  {
   "id": "p_relic_candidate_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是当前候选展项，类别、来源与实物关系仍待核实。",
+  "voice": "Serena",
+  "text": "这是本次展陈的非遗项目，我来为你讲解。",
   "file": "zh/p_relic_candidate_v2.mp3",
-  "bytes": 36588,
-  "md5": "13be0d95947dde6581f6ce8c6461672f"
+  "bytes": 23109,
+  "md5": "5eb82a541d82ccf63f6e1ae809bf0dc3"
  },
  {
   "id": "p_relic_confirm_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "讲解结束后，请移开图片，再展示同一类别的已核验授权示范图片完成确认。",
+  "voice": "Serena",
+  "text": "答对了，继续下一件。",
   "file": "zh/p_relic_confirm_v2.mp3",
-  "bytes": 43328,
-  "md5": "f8e7e595b7efda844fa945364634076b"
+  "bytes": 10727,
+  "md5": "e9f9d8c0e4e893ebbee3ec5da930fa51"
  },
  {
   "id": "p_relic_intro_active_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "本次图像识别流程已启动，请按顺序展示对应类别的已核验授权图片。",
+  "voice": "Serena",
+  "text": "火眼金睛开始，请把非遗图片放到镜头前。",
   "file": "zh/p_relic_intro_active_v2.mp3",
-  "bytes": 36588,
-  "md5": "113d03ed22a88dc44418236b5e19b5fc"
+  "bytes": 26087,
+  "md5": "b1da3bf56465b188f39ce35410a703fd"
  },
  {
   "id": "p_relic_intro_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "当前旧类别模型已停用；新类别来源、授权示范图片、训练数据和验证模型尚待核实。自动识别与识别积分均未启用。",
+  "voice": "Serena",
+  "text": "欢迎来到火眼金睛。把非遗图片放到镜头前，认到了我就为你讲解并出题。",
   "file": "zh/p_relic_intro_v2.mp3",
-  "bytes": 64017,
-  "md5": "315a336b0f2880f5aa9d84feee9dadf9"
+  "bytes": 43328,
+  "md5": "6f9379a0aa3a1dc240fb290025d6949d"
  },
  {
   "id": "p_relic_model_pending_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "当前识别模型仍是旧类别版本，已安全停用。五个新类别的实物图片和训练数据尚待核实补齐，暂不执行自动识别，也不计识别积分。",
+  "voice": "Serena",
+  "text": "识别功能正常，把展项图片放到镜头前即可识别。",
   "file": "zh/p_relic_model_pending_v2.mp3",
-  "bytes": 75458,
-  "md5": "b1d95d4b685125a22626c76ceddecbc0"
+  "bytes": 27498,
+  "md5": "cdd2c6db8ef96c359909937876d60b81"
  },
  {
   "id": "p_relic_next_active_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "请展示下一项候选类别对应的已核验授权图片。",
+  "voice": "Serena",
+  "text": "请展示下一件非遗图片。",
   "file": "zh/p_relic_next_active_v2.mp3",
-  "bytes": 24676,
-  "md5": "470694c9ff25ae6e78672f85976eecff"
+  "bytes": 16996,
+  "md5": "64446b3cbda768957192c272eb18b723"
  },
  {
   "id": "p_relic_next_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "请按顺序查看下一件候选展项；相关图片和模型完成核实后，再启用自动识别。",
+  "voice": "Serena",
+  "text": "请继续查看下一件展项。",
   "file": "zh/p_relic_next_v2.mp3",
-  "bytes": 43798,
-  "md5": "d10f3ae60eefd5557929806c9305753a"
+  "bytes": 13078,
+  "md5": "2cbad16b41d91cdbdb46166dbf869997"
  },
  {
   "id": "p_relic_order_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "火眼金睛先列鳌台书院优先展示候选（具体关联待核），再列东莞技艺候选（地域与项目名待核）；所有类别暂不自动识别或计分。",
+  "voice": "Serena",
+  "text": "火眼金睛一共五项：厚街粤绣、厚街双手洪拳、鳌鱼砖、莞草编织、清溪麒麟扎作。认到哪一项就讲哪一项。",
   "file": "zh/p_relic_order_v2.mp3",
-  "bytes": 73578,
-  "md5": "bea2a6f3bb9a02dd8227ea04f1f27394"
+  "bytes": 74988,
+  "md5": "8ac773d936b3fa766420f39da393073c"
  },
  {
   "id": "p_relic_pass_active_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "本次图像匹配确认完成；这不代表项目来源或历史关系已核实。",
+  "voice": "Serena",
+  "text": "这件认对了，讲得真好。继续下一件。",
   "file": "zh/p_relic_pass_active_v2.mp3",
-  "bytes": 36588,
-  "md5": "6f23f3d84e2ec399dd6dbb53763350c6"
+  "bytes": 19818,
+  "md5": "93b0092f1dd30e759dc8ce08670e8a93"
  },
  {
   "id": "p_relic_pass_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "候选清单结构已整理；各项来源、实物和模型仍待核实，自动识别尚未启用。",
+  "voice": "Serena",
+  "text": "这一项完成了，继续下一件。",
   "file": "zh/p_relic_pass_v2.mp3",
-  "bytes": 46619,
-  "md5": "c664ca00ac34392ef6117adfdc025c91"
+  "bytes": 14489,
+  "md5": "ae1a3cbf942e8c0f93d59b213620bcb3"
  },
  {
   "id": "p_relic_task_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "火眼金睛环节先看鳌台书院主题展项，再看东莞技艺：厚街粤绣、厚街双手洪拳、鳌鱼砖、莞草编织、清溪麒麟扎作。图片识别暂未开启。",
+  "voice": "Serena",
+  "text": "火眼金睛一共五项：厚街粤绣、厚街双手洪拳、鳌鱼砖、莞草编织、清溪麒麟扎作。把图片放到镜头前，我来讲解。",
   "file": "zh/p_relic_task_v2.mp3",
-  "bytes": 77966,
-  "md5": "3a1d400b509f71a881b8410dd765a651"
+  "bytes": 88467,
+  "md5": "9fa1fa5c8c725233d7cf5b9b9a272b8c"
  },
  {
   "id": "p_summary_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "今天我们听完了鳌台书院的故事：从明代建院，到清代迁建，再到今天的重建；也读了讲堂的楹联，认识了莞草编织、香云纱这些东莞手艺。谢谢你陪小鳌走完这一程。",
+  "voice": "Serena",
+  "text": "今天我们听了鳌台书院的故事，也认识了厚街粤绣、双手洪拳、鳌鱼砖、莞草编织和清溪麒麟扎作这些东莞非遗手艺。谢谢你陪小鳌走完这一程。",
   "file": "zh/p_summary_v2.mp3",
-  "bytes": 91759,
-  "md5": "3ee323b455155e23d46bdc7070bbcf84"
+  "bytes": 82668,
+  "md5": "8f674f7fc1d52b9185b7d6b2473205ee"
  },
  {
   "id": "relic_aotai_aoyu_brick_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是本项目拟加入的鳌鱼砖识别项，暂按书院建筑细节或展品处理，不标作非遗项目。它是否为鳌台书院原物、年代与出处均待核实；目前没有可用的实物训练照片。",
+  "voice": "Serena",
+  "text": "鳌鱼砖是岭南建筑上的砖雕构件，多用于屋脊、墀头与墙面装饰。匠人在青砖上凿刻出鳌鱼、祥云与花木，鳌鱼取独占鳌头之意，寄托读书登科的期望。",
   "file": "zh/relic_aotai_aoyu_brick_v2.mp3",
-  "bytes": 94267,
-  "md5": "4eff5b8ea395ce0621432d082ac700ac"
+  "bytes": 96147,
+  "md5": "66caee6b1cbcb19917da9a4c3e21350c"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_no",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "再想想。鳌鱼砖 是东莞非遗的代表之一，它就在你面前。",
+  "file": "zh/relic_aotai_aoyu_brick_v2_no.mp3",
+  "bytes": 35648,
+  "md5": "ddff381967d73e3fc010410a8756ffe2"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "答对了！鳌鱼砖 是东莞非遗的代表之一。",
+  "file": "zh/relic_aotai_aoyu_brick_v2_ok.mp3",
+  "bytes": 28438,
+  "md5": "a42eede9d8ce42d8496870ac1301e210"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "鳌鱼砖 属于下列哪一类？",
+  "file": "zh/relic_aotai_aoyu_brick_v2_q.mp3",
+  "bytes": 16996,
+  "md5": "fcc6501351b56b44b1e48cfdbb2fd032"
  },
  {
   "id": "relic_guancao_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是本项目提出的莞草编织类别。具体材料、制作流程、代表实物和东莞来源需以有采集地点与授权记录的样本及官方资料核对；目前模型未用经核实的莞草实物图训练。",
+  "voice": "Serena",
+  "text": "莞草编织是东莞水乡的传统手艺。咸水草多生于河边滩地，晒干压扁后，在手上一压一挑，编成草席、草篮、草帽，是水乡人家最日常的器物。",
   "file": "zh/relic_guancao_v2.mp3",
-  "bytes": 93326,
-  "md5": "3ac21768e2095ec7aaa99496fb6e4d6e"
+  "bytes": 99439,
+  "md5": "9994a91973ca1779e1ac49b412091170"
+ },
+ {
+  "id": "relic_guancao_v2_no",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "再想想。莞草编织 是东莞非遗的代表之一，它就在你面前。",
+  "file": "zh/relic_guancao_v2_no.mp3",
+  "bytes": 35648,
+  "md5": "28c7b01ed8b44139da2d61f4a27eb8e4"
+ },
+ {
+  "id": "relic_guancao_v2_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "答对了！莞草编织 是东莞非遗的代表之一。",
+  "file": "zh/relic_guancao_v2_ok.mp3",
+  "bytes": 24206,
+  "md5": "8698b852a57aeef514447ac87ed717eb"
+ },
+ {
+  "id": "relic_guancao_v2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "莞草编织 属于下列哪一类？",
+  "file": "zh/relic_guancao_v2_q.mp3",
+  "bytes": 15429,
+  "md5": "36138aef42107e10e102d3e381a72092"
  },
  {
   "id": "relic_houjie_shuangshou_hongquan_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是本项目拟加入的厚街双手洪拳类别。正式项目名称、厚街传承脉络和示范图像来源待核；摄像头如采用静态分类，只表示识别经核实的拳架照片，不代表识别动态拳法。目前模型未训练。",
+  "voice": "Serena",
+  "text": "厚街双手洪拳属南拳体系。练拳讲究桥手沉稳、马步生根，出手求整劲。套路里有拳法也有器械，一代代在武馆和村落中传习至今。",
   "file": "zh/relic_houjie_shuangshou_hongquan_v2.mp3",
-  "bytes": 115739,
-  "md5": "c220a48a3f01b6b106a83b274d059537"
+  "bytes": 91759,
+  "md5": "cbfdeaff5c26d4cd6720346ba21a3152"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_no",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "再想想。厚街双手洪拳 是东莞非遗的代表之一，它就在你面前。",
+  "file": "zh/relic_houjie_shuangshou_hongquan_v2_no.mp3",
+  "bytes": 35648,
+  "md5": "49201f857f52f324bc85642e7ff58a40"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "答对了！厚街双手洪拳 是东莞非遗的代表之一。",
+  "file": "zh/relic_houjie_shuangshou_hongquan_v2_ok.mp3",
+  "bytes": 31259,
+  "md5": "04f1c76cb72929a2850c0a358c73cd7d"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "厚街双手洪拳 属于下列哪一类？",
+  "file": "zh/relic_houjie_shuangshou_hongquan_v2_q.mp3",
+  "bytes": 23109,
+  "md5": "8db26f7733e2781dd8bda6601a538dbe"
  },
  {
   "id": "relic_houjie_yuexiu_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是本项目拟加入的厚街粤绣类别。正式项目名称、与书院展陈的关系、代表实物和来源仍待书院展签或官方资料核实；目前没有经过核实的训练照片，暂不自动识别。",
+  "voice": "Serena",
+  "text": "厚街粤绣是东莞的传统刺绣手艺。绣娘以针代笔，用丝线在绸缎上绣出花鸟鱼虫，针脚细密、色彩浓艳，常以金银线盘绣，让图案在光下泛出层次。",
   "file": "zh/relic_houjie_yuexiu_v2.mp3",
-  "bytes": 92229,
-  "md5": "829e3d38cc43c3c870c8094901de60c2"
+  "bytes": 107119,
+  "md5": "12a8dacbb3851bc6728e95ce36632890"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_no",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "再想想。厚街粤绣 是东莞非遗的代表之一，它就在你面前。",
+  "file": "zh/relic_houjie_yuexiu_v2_no.mp3",
+  "bytes": 44738,
+  "md5": "88a35c2327041534a782212056c021f4"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "答对了！厚街粤绣 是东莞非遗的代表之一。",
+  "file": "zh/relic_houjie_yuexiu_v2_ok.mp3",
+  "bytes": 23109,
+  "md5": "8cfac5e194e3d4fbc891f75747580532"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "厚街粤绣 属于下列哪一类？",
+  "file": "zh/relic_houjie_yuexiu_v2_q.mp3",
+  "bytes": 15429,
+  "md5": "b6442ae2b883d22121d18b3fe1f55406"
  },
  {
   "id": "relic_qingxi_qilin_zhazuo_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
-  "text": "这是本项目拟加入的清溪麒麟扎作类别。项目正式名称、与麒麟舞的关系、传承资料及实物来源待权威资料核实；当前不把舞蹈动作照片当作扎作实物样本，模型尚未训练。",
+  "voice": "Serena",
+  "text": "清溪麒麟扎作以竹篾扎出骨架，再糊纸、上彩、绘鳞。麒麟头色彩斑斓、双目灵动，是麒麟舞的核心道具，每逢节庆便随锣鼓起舞。",
   "file": "zh/relic_qingxi_qilin_zhazuo_v2.mp3",
-  "bytes": 101476,
-  "md5": "d7b3c11d2f32187247631da8d74dc05e"
+  "bytes": 95677,
+  "md5": "dd393f2a9f008c8bf156b9465a5f7ef7"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_no",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "再想想。清溪麒麟扎作 是东莞非遗的代表之一，它就在你面前。",
+  "file": "zh/relic_qingxi_qilin_zhazuo_v2_no.mp3",
+  "bytes": 40507,
+  "md5": "25db9346e279edc535ea00df77a687bb"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_ok",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "答对了！清溪麒麟扎作 是东莞非遗的代表之一。",
+  "file": "zh/relic_qingxi_qilin_zhazuo_v2_ok.mp3",
+  "bytes": 34237,
+  "md5": "cdd25536964b4f4aeefb252de8f3ff6f"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2_q",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Serena",
+  "text": "清溪麒麟扎作 属于下列哪一类？",
+  "file": "zh/relic_qingxi_qilin_zhazuo_v2_q.mp3",
+  "bytes": 17937,
+  "md5": "0aaeca121e1dac2f2c1a7f6e811db7ed"
  },
  {
   "id": "s1_prompt",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "请正对摄像头，让我先认一认你。",
   "file": "zh/s1_prompt.mp3",
-  "bytes": 18877,
-  "md5": "06536f879f6f1ed0ee4d1625d3038955"
+  "bytes": 18407,
+  "md5": "649c99485ea2fb17a05a90bdc6b650ec"
  },
  {
   "id": "s1_welcome_new_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "欢迎光临鳌台书院，我是你的智能导览员小鳌。这座书院在东莞厚街，是岭南书院文化的代表之一。今天我们走五关，先听书院的故事，再看东莞的手艺。",
   "file": "zh/s1_welcome_new_v2.mp3",
-  "bytes": 81258,
-  "md5": "0b8e174b2388b3ae7cab7e0fd71c299e"
+  "bytes": 88467,
+  "md5": "b4731eabb6066321c20f2fe1048d1c0d"
  },
  {
   "id": "s1_welcome_ok_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "预约访客，欢迎您来到鳌台书院。认出您了，跟好小鳌，我们这就出发。",
   "file": "zh/s1_welcome_ok_v2.mp3",
-  "bytes": 39566,
-  "md5": "04f18da958f17a8d3d90d77a0b318936"
+  "bytes": 43798,
+  "md5": "f4372eadc3611fc1cb536c4bd66ae91f"
  },
  {
   "id": "s2_move_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "书院最早建在凤林长生庙旁边。到了清朝乾隆年间，老屋年久失修塌了，族人合力把它迁到菊塘坊菊山脚下，乾隆二十一年落成。",
   "file": "zh/s2_move_v2.mp3",
-  "bytes": 86116,
-  "md5": "1231b15b8b3d4fc2601d1559a65356cc"
+  "bytes": 71227,
+  "md5": "0f6d884dab8a704b76f1952df96a46f1"
  },
  {
   "id": "s2_origin_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "明朝成化十二年，也就是一四七六年春天，做过宝庆知府的厚街人王恪回到家乡，倡议族人捐资，建起了鳌台书院。",
   "file": "zh/s2_origin_v2.mp3",
-  "bytes": 64017,
-  "md5": "a51d6be63d478ea6b5b0f8762922a1d1"
+  "bytes": 73578,
+  "md5": "6faae407700a86c279962af7fdf4f874"
  },
  {
   "id": "s2_rebuild_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "今天你看到的书院，是二〇〇八年动工重建、二〇一二年竣工的，占地四千多平方米，保留了正门、中堂、奎星楼三进的格局。",
   "file": "zh/s2_rebuild_v2.mp3",
-  "bytes": 67308,
-  "md5": "986941a73314d9cc7255c4ea83c6bab5"
+  "bytes": 68249,
+  "md5": "10286db7a2127824f1eacf63691092a3"
  },
  {
   "id": "s3_couplet_mean_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "意思是说，读书贵在顺应时代，通晓古今才算读书人；这片土地本就钟灵毓秀，要在这里培育出栋梁之才。",
   "file": "zh/s3_couplet_mean_v2.mp3",
-  "bytes": 64487,
-  "md5": "ce2a8524a9050caccfee3436e6ab2f36"
+  "bytes": 68719,
+  "md5": "8795cceba359e06783c6edd1430d44a9"
  },
  {
   "id": "s3_couplet_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "柱子上这副对联是：学贵因时，通古今之谓士；地原毓秀，树梁栋以成材。请跟我读一遍。",
   "file": "zh/s3_couplet_v2.mp3",
-  "bytes": 55867,
-  "md5": "b41bb3f91a04ab0b21955cfc90440d84"
+  "bytes": 61509,
+  "md5": "e7ccdf41f9326e8e4198fad56d20a36c"
  },
  {
   "id": "s3_gate_couplet_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "书院正门还有一副长联：鳌海澄波看锦鳞而跃浪，彭峰耸翠兆文笔之生花。写的是这里出人才的底气。",
   "file": "zh/s3_gate_couplet_v2.mp3",
-  "bytes": 61509,
-  "md5": "967b6ed0ef28e3d8a38921307ea7827b"
+  "bytes": 73578,
+  "md5": "a68fa7e999ac5dc1b8b3166ac1bc48f7"
  },
  {
   "id": "s3_intro_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "我们走进讲堂。古时候，学生就坐在这样的梁柱之间读书、写字、听先生讲学。",
   "file": "zh/s3_intro_v2.mp3",
-  "bytes": 42858,
-  "md5": "886803e42c9418875eeaf6b4cd8d9c86"
+  "bytes": 51008,
+  "md5": "d0348ccc2885a8c35ccd99ba6d69939b"
  },
  {
   "id": "s3_three_top_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "状元庄有恭、榜眼冯愿、探花陈伯陶都曾为书院题写匾联，所以它被称为东莞唯一有三甲留墨的书院。",
   "file": "zh/s3_three_top_v2.mp3",
-  "bytes": 58688,
-  "md5": "bbe31915a0f3fb207d4bce5abd99f0b5"
+  "bytes": 59158,
+  "md5": "9dc03f3f78e021a6a2825b6a0410bd67"
  },
  {
   "id": "s4_guancao_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "还有莞草编织。咸水草在手里一压一挑，就变成草席、草篮、草帽，这是水乡人家最日常的手艺。",
   "file": "zh/s4_guancao_v2.mp3",
   "bytes": 61039,
-  "md5": "74a2d37f707d0b71d21b09abbe58f7c2"
+  "md5": "75e6648cbf7ba14e1a0dd063f23612fa"
  },
  {
   "id": "s4_workshop_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "这里是非遗工坊。东莞人靠水吃水，一门门老手艺，就是从这样的院子里传下来的。",
   "file": "zh/s4_workshop_v2.mp3",
-  "bytes": 47246,
-  "md5": "5849231f9eb089360a8abbbd7187655d"
+  "bytes": 47716,
+  "md5": "6986360ff1a770b5cdf8cc320077b13e"
  },
  {
   "id": "s4_xiangyunsha_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "香云纱又叫莨纱，用薯莨汁反复浸染，再用河泥覆盖晾晒，正面乌黑发亮，反面棕红，穿起来沙沙作响。",
   "file": "zh/s4_xiangyunsha_v2.mp3",
-  "bytes": 61979,
-  "md5": "dd2c847654191e504a915a3e51742e32"
+  "bytes": 78907,
+  "md5": "f9352f43c01861b6def552acb833d7f4"
  },
  {
   "id": "s5_bye_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "我是小鳌，谢谢你陪我把这座书院走了一遍。欢迎下次再来，也欢迎再来读一遍那副对联。",
   "file": "zh/s5_bye_v2.mp3",
-  "bytes": 46619,
-  "md5": "96742fadc134d21e355a1042131cb95e"
+  "bytes": 47246,
+  "md5": "ff8b62cbe948d78d5fc368965b124d39"
  },
  {
   "id": "s5_closing_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "五关走完，从明清的书声，到今天的手艺，鳌台书院一直守在这里，把文脉一代一代传下去。",
   "file": "zh/s5_closing_v2.mp3",
-  "bytes": 51948,
-  "md5": "f5faa0633be5155ef3b18879d345c8bf"
+  "bytes": 47246,
+  "md5": "c29e5e1df3f5b7e66fa2be6bf6236da1"
  },
  {
   "id": "s5_ink_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "古人在这里留下墨迹，你也可以留下自己的心愿。愿你像书院的学子一样，读万卷书，行万里路。",
   "file": "zh/s5_ink_v2.mp3",
-  "bytes": 47246,
-  "md5": "2af73eaca7799fc94d9bd4c1a3aa4f37"
+  "bytes": 47716,
+  "md5": "b6b0748bda9217283360722a603f0722"
  },
  {
   "id": "s5_route_v2",
   "lang": "zh",
   "engine": "qwen",
-  "voice": "Cherry",
+  "voice": "Serena",
   "text": "离馆前给你一条参观路线：正门牌坊，前院天井和假山，讲堂楹联，东侧非遗工坊，最后到后园六角亭。",
   "file": "zh/s5_route_v2.mp3",
-  "bytes": 60098,
-  "md5": "99c7da9eb8d0c4aab48679f13b0e9eab"
+  "bytes": 61979,
+  "md5": "5534f83af925a04c1823f9ca201e0b9f"
  }
 ]
