@@ -320,6 +320,19 @@ kbd {
 .rp-list { list-style: none; margin: 8px 0 10px; padding: 0; }
 /* 候选卡片网格：每类一张示意图 + 名称 + 来源说明 */
 .rp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 8px 0 12px; }
+/* 可点击的候选卡片：设备离线时也能直接进入答题 */
+.rp-pick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 10px 0 12px; }
+.rp-pick { display: flex; flex-direction: column; gap: 4px; padding: 0; border: 1px solid rgba(217,180,91,0.3);
+  background: rgba(255,255,255,0.04); border-radius: 10px; overflow: hidden; cursor: pointer;
+  text-align: left; font: inherit; color: inherit; transition: border-color .15s, transform .1s; }
+.rp-pick:hover { border-color: rgba(217,180,91,0.85); transform: translateY(-1px); }
+.rp-pick:active { transform: translateY(0); }
+.rp-pick img { display: block; width: 100%; height: 92px; object-fit: cover; background: #111; }
+.rp-pick img.is-missing { display: none; }
+.rp-pick-name { font-size: 13px; color: var(--gold); padding: 0 8px; line-height: 1.3; }
+.rp-pick-note { font-size: 10px; color: var(--paper-dim); padding: 0 8px 8px; line-height: 1.35; opacity: .9; }
+.rp-pick.is-done { opacity: .55; }
+.rp-pick.is-done .rp-pick-name { color: #7fcaa0; }
 .rp-item { margin: 0; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(217, 180, 91, 0.22);
   border-radius: 10px; overflow: hidden; }
 .rp-item img { display: block; width: 100%; height: 96px; object-fit: cover; background: #111; }

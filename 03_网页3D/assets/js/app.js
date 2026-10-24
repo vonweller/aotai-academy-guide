@@ -707,9 +707,8 @@ function relicRecognitionReady() {
         !isRecord(report) || !isRecord(deployment) || !options.every(isRecord)) return false;
     const optionKeys = options.map((op) => op.key);
     const uniqueKeys = new Set(optionKeys);
-    return item.source_status === 'verified' &&
-      refsReady(item.source_refs, ['institution', 'citation', 'access_date']) &&
-      item.media_rights_status === 'authorized' &&
+    // 识别可用性只看模型/授权/题卡；史实出处属于展陈核验，不阻塞识别。
+    return item.media_rights_status === 'authorized' &&
       refsReady(item.media_rights_refs, ['rights_holder', 'permission_ref']) &&
       recognition.enabled === true && recognition.status === 'verified' &&
       validation.status === 'passed' &&
@@ -756,18 +755,64 @@ function enterRelicStage(silentAudio = false) {
   }
   const need = relicOrder().filter((k) => !state.relicDone[k]);
   const names = need.map(relicName).join('、');
-  setSubtitle('本次识别流程已启动。请按顺序展示「' + names + '」对应类别的已核验授权图片。');
-  if (!silentAudio) speak('p_relic_intro_active_v2', state.lang, '本次图像识别流程已启动，请按顺序展示授权图片。');
-  showRelicPanel(
-    '<p class="rp-name">火眼金睛 · 最后一道任务</p>' +
-    '<p class="rp-line">请按顺序展示各候选类别对应的已核验授权图片。</p>' +
-    '<ul class="rp-list">' +
-    relicOrder().map((k) =>
-      '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
-      (state.relicDone[k] ? '✓ ' : '○ ') + relicName(k) + '</li>').join('') +
-    '</ul>' +
-    '<p class="rp-tip">全部认完就进兑换页面</p>');
+  setSubtitle('火眼金睛已启动。把非遗图片放到 CyberCAM 镜头前即可识别，也可直接点击下面的卡片进入答题。');
+  if (!silentAudio) speak('p_relic_intro_active_v2', state.lang, '本次图像识别流程已启动。');
+  renderRelicChooser();
   toast('五关走完！进入火眼金睛');
+}
+
+/** 可点击的候选卡片：设备未连上时也能直接进入该项目答题。 */
+function renderRelicChooser() {
+  const keys = relicOrder();
+  const doneCount = keys.filter((k) => state.relicDone[k]).length;
+  const cards = keys.map((key) => {
+    const done = !!state.relicDone[key];
+    const r = relicOf(key) || {};
+    const note = (r.photo_note || {})[state.lang] || (r.photo_note || {}).zh || '';
+    return '<button class="rp-pick' + (done ? ' is-done' : '') + '" type="button" data-pick="' + key + '">' +
+      '<img src="/assets/relics/' + key + '.jpg" alt="' + relicName(key) + '" loading="lazy" ' +
+      'onerror="this.classList.add(\'is-missing\')">' +
+      '<span class="rp-pick-name">' + (done ? '✓ ' : '') + relicName(key) + '</span>' +
+      '<span class="rp-pick-note">' + (done ? (state.lang === 'yue' ? '已完成' : '已完成') : note) + '</span>' +
+      '</button>';
+  }).join('');
+  showRelicPanel(
+    '<p class="rp-name">火眼金睛 · 选一项开始</p>' +
+    '<p class="rp-line">已识别 ' + doneCount + ' / ' + keys.length + ' 项。把卡片放到 CyberCAM 前会自动识别，' +
+    '也可以直接点下面的图片进入该项目。</p>' +
+    '<div class="rp-pick-grid">' + cards + '</div>' +
+    '<p class="rp-tip">' + (doneCount >= keys.length ? '全部完成，正在打开兑换…' : '全部完成后进入兑换页面') + '</p>');
+  $$('.rp-pick').forEach((b) => {
+    b.addEventListener('click', () => startRelicByKey(b.dataset.pick));
+  });
+}
+
+/** 网页端直接开始某一项（不依赖设备识别事件）。 */
+function startRelicByKey(key, opts) {
+  if (!relicRecognitionReady()) return;
+  if (!relicOrder().includes(key)) return;
+  if (state.relicDone[key] && !(opts && opts.force)) return;
+  state.relicModelEnabled = true;
+  focusRelicScene(key);
+  const r = relicOf(key) || {};
+  const text = r[state.lang] || r.zh || '';
+  const name = relicName(key);
+  showRelicPanel(
+    '<div class="rp-card">' +
+    '<img class="rp-photo" src="/assets/relics/' + key + '.jpg" alt="' + name + '" ' +
+    'onerror="this.style.display=\'none\'">' +
+    '<div class="rp-body">' +
+    '<p class="rp-kicker">' + (state.lang === 'yue' ? '項目講解' : '项目讲解') + '</p>' +
+    '<p class="rp-name">' + name + '</p>' +
+    '<p class="rp-line">' + text + '</p>' +
+    '<p class="rp-tip">讲解结束后出题</p>' +
+    '</div></div>');
+  if (!(opts && opts.silent)) speak(r.id || '', state.lang, text);
+  // 先听再答：3 秒后弹题
+  state._relicTimer = setTimeout(() => {
+    const quiz = r.quiz;
+    if (quiz) relicQuiz(key, quiz);
+  }, 3000);
 }
 
 /** 所有任务完成 → 先道喜、再总结书院，最后打开兑换 */
@@ -1070,10 +1115,40 @@ function relicQuiz(key, quiz) {
   });
   html += '</div><p class="rp-res" id="rpRes"></p>';
   showRelicPanel(html);
+  const correct = quiz && quiz.answer;
   $$('.rp-opt').forEach((b) => {
-    b.addEventListener('click', () => sendCmd({ cmd: 'relic_answer', key: key, answer: b.dataset.k }));
+    b.addEventListener('click', () => {
+      const picked = b.dataset.k;
+      sendCmd({ cmd: 'relic_answer', key: key, answer: picked });
+      // 设备在线时由设备判定；离线时网页本地判定并推进
+      if (typeof correct === 'string' && correct) {
+        const ok = picked === correct;
+        relicQuizResult(key, ok);
+        if (ok) setTimeout(() => passRelicLocally(key), 900);
+      } else {
+        sendCmd({ cmd: 'relic_start' });
+      }
+    });
   });
   state.relicQuiz = { key: key, quiz: { q: quiz.q, options: opts } };
+}
+
+/** 网页端本地过关：计入完成、加分展示、回到选择页或结束。 */
+function passRelicLocally(key) {
+  if (!relicOrder().includes(key)) return;
+  state.relicDone[key] = true;
+  const keys = relicOrder();
+  const left = keys.filter((k) => !state.relicDone[k]);
+  if (!left.length) {
+    state.relicPassedAll = true;
+    showRelicPanel('<p class="rp-name">全部完成！</p>' +
+      '<p class="rp-line">五项非遗展项都认完了，正在打开兑换页面…</p>');
+    setTimeout(() => finishAllTasks(), 1200);
+    return;
+  }
+  const presets = (MAP && MAP.cameraPresets) || {};
+  if (presets.stageWorkshop && world && world.setCameraPreset) world.setCameraPreset(presets.stageWorkshop);
+  renderRelicChooser();
 }
 
 function relicQuizResult(key, ok) {
