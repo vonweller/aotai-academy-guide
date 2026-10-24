@@ -1,5 +1,25 @@
 [
  {
+  "id": "p_congrats_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今次數字導覽已完成，多謝參與。",
+  "file": "yue/p_congrats_v2.mp3",
+  "bytes": 25774,
+  "md5": "19f7129ecb26122a701b4f7244c88b36"
+ },
+ {
+  "id": "p_content_review_done_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "候選內容清單已列出；五類來源、實物同模型仍待核實，自動識別仲未啟用。",
+  "file": "yue/p_content_review_done_v2.mp3",
+  "bytes": 49911,
+  "md5": "1a85a891bfd5a3933878f79ca544751f"
+ },
+ {
   "id": "p_lang_yue",
   "lang": "yue",
   "engine": "edge",
@@ -20,6 +40,206 @@
   "md5": "c9d12e2a70a1f8c6dc83956373de771f"
  },
  {
+  "id": "p_points",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "積分又多咗。",
+  "file": "yue/p_points.mp3",
+  "bytes": 13391,
+  "md5": "6a2ea0fc5013e80ce5a90c40a1494f87"
+ },
+ {
+  "id": "p_relic_bring_active_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "請將相應類別已核實授權嘅示範相片對準鏡頭；拳架類別只對應靜態姿勢示範圖。",
+  "file": "yue/p_relic_bring_active_v2.mp3",
+  "bytes": 50067,
+  "md5": "08c1caf49b823bf1357c693bef4315a3"
+ },
+ {
+  "id": "p_relic_bring_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "請睇相應候選類別嘅代表相片；相片來源同授權仍待核實，目前唔會用作自動識別或計分。",
+  "file": "yue/p_relic_bring_v2.mp3",
+  "bytes": 53359,
+  "md5": "73b80e3978880da5d5c1742aaee9d640"
+ },
+ {
+  "id": "p_relic_candidate_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係目前嘅候選展項，類別、來源同實物關係仍待核實。",
+  "file": "yue/p_relic_candidate_v2.mp3",
+  "bytes": 36275,
+  "md5": "ba91947ea02c300fea398b23abb3f2cf"
+ },
+ {
+  "id": "p_relic_confirm_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "講解結束後，請移開相片，再展示同一類別已核實授權嘅示範相片完成確認。",
+  "file": "yue/p_relic_confirm_v2.mp3",
+  "bytes": 47716,
+  "md5": "91852950cb351c92faea4c913b4a5f1f"
+ },
+ {
+  "id": "p_relic_intro_active_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今次圖像識別流程已啟動，請按次序展示相應類別已核實授權嘅相片。",
+  "file": "yue/p_relic_intro_active_v2.mp3",
+  "bytes": 44268,
+  "md5": "40b8425854ea9af868a3795dd2b98048"
+ },
+ {
+  "id": "p_relic_intro_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "目前舊類別模型已停用；新類別來源、授權示範相片、訓練資料同驗證模型仍待核實。自動識別同識別積分都未啟用。",
+  "file": "yue/p_relic_intro_v2.mp3",
+  "bytes": 73264,
+  "md5": "541ec9e3b1f9c0df2d00fc68542c2b46"
+ },
+ {
+  "id": "p_relic_model_pending_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "目前識別模型仍然係舊類別版本，已安全停用。五個新類別嘅實物相片同訓練資料仍要核實補齊，暫時唔會自動識別，亦唔會計識別積分。",
+  "file": "yue/p_relic_model_pending_v2.mp3",
+  "bytes": 81885,
+  "md5": "d4d4c6fb1e71a632b669f25fbfcb750f"
+ },
+ {
+  "id": "p_relic_next_active_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "請展示下一項候選類別相應嘅已核實授權相片。",
+  "file": "yue/p_relic_next_active_v2.mp3",
+  "bytes": 32200,
+  "md5": "f508758287eb423c069013e443e29909"
+ },
+ {
+  "id": "p_relic_next_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "請按次序睇下一件候選展項；相關相片同模型完成核實後，先會啟用自動識別。",
+  "file": "yue/p_relic_next_v2.mp3",
+  "bytes": 48657,
+  "md5": "02ad9bd0d67561a48c8b5a8d4f244a24"
+ },
+ {
+  "id": "p_relic_order_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "火眼金睛先列鰲台書院優先展示候選（具體關聯待核），再列東莞技藝候選（地域同項目名待核）；所有類別暫不自動識別或計分。",
+  "file": "yue/p_relic_order_v2.mp3",
+  "bytes": 75458,
+  "md5": "ed664269927558f0ad7e807d35b4c021"
+ },
+ {
+  "id": "p_relic_pass_active_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今次圖像匹配確認完成；呢個唔代表項目來源或歷史關係已核實。",
+  "file": "yue/p_relic_pass_active_v2.mp3",
+  "bytes": 40663,
+  "md5": "e710b1a6b1d44a9d5e52ab01a48a4fe7"
+ },
+ {
+  "id": "p_relic_pass_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "候選清單結構已整理；各項來源、實物同模型仍待核實，自動識別仲未啟用。",
+  "file": "yue/p_relic_pass_v2.mp3",
+  "bytes": 49911,
+  "md5": "fabf82a276e53049b0fc56f7970530bf"
+ },
+ {
+  "id": "p_relic_task_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "候選清單（關聯同地域待核）：厚街粵繡、厚街雙手洪拳、鰲魚磚；莞草編織、清溪麒麟紮作。相片同模型仍待核實，暫不識別或計分。",
+  "file": "yue/p_relic_task_v2.mp3",
+  "bytes": 83452,
+  "md5": "c220fe861933b7ec7bdb6e5665800a01"
+ },
+ {
+  "id": "p_summary_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今日我哋聽咗書院故事，亦睇咗本項目擬展示嘅候選內容。各項目關聯、地域、正式名稱同實物來源仍待核實，多謝你陪小鰲行完呢一程。",
+  "file": "yue/p_summary_v2.mp3",
+  "bytes": 84392,
+  "md5": "632853f7b6c17d6e95bd0b4590fec86b"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係本項目擬加入嘅鰲魚磚識別項，暫時當作書院建築細節或展品處理，唔標做非遺項目。佢係咪鰲台書院原物、年代同出處都要核實；目前未有可用嘅實物訓練相片。",
+  "file": "yue/relic_aotai_aoyu_brick_v2.mp3",
+  "bytes": 98028,
+  "md5": "62b309ecd956755e9bc6b84ca53f439b"
+ },
+ {
+  "id": "relic_guancao_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係本項目提出嘅莞草編織類別。具體材料、製作流程、代表實物同東莞來源，要用有採集地點同授權記錄嘅樣本及官方資料核對；目前模型未有用核實過嘅莞草實物相片訓練。",
+  "file": "yue/relic_guancao_v2.mp3",
+  "bytes": 105551,
+  "md5": "8079dc52b0eba3d084cad9a77fc47041"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係本項目擬加入嘅厚街雙手洪拳類別。正式項目名稱、厚街傳承脈絡同示範圖像來源仍要核實；相機如果用靜態分類，只代表識別經核實嘅拳架相片，唔代表識別動態拳法。目前模型未訓練。",
+  "file": "yue/relic_houjie_shuangshou_hongquan_v2.mp3",
+  "bytes": 117620,
+  "md5": "522fa914b3e53efad5ed2c93202c4f91"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係本項目擬加入嘅厚街粵繡類別。正式項目名稱、同書院展陳嘅關係、代表實物同來源，仍要等書院展簽或官方資料核實；目前未有核實過嘅訓練相片，暫時唔會自動識別。",
+  "file": "yue/relic_houjie_yuexiu_v2.mp3",
+  "bytes": 101163,
+  "md5": "675bd7f34cbf25096100d77d93eefe96"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢個係本項目擬加入嘅清溪麒麟紮作類別。正式項目名稱、同麒麟舞嘅關係、傳承資料同實物來源，仍要等權威資料核實；目前唔會將舞蹈動作相片當成紮作實物樣本，模型尚未訓練。",
+  "file": "yue/relic_qingxi_qilin_zhazuo_v2.mp3",
+  "bytes": 106649,
+  "md5": "d42ee819b7326ecd3181eeddbacf5d6b"
+ },
+ {
   "id": "s1_prompt",
   "lang": "yue",
   "voice": "zh-HK-HiuMaanNeural",
@@ -28,6 +248,126 @@
   "bytes": 22796,
   "md5": "d823e634f1ae3c6f29801bac3b94af59",
   "engine": "edge"
+ },
+ {
+  "id": "s1_welcome_new_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "歡迎光臨鰲台書院，我係你嘅智能導覽員小鰲。今日我哋會聽書院故事，亦會睇本項目擬展示嘅候選內容；具體關聯、地域同項目名稱仍待核實。",
+  "file": "yue/s1_welcome_new_v2.mp3",
+  "bytes": 88311,
+  "md5": "03e8aa6404b0bb3a6a541e5a44ddc956"
+ },
+ {
+  "id": "s1_welcome_ok_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "預約訪客，歡迎您嚟到鰲台書院 AI 導覽。認得您喇，跟實小鰲，一齊睇本項目擬展示嘅候選內容。",
+  "file": "yue/s1_welcome_ok_v2.mp3",
+  "bytes": 64644,
+  "md5": "866f93cb1a3f193acdef9a5954de47ad"
+ },
+ {
+  "id": "s2_source_pending_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "本項目現有文稿記錄咗書院創建、遷建同重建等資料，但目前欠缺可以用作展陳引用嘅權威出處。今次數字導覽暫時唔講具體年代同規模，待核對地方志、檔案或官方資料後再更新。",
+  "file": "yue/s2_source_pending_v2.mp3",
+  "bytes": 108373,
+  "md5": "9148d22cb07344d5aa84a93e927a2074"
+ },
+ {
+  "id": "s3_inscription_source_pending_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "講堂楹聯、匾額內容、題寫者同科名等資料，要由現場原物、地方志或官方資料逐項核實；來源確認之前，本項目唔作確定陳述。",
+  "file": "yue/s3_inscription_source_pending_v2.mp3",
+  "bytes": 76399,
+  "md5": "eda36756b3b2dafb64d7dc45c1446603"
+ },
+ {
+  "id": "s3_virtual_hall_scope_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "本項目將呢度設置為數字講堂場景；實際歷史用途、題刻內容同原物出處仍待現場資料或檔案核實。",
+  "file": "yue/s3_virtual_hall_scope_v2.mp3",
+  "bytes": 58218,
+  "md5": "0a438aab59ce9d6256798a4a7f1c2cab"
+ },
+ {
+  "id": "s4_virtual_scope_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "呢度係本項目設計嘅虛擬技藝展陳場景，唔代表鰲台書院現場已有相同工坊或展品。火眼金睛會先介紹擬展示嘅鰲台書院主題數字展項，再介紹東莞技藝候選（地域同項目名待核）；各項目關係、正式名稱同實物來源仍待核實。",
+  "file": "yue/s4_virtual_scope_v2.mp3",
+  "bytes": 131726,
+  "md5": "85faaa841e342c9a81f2a28d6bcee55a"
+ },
+ {
+  "id": "s5_bye_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "數字導覽到呢度結束。多謝你參與，亦歡迎繼續睇項目入面明確標註為候選或待核嘅內容。",
+  "file": "yue/s5_bye_v2.mp3",
+  "bytes": 57747,
+  "md5": "2189ec8bbeef18f829e453b321b0869e"
+ },
+ {
+  "id": "s5_closing_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今日我哋聽咗書院故事，亦睇咗本項目擬展示嘅候選內容。項目關聯、地域、正式名稱同實物來源仍待核實，多謝你陪小鰲行完呢一程。",
+  "file": "yue/s5_closing_v2.mp3",
+  "bytes": 83922,
+  "md5": "abf57e90a3987ce75de287cb16ecc835"
+ },
+ {
+  "id": "s5_ink_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "你都可以喺數字展陳入面留低自己嘅心願。書院題刻同原物出處仍以核實後嘅資料為準。",
+  "file": "yue/s5_ink_v2.mp3",
+  "bytes": 56964,
+  "md5": "ca74db1c482ac64a262fc7b82e0f86da"
+ },
+ {
+  "id": "s5_virtual_route_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "本項目嘅數字參觀路線依次經過門樓、前院、講堂、東側虛擬展陳場景同後園，屬於互動設計，唔代表現場開放路線或實際展項布局。",
+  "file": "yue/s5_virtual_route_v2.mp3",
+  "bytes": 79847,
+  "md5": "2d95f177b75a81b6657a713816abedd8"
+ },
+ {
+  "id": "p_congrats_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本次数字导览已完成，多谢参与。",
+  "file": "zh/p_congrats_v2.mp3",
+  "bytes": 21698,
+  "md5": "110e06cbcfdda3a2de60e0d95a015228"
+ },
+ {
+  "id": "p_content_review_done_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "候选内容清单已列出；五类来源、实物和模型仍待核实，自动识别尚未启用。",
+  "file": "zh/p_content_review_done_v2.mp3",
+  "bytes": 49597,
+  "md5": "96ed9cd0d9e6d1ad59224d26fa772a61"
  },
  {
   "id": "p_lang_yue",
@@ -50,6 +390,206 @@
   "md5": "c449694a460349617fb744136ba19b2b"
  },
  {
+  "id": "p_points",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "积分又多了。",
+  "file": "zh/p_points.mp3",
+  "bytes": 9316,
+  "md5": "59fb467332426ad9c117b9ffb578c47b"
+ },
+ {
+  "id": "p_relic_bring_active_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "请把相应类别的已核验授权示范图片对准镜头；拳架类别仅对应静态姿势示范图。",
+  "file": "zh/p_relic_bring_active_v2.mp3",
+  "bytes": 48657,
+  "md5": "ab769059076d72884e875ae74c1f5b18"
+ },
+ {
+  "id": "p_relic_bring_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "请查看相应候选类别的代表图片；图片来源与授权仍待核实，当前不用于自动识别或计分。",
+  "file": "zh/p_relic_bring_v2.mp3",
+  "bytes": 56807,
+  "md5": "2585d80501bba79e0e2d93724afa6a2a"
+ },
+ {
+  "id": "p_relic_candidate_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是当前候选展项，类别、来源与实物关系仍待核实。",
+  "file": "zh/p_relic_candidate_v2.mp3",
+  "bytes": 36588,
+  "md5": "13be0d95947dde6581f6ce8c6461672f"
+ },
+ {
+  "id": "p_relic_confirm_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "讲解结束后，请移开图片，再展示同一类别的已核验授权示范图片完成确认。",
+  "file": "zh/p_relic_confirm_v2.mp3",
+  "bytes": 43328,
+  "md5": "f8e7e595b7efda844fa945364634076b"
+ },
+ {
+  "id": "p_relic_intro_active_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本次图像识别流程已启动，请按顺序展示对应类别的已核验授权图片。",
+  "file": "zh/p_relic_intro_active_v2.mp3",
+  "bytes": 36588,
+  "md5": "113d03ed22a88dc44418236b5e19b5fc"
+ },
+ {
+  "id": "p_relic_intro_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "当前旧类别模型已停用；新类别来源、授权示范图片、训练数据和验证模型尚待核实。自动识别与识别积分均未启用。",
+  "file": "zh/p_relic_intro_v2.mp3",
+  "bytes": 64017,
+  "md5": "315a336b0f2880f5aa9d84feee9dadf9"
+ },
+ {
+  "id": "p_relic_model_pending_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "当前识别模型仍是旧类别版本，已安全停用。五个新类别的实物图片和训练数据尚待核实补齐，暂不执行自动识别，也不计识别积分。",
+  "file": "zh/p_relic_model_pending_v2.mp3",
+  "bytes": 75458,
+  "md5": "b1d95d4b685125a22626c76ceddecbc0"
+ },
+ {
+  "id": "p_relic_next_active_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "请展示下一项候选类别对应的已核验授权图片。",
+  "file": "zh/p_relic_next_active_v2.mp3",
+  "bytes": 24676,
+  "md5": "470694c9ff25ae6e78672f85976eecff"
+ },
+ {
+  "id": "p_relic_next_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "请按顺序查看下一件候选展项；相关图片和模型完成核实后，再启用自动识别。",
+  "file": "zh/p_relic_next_v2.mp3",
+  "bytes": 43798,
+  "md5": "d10f3ae60eefd5557929806c9305753a"
+ },
+ {
+  "id": "p_relic_order_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "火眼金睛先列鳌台书院优先展示候选（具体关联待核），再列东莞技艺候选（地域与项目名待核）；所有类别暂不自动识别或计分。",
+  "file": "zh/p_relic_order_v2.mp3",
+  "bytes": 73578,
+  "md5": "bea2a6f3bb9a02dd8227ea04f1f27394"
+ },
+ {
+  "id": "p_relic_pass_active_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本次图像匹配确认完成；这不代表项目来源或历史关系已核实。",
+  "file": "zh/p_relic_pass_active_v2.mp3",
+  "bytes": 36588,
+  "md5": "6f23f3d84e2ec399dd6dbb53763350c6"
+ },
+ {
+  "id": "p_relic_pass_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "候选清单结构已整理；各项来源、实物和模型仍待核实，自动识别尚未启用。",
+  "file": "zh/p_relic_pass_v2.mp3",
+  "bytes": 46619,
+  "md5": "c664ca00ac34392ef6117adfdc025c91"
+ },
+ {
+  "id": "p_relic_task_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "候选清单（关联与地域待核）：厚街粤绣、厚街双手洪拳、鳌鱼砖；莞草编织、清溪麒麟扎作。图片和模型待核实，暂不识别或计分。",
+  "file": "zh/p_relic_task_v2.mp3",
+  "bytes": 79377,
+  "md5": "313b9ffe184f402c12e8a81a330cb5ab"
+ },
+ {
+  "id": "p_summary_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "今天我们听了书院故事，也查看了本项目拟展示的候选内容。各项目关联、地域、正式名称与实物来源仍待核实，谢谢你陪小鳌走完这一程。",
+  "file": "zh/p_summary_v2.mp3",
+  "bytes": 79377,
+  "md5": "c87199254f421af1d95a900fa1f92322"
+ },
+ {
+  "id": "relic_aotai_aoyu_brick_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是本项目拟加入的鳌鱼砖识别项，暂按书院建筑细节或展品处理，不标作非遗项目。它是否为鳌台书院原物、年代与出处均待核实；目前没有可用的实物训练照片。",
+  "file": "zh/relic_aotai_aoyu_brick_v2.mp3",
+  "bytes": 94267,
+  "md5": "4eff5b8ea395ce0621432d082ac700ac"
+ },
+ {
+  "id": "relic_guancao_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是本项目提出的莞草编织类别。具体材料、制作流程、代表实物和东莞来源需以有采集地点与授权记录的样本及官方资料核对；目前模型未用经核实的莞草实物图训练。",
+  "file": "zh/relic_guancao_v2.mp3",
+  "bytes": 93326,
+  "md5": "3ac21768e2095ec7aaa99496fb6e4d6e"
+ },
+ {
+  "id": "relic_houjie_shuangshou_hongquan_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是本项目拟加入的厚街双手洪拳类别。正式项目名称、厚街传承脉络和示范图像来源待核；摄像头如采用静态分类，只表示识别经核实的拳架照片，不代表识别动态拳法。目前模型未训练。",
+  "file": "zh/relic_houjie_shuangshou_hongquan_v2.mp3",
+  "bytes": 115739,
+  "md5": "c220a48a3f01b6b106a83b274d059537"
+ },
+ {
+  "id": "relic_houjie_yuexiu_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是本项目拟加入的厚街粤绣类别。正式项目名称、与书院展陈的关系、代表实物和来源仍待书院展签或官方资料核实；目前没有经过核实的训练照片，暂不自动识别。",
+  "file": "zh/relic_houjie_yuexiu_v2.mp3",
+  "bytes": 92229,
+  "md5": "829e3d38cc43c3c870c8094901de60c2"
+ },
+ {
+  "id": "relic_qingxi_qilin_zhazuo_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这是本项目拟加入的清溪麒麟扎作类别。项目正式名称、与麒麟舞的关系、传承资料及实物来源待权威资料核实；当前不把舞蹈动作照片当作扎作实物样本，模型尚未训练。",
+  "file": "zh/relic_qingxi_qilin_zhazuo_v2.mp3",
+  "bytes": 101476,
+  "md5": "d7b3c11d2f32187247631da8d74dc05e"
+ },
+ {
   "id": "s1_prompt",
   "lang": "zh",
   "engine": "qwen",
@@ -58,5 +598,105 @@
   "file": "zh/s1_prompt.mp3",
   "bytes": 18877,
   "md5": "06536f879f6f1ed0ee4d1625d3038955"
+ },
+ {
+  "id": "s1_welcome_new_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "欢迎光临鳌台书院，我是你的智能导览员小鳌。今天我们会听书院故事，并查看本项目拟展示的候选内容；具体关联、地域与项目名称仍待核实。",
+  "file": "zh/s1_welcome_new_v2.mp3",
+  "bytes": 78436,
+  "md5": "c0087cc4aba9f6e8b47e4f369088256c"
+ },
+ {
+  "id": "s1_welcome_ok_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "预约访客，欢迎您来到鳌台书院 AI 导览。认出您了，跟好小鳌，一起查看本项目拟展示的候选内容。",
+  "file": "zh/s1_welcome_ok_v2.mp3",
+  "bytes": 56337,
+  "md5": "bc1d3592c224e6f0a0dbd254cef03563"
+ },
+ {
+  "id": "s2_source_pending_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本项目现有文稿记录了书院创建、迁建及重建等信息，但目前缺少可供展陈引用的权威出处。本次数字导览暂不陈述具体年代和规模，待核对地方志、档案或官方资料后再更新。",
+  "file": "zh/s2_source_pending_v2.mp3",
+  "bytes": 98498,
+  "md5": "1ca59b0454582ede039a585fcac9f070"
+ },
+ {
+  "id": "s3_inscription_source_pending_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "讲堂楹联、匾额内容、题写者与科名等信息，需由现场原物、地方志或官方资料逐项核实；在来源确认前，本项目不作确定陈述。",
+  "file": "zh/s3_inscription_source_pending_v2.mp3",
+  "bytes": 84549,
+  "md5": "ccdcffcdc7f215d112212309cfc51355"
+ },
+ {
+  "id": "s3_virtual_hall_scope_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本项目把这里设置为数字讲堂场景；实际历史用途、题刻内容和原物出处仍待现场资料或档案核实。",
+  "file": "zh/s3_virtual_hall_scope_v2.mp3",
+  "bytes": 53359,
+  "md5": "477424161e83b5e82d8237843346df9a"
+ },
+ {
+  "id": "s4_virtual_scope_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这里是本项目设计的虚拟技艺展陈场景，不代表鳌台书院现场已有相同工坊或展品。火眼金睛先介绍拟展示的鳌台书院主题数字展项，再进入东莞技艺候选（地域与项目名待核）；各项目关系、正式名称和实物来源仍待核实。",
+  "file": "zh/s4_virtual_scope_v2.mp3",
+  "bytes": 125927,
+  "md5": "8e811db6f4d85f646d6f3f489242f6e0"
+ },
+ {
+  "id": "s5_bye_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "数字导览到这里结束。谢谢你参与，也欢迎继续查看项目中明确标注为候选或待核的内容。",
+  "file": "zh/s5_bye_v2.mp3",
+  "bytes": 43328,
+  "md5": "32207caca4ea910bdc46efc720f38e65"
+ },
+ {
+  "id": "s5_closing_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "今天我们听了书院故事，也查看了本项目拟展示的候选内容。项目关联、地域、正式名称和实物来源仍待核实，谢谢你陪小鳌走完这一程。",
+  "file": "zh/s5_closing_v2.mp3",
+  "bytes": 70286,
+  "md5": "8eabb79310c7b19bd3cb40563e4e2cbc"
+ },
+ {
+  "id": "s5_ink_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "你也可以在数字展陈里留下自己的心愿。书院题刻与原物出处仍以核实后的资料为准。",
+  "file": "zh/s5_ink_v2.mp3",
+  "bytes": 38469,
+  "md5": "8f0ab1ea3140dc5ddbd68d7be671a826"
+ },
+ {
+  "id": "s5_virtual_route_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "本项目中的数字参观路线依次经过门楼、前院、讲堂、东侧虚拟展陈场景和后园，属于交互设计，不代表现场开放路线或实际展项布局。",
+  "file": "zh/s5_virtual_route_v2.mp3",
+  "bytes": 74988,
+  "md5": "1b07351b785774eb7bde3477e57e8f00"
  }
 ]
