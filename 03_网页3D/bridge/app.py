@@ -221,6 +221,12 @@ def qc(p):
     return send_from_directory(os.path.join(WEB_ROOT, "qc"), p)
 
 
+@app.route("/fw/<path:p>")
+def fw(p):
+    """只读暴露固件源码目录，供同网段设备拉取部署（不含任何密钥）。"""
+    return send_from_directory(os.path.join(WS_ROOT, "01_固件", "CyberCAM_AI书院"), p)
+
+
 # ---------------- API ----------------
 @app.route("/favicon.ico")
 def favicon():
@@ -339,12 +345,13 @@ POINT_REWARDS = {
     "face": 10, "stage_clear": 10, "quiz_right": 15,
     "relic_recognize": 8, "relic_quiz_right": 20, "finish": 50,
 }
+# 兑换品使用东莞本地非遗主题；下架香云纱/千角灯摆件卡片。
 SHOP_ITEMS = [
-    {"id": "pin_xiangyunsha", "name": "项目纪念徽章", "cost": 30, "icon": "badge"},
-    {"id": "pin_guancao", "name": "导览纪念书签", "cost": 45, "icon": "bookmark"},
-    {"id": "pin_qianjiaodeng", "name": "展陈主题挂饰", "cost": 60, "icon": "lantern"},
-    {"id": "figure_xiangyunsha", "name": "数字导览摆件", "cost": 90, "icon": "figure"},
-    {"id": "figure_qianjiaodeng", "name": "项目纪念摆件", "cost": 120, "icon": "figure"},
+    {"id": "pin_yuexiu", "name": "粤绣纹样徽章", "cost": 30, "icon": "badge"},
+    {"id": "pin_guancao", "name": "莞草编织书签", "cost": 45, "icon": "bookmark"},
+    {"id": "pin_qilin", "name": "麒麟扎作挂饰", "cost": 60, "icon": "lantern"},
+    {"id": "pin_hongquan", "name": "洪拳纹样徽章", "cost": 90, "icon": "badge"},
+    {"id": "pin_aoyu", "name": "鳌鱼砖纹样摆件", "cost": 120, "icon": "figure"},
 ]
 
 

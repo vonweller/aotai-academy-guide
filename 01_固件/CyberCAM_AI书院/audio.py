@@ -26,12 +26,13 @@ DASHSCOPE_TTS_MODEL = "qwen-tts"
 DASHSCOPE_TTS_URL = (
     "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
 )
-# 粤语优先用粤语音色；若无权限自动退回普通话音色
+# 与网页端音色保持一致。注意：千问 TTS 只提供普通话音色，
+# 粤语仅在「本地缺 mp3」时才走在线合成，此时退回普通话音色（WanLung 属 edge-tts，千问不支持）。
 VOICE_BY_LANG = {
-    "zh": os.environ.get("AOTAI_VOICE_ZH", "Cherry"),
+    "zh": os.environ.get("AOTAI_VOICE_ZH", "Serena"),
     "yue": os.environ.get("AOTAI_VOICE_YUE", "Serena"),
 }
-_TTS_VOICE_FALLBACK = ["Cherry", "Serena", "Ethan", "Chelsie"]
+_TTS_VOICE_FALLBACK = ["Serena", "Cherry", "Ethan", "Chelsie"]
 
 
 def _log(*a):
