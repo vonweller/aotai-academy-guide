@@ -318,6 +318,15 @@ kbd {
 .rp-kicker { font-size: 11px; letter-spacing: 0.18em; color: var(--gold); margin: 0 0 4px; opacity: 0.85; }
 .rp-tip { font-size: 13px; line-height: 1.6; color: var(--paper-dim); margin: 0; }
 .rp-list { list-style: none; margin: 8px 0 10px; padding: 0; }
+/* 候选卡片网格：每类一张示意图 + 名称 + 来源说明 */
+.rp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 8px 0 12px; }
+.rp-item { margin: 0; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(217, 180, 91, 0.22);
+  border-radius: 10px; overflow: hidden; }
+.rp-item img { display: block; width: 100%; height: 96px; object-fit: cover; background: #111; }
+.rp-item img.is-missing { display: none; }
+.rp-item figcaption { display: flex; flex-direction: column; gap: 2px; padding: 6px 8px 7px; }
+.rp-item-name { font-size: 13px; color: var(--gold); line-height: 1.35; }
+.rp-item-note { font-size: 10px; line-height: 1.4; color: var(--paper-dim); opacity: 0.9; }
 .rp-list li { font-size: 14px; line-height: 1.9; color: var(--paper); }
 .rp-list li.done { color: #7fcaa0; }
 .rp-name { font-size: 22px; color: var(--gold); margin: 0 0 8px; }

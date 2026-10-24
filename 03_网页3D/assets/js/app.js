@@ -732,9 +732,8 @@ function enterRelicStage(silentAudio = false) {
     const keys = relicOrder();
     const groupMarkup = groups.length ? groups.map((group) =>
       '<h3 class="rp-group">' + ((group.label || {})[state.lang] || (group.label || {}).zh || group.id) + '</h3>' +
-      '<ul class="rp-list">' + (group.keys || []).map((key) =>
-        '<li>○ ' + relicName(key) + '</li>').join('') + '</ul>'
-    ).join('') : '<ul class="rp-list">' + keys.map((key) => '<li>○ ' + relicName(key) + '</li>').join('') + '</ul>' ;
+      '<div class="rp-grid">' + (group.keys || []).map((key) => relicCardMarkup(key)).join('') + '</div>'
+    ).join('') : '<div class="rp-grid">' + keys.map((key) => relicCardMarkup(key)).join('') + '</div>' ;
     const text = !contentReady
       ? (state.lang === 'yue'
         ? '候選清單已列出，但類別來源、實物相片與模型仍待核實，暫不自動識別或計分。'
@@ -985,6 +984,18 @@ function relicName(key) {
   }
   const f = RELIC_INFO[key];
   return f ? (f[state.lang] || f.zh) : key;
+}
+
+function relicCardMarkup(key) {
+  const name = relicName(key);
+  const r = relicOf(key) || {};
+  const note = (r.photo_note || {})[state.lang] || (r.photo_note || {}).zh || '';
+  const tip = state.lang === 'yue' ? '示意相片，非本地實物' : '示意图片，非本地实物';
+  return '<figure class="rp-item">' +
+    '<img src="/assets/relics/' + key + '.jpg" alt="' + name + '" loading="lazy" ' +
+    'onerror="this.classList.add(\'is-missing\')">' +
+    '<figcaption><span class="rp-item-name">' + name + '</span>' +
+    '<span class="rp-item-note">' + (note || tip) + '</span></figcaption></figure>';
 }
 
 function showRelicPanel(html) {

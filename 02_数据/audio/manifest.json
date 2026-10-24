@@ -14,10 +14,10 @@
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "候選內容清單已列出；五類來源、實物同模型仍待核實，自動識別仲未啟用。",
+  "text": "五關講解已全部完成。多謝你陪小鰲行完呢座書院。",
   "file": "yue/p_content_review_done_v2.mp3",
-  "bytes": 49911,
-  "md5": "1a85a891bfd5a3933878f79ca544751f"
+  "bytes": 40977,
+  "md5": "491a7821c49d3c220afcc1f5cfc90dc2"
  },
  {
   "id": "p_lang_yue",
@@ -174,20 +174,20 @@
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "候選清單（關聯同地域待核）：厚街粵繡、厚街雙手洪拳、鰲魚磚；莞草編織、清溪麒麟紮作。相片同模型仍待核實，暫不識別或計分。",
+  "text": "火眼金睛環節先睇鰲台書院主題展項，再睇東莞技藝：厚街粵繡、厚街雙手洪拳、鰲魚磚、莞草編織、清溪麒麟紮作。相片識別暫時未開啟。",
   "file": "yue/p_relic_task_v2.mp3",
-  "bytes": 83452,
-  "md5": "c220fe861933b7ec7bdb6e5665800a01"
+  "bytes": 91289,
+  "md5": "06fc9b66a9023c23be4d42deb255cefe"
  },
  {
   "id": "p_summary_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "今日我哋聽咗書院故事，亦睇咗本項目擬展示嘅候選內容。各項目關聯、地域、正式名稱同實物來源仍待核實，多謝你陪小鰲行完呢一程。",
+  "text": "今日我哋聽完咗鰲台書院嘅故事：由明代建院，到清代遷建，再到今日嘅重建；亦讀咗講堂嘅楹聯，認識咗莞草編織、香雲紗呢啲東莞手藝。多謝你陪小鰲行完呢一程。",
   "file": "yue/p_summary_v2.mp3",
-  "bytes": 84392,
-  "md5": "632853f7b6c17d6e95bd0b4590fec86b"
+  "bytes": 97558,
+  "md5": "3d93c131ffa2ee767009d9861cac4f40"
  },
  {
   "id": "relic_aotai_aoyu_brick_v2",
@@ -254,100 +254,170 @@
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "歡迎光臨鰲台書院，我係你嘅智能導覽員小鰲。今日我哋會聽書院故事，亦會睇本項目擬展示嘅候選內容；具體關聯、地域同項目名稱仍待核實。",
+  "text": "歡迎光臨鰲台書院，我係你嘅智能導覽員小鰲。呢座書院喺東莞厚街，係嶺南書院文化嘅代表之一。今日我哋行五關，先聽書院嘅故事，再睇東莞嘅手藝。",
   "file": "yue/s1_welcome_new_v2.mp3",
-  "bytes": 88311,
-  "md5": "03e8aa6404b0bb3a6a541e5a44ddc956"
+  "bytes": 98655,
+  "md5": "1edacd47d838bbe79e325a17b57e313e"
  },
  {
   "id": "s1_welcome_ok_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "預約訪客，歡迎您嚟到鰲台書院 AI 導覽。認得您喇，跟實小鰲，一齊睇本項目擬展示嘅候選內容。",
+  "text": "預約訪客，歡迎您嚟到鰲台書院。認得您喇，跟實小鰲，我哋即刻出發。",
   "file": "yue/s1_welcome_ok_v2.mp3",
+  "bytes": 49911,
+  "md5": "2bfc7cf2009aea6f72dae88a7fb2e693"
+ },
+ {
+  "id": "s2_move_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "書院最早起喺鳳林長生廟隔籬。到咗清朝乾隆年間，老屋年久失修塌咗，族人合力將佢遷到菊塘坊菊山腳下，乾隆二十一年落成。",
+  "file": "yue/s2_move_v2.mp3",
+  "bytes": 80004,
+  "md5": "632187a203ba012e0c23fe73d0cf70cb"
+ },
+ {
+  "id": "s2_origin_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "明朝成化十二年，即係一四七六年春天，做過寶慶知府嘅厚街人王恪返到家鄉，倡議族人捐錢，起咗鰲台書院。",
+  "file": "yue/s2_origin_v2.mp3",
+  "bytes": 65741,
+  "md5": "9b0da036b6ebec1305fe7f167196a9b8"
+ },
+ {
+  "id": "s2_rebuild_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "今日你見到嘅書院，係二〇〇八年動工重建、二〇一二年竣工，佔地四千幾平方米，保留咗正門、中堂、奎星樓三進嘅格局。",
+  "file": "yue/s2_rebuild_v2.mp3",
+  "bytes": 73578,
+  "md5": "216463eeef4ba48cf43e0e84d03411c6"
+ },
+ {
+  "id": "s3_couplet_mean_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "意思係話，讀書貴在順應時代，通曉古今先算讀書人；呢片土地本就鍾靈毓秀，要在呢度培育出棟樑之才。",
+  "file": "yue/s3_couplet_mean_v2.mp3",
+  "bytes": 62920,
+  "md5": "089a419878808448f17a7c6cb427f987"
+ },
+ {
+  "id": "s3_couplet_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "柱上呢副對聯係：學貴因時，通古今之謂士；地原毓秀，樹梁棟以成材。請跟我讀一次。",
+  "file": "yue/s3_couplet_v2.mp3",
+  "bytes": 59315,
+  "md5": "ec0d6ac1f8733d9bdb6e42f033d93d7d"
+ },
+ {
+  "id": "s3_gate_couplet_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "書院正門仲有一副長聯：鰲海澄波看錦鱗而躍浪，彭峰聳翠兆文筆之生花。寫嘅係呢度出人才嘅底氣。",
+  "file": "yue/s3_gate_couplet_v2.mp3",
   "bytes": 64644,
-  "md5": "866f93cb1a3f193acdef9a5954de47ad"
+  "md5": "c4ad5124d18e02deb1821fc18391d1ca"
  },
  {
-  "id": "s2_source_pending_v2",
+  "id": "s3_intro_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "本項目現有文稿記錄咗書院創建、遷建同重建等資料，但目前欠缺可以用作展陳引用嘅權威出處。今次數字導覽暫時唔講具體年代同規模，待核對地方志、檔案或官方資料後再更新。",
-  "file": "yue/s2_source_pending_v2.mp3",
-  "bytes": 108373,
-  "md5": "9148d22cb07344d5aa84a93e927a2074"
+  "text": "我哋行入講堂。古時候，學生就坐喺咁樣嘅梁柱之間讀書、寫字、聽先生講學。",
+  "file": "yue/s3_intro_v2.mp3",
+  "bytes": 55396,
+  "md5": "9033e69e9fb23416b5ed7147b668f063"
  },
  {
-  "id": "s3_inscription_source_pending_v2",
+  "id": "s3_three_top_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "講堂楹聯、匾額內容、題寫者同科名等資料，要由現場原物、地方志或官方資料逐項核實；來源確認之前，本項目唔作確定陳述。",
-  "file": "yue/s3_inscription_source_pending_v2.mp3",
-  "bytes": 76399,
-  "md5": "eda36756b3b2dafb64d7dc45c1446603"
+  "text": "狀元莊有恭、榜眼馮願、探花陳伯陶都曾經為書院題寫匾聯，所以佢被稱為東莞唯一有三甲留墨嘅書院。",
+  "file": "yue/s3_three_top_v2.mp3",
+  "bytes": 61979,
+  "md5": "19eabb50229440129a48b6b0a3ca7ca1"
  },
  {
-  "id": "s3_virtual_hall_scope_v2",
+  "id": "s4_guancao_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "本項目將呢度設置為數字講堂場景；實際歷史用途、題刻內容同原物出處仍待現場資料或檔案核實。",
-  "file": "yue/s3_virtual_hall_scope_v2.mp3",
-  "bytes": 58218,
-  "md5": "0a438aab59ce9d6256798a4a7f1c2cab"
+  "text": "仲有莞草編織。鹹水草喺手上一壓一挑，就變成草蓆、草籃、草帽，呢個係水鄉人家最日常嘅手藝。",
+  "file": "yue/s4_guancao_v2.mp3",
+  "bytes": 64957,
+  "md5": "8cb807bffacf8fc8df13ba718bfd5cb6"
  },
  {
-  "id": "s4_virtual_scope_v2",
+  "id": "s4_workshop_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "呢度係本項目設計嘅虛擬技藝展陳場景，唔代表鰲台書院現場已有相同工坊或展品。火眼金睛會先介紹擬展示嘅鰲台書院主題數字展項，再介紹東莞技藝候選（地域同項目名待核）；各項目關係、正式名稱同實物來源仍待核實。",
-  "file": "yue/s4_virtual_scope_v2.mp3",
-  "bytes": 131726,
-  "md5": "85faaa841e342c9a81f2a28d6bcee55a"
+  "text": "呢度係非遺工坊。東莞人靠水吃水，一門門老手藝，就係喺咁樣嘅院子傳落嚟。",
+  "file": "yue/s4_workshop_v2.mp3",
+  "bytes": 53986,
+  "md5": "388390f2d0a8a2a8ebaac776a2bded90"
+ },
+ {
+  "id": "s4_xiangyunsha_v2",
+  "lang": "yue",
+  "engine": "edge",
+  "voice": "zh-HK-HiuMaanNeural",
+  "text": "香雲紗又叫莨紗，用薯莨汁反覆浸染，再用河泥覆蓋晾曬，正面烏黑發亮，反面棕紅，著起身沙沙聲。",
+  "file": "yue/s4_xiangyunsha_v2.mp3",
+  "bytes": 63390,
+  "md5": "01308a837bb3e01222699d77356494b8"
  },
  {
   "id": "s5_bye_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "數字導覽到呢度結束。多謝你參與，亦歡迎繼續睇項目入面明確標註為候選或待核嘅內容。",
+  "text": "我係小鰲，多謝你陪我將呢座書院行咗一次。歡迎下次再嚟，亦歡迎再嚟讀一次嗰副對聯。",
   "file": "yue/s5_bye_v2.mp3",
-  "bytes": 57747,
-  "md5": "2189ec8bbeef18f829e453b321b0869e"
+  "bytes": 59001,
+  "md5": "b3e54ccb8504f69ef681d58e1434ef0d"
  },
  {
   "id": "s5_closing_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "今日我哋聽咗書院故事，亦睇咗本項目擬展示嘅候選內容。項目關聯、地域、正式名稱同實物來源仍待核實，多謝你陪小鰲行完呢一程。",
+  "text": "五關行完，由明清嘅書聲，到今日嘅手藝，鰲台書院一直守喺呢度，將文脈一代一代傳落去。",
   "file": "yue/s5_closing_v2.mp3",
-  "bytes": 83922,
-  "md5": "abf57e90a3987ce75de287cb16ecc835"
+  "bytes": 54769,
+  "md5": "f37f54b1ad154eeccc4594e09a0f7b16"
  },
  {
   "id": "s5_ink_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "你都可以喺數字展陳入面留低自己嘅心願。書院題刻同原物出處仍以核實後嘅資料為準。",
+  "text": "古人喺呢度留低墨跡，你都可以留低自己嘅心願。願你似書院嘅學子一樣，讀萬卷書，行萬里路。",
   "file": "yue/s5_ink_v2.mp3",
-  "bytes": 56964,
-  "md5": "ca74db1c482ac64a262fc7b82e0f86da"
+  "bytes": 61979,
+  "md5": "d781010b8669997ae6fc110b46e1b1ae"
  },
  {
-  "id": "s5_virtual_route_v2",
+  "id": "s5_route_v2",
   "lang": "yue",
   "engine": "edge",
   "voice": "zh-HK-HiuMaanNeural",
-  "text": "本項目嘅數字參觀路線依次經過門樓、前院、講堂、東側虛擬展陳場景同後園，屬於互動設計，唔代表現場開放路線或實際展項布局。",
-  "file": "yue/s5_virtual_route_v2.mp3",
-  "bytes": 79847,
-  "md5": "2d95f177b75a81b6657a713816abedd8"
+  "text": "離館前俾你一條參觀路線：正門牌坊、前院天井同假山、講堂楹聯、東側非遺工坊，最後到後園六角亭。",
+  "file": "yue/s5_route_v2.mp3",
+  "bytes": 64330,
+  "md5": "efce5c67190120e3ba3d9e5cb196c12e"
  },
  {
   "id": "p_congrats_v2",
@@ -364,10 +434,10 @@
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "候选内容清单已列出；五类来源、实物和模型仍待核实，自动识别尚未启用。",
+  "text": "五关讲解已全部完成。谢谢你陪小鳌走完这座书院。",
   "file": "zh/p_content_review_done_v2.mp3",
-  "bytes": 49597,
-  "md5": "96ed9cd0d9e6d1ad59224d26fa772a61"
+  "bytes": 28438,
+  "md5": "91c6e6b2f38fe9b0ea8be3f9dfdc1e0e"
  },
  {
   "id": "p_lang_yue",
@@ -524,20 +594,20 @@
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "候选清单（关联与地域待核）：厚街粤绣、厚街双手洪拳、鳌鱼砖；莞草编织、清溪麒麟扎作。图片和模型待核实，暂不识别或计分。",
+  "text": "火眼金睛环节先看鳌台书院主题展项，再看东莞技艺：厚街粤绣、厚街双手洪拳、鳌鱼砖、莞草编织、清溪麒麟扎作。图片识别暂未开启。",
   "file": "zh/p_relic_task_v2.mp3",
-  "bytes": 79377,
-  "md5": "313b9ffe184f402c12e8a81a330cb5ab"
+  "bytes": 77966,
+  "md5": "3a1d400b509f71a881b8410dd765a651"
  },
  {
   "id": "p_summary_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "今天我们听了书院故事，也查看了本项目拟展示的候选内容。各项目关联、地域、正式名称与实物来源仍待核实，谢谢你陪小鳌走完这一程。",
+  "text": "今天我们听完了鳌台书院的故事：从明代建院，到清代迁建，再到今天的重建；也读了讲堂的楹联，认识了莞草编织、香云纱这些东莞手艺。谢谢你陪小鳌走完这一程。",
   "file": "zh/p_summary_v2.mp3",
-  "bytes": 79377,
-  "md5": "c87199254f421af1d95a900fa1f92322"
+  "bytes": 91759,
+  "md5": "3ee323b455155e23d46bdc7070bbcf84"
  },
  {
   "id": "relic_aotai_aoyu_brick_v2",
@@ -604,99 +674,169 @@
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "欢迎光临鳌台书院，我是你的智能导览员小鳌。今天我们会听书院故事，并查看本项目拟展示的候选内容；具体关联、地域与项目名称仍待核实。",
+  "text": "欢迎光临鳌台书院，我是你的智能导览员小鳌。这座书院在东莞厚街，是岭南书院文化的代表之一。今天我们走五关，先听书院的故事，再看东莞的手艺。",
   "file": "zh/s1_welcome_new_v2.mp3",
-  "bytes": 78436,
-  "md5": "c0087cc4aba9f6e8b47e4f369088256c"
+  "bytes": 81258,
+  "md5": "0b8e174b2388b3ae7cab7e0fd71c299e"
  },
  {
   "id": "s1_welcome_ok_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "预约访客，欢迎您来到鳌台书院 AI 导览。认出您了，跟好小鳌，一起查看本项目拟展示的候选内容。",
+  "text": "预约访客，欢迎您来到鳌台书院。认出您了，跟好小鳌，我们这就出发。",
   "file": "zh/s1_welcome_ok_v2.mp3",
-  "bytes": 56337,
-  "md5": "bc1d3592c224e6f0a0dbd254cef03563"
+  "bytes": 39566,
+  "md5": "04f18da958f17a8d3d90d77a0b318936"
  },
  {
-  "id": "s2_source_pending_v2",
+  "id": "s2_move_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "本项目现有文稿记录了书院创建、迁建及重建等信息，但目前缺少可供展陈引用的权威出处。本次数字导览暂不陈述具体年代和规模，待核对地方志、档案或官方资料后再更新。",
-  "file": "zh/s2_source_pending_v2.mp3",
-  "bytes": 98498,
-  "md5": "1ca59b0454582ede039a585fcac9f070"
+  "text": "书院最早建在凤林长生庙旁边。到了清朝乾隆年间，老屋年久失修塌了，族人合力把它迁到菊塘坊菊山脚下，乾隆二十一年落成。",
+  "file": "zh/s2_move_v2.mp3",
+  "bytes": 86116,
+  "md5": "1231b15b8b3d4fc2601d1559a65356cc"
  },
  {
-  "id": "s3_inscription_source_pending_v2",
+  "id": "s2_origin_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "讲堂楹联、匾额内容、题写者与科名等信息，需由现场原物、地方志或官方资料逐项核实；在来源确认前，本项目不作确定陈述。",
-  "file": "zh/s3_inscription_source_pending_v2.mp3",
-  "bytes": 84549,
-  "md5": "ccdcffcdc7f215d112212309cfc51355"
+  "text": "明朝成化十二年，也就是一四七六年春天，做过宝庆知府的厚街人王恪回到家乡，倡议族人捐资，建起了鳌台书院。",
+  "file": "zh/s2_origin_v2.mp3",
+  "bytes": 64017,
+  "md5": "a51d6be63d478ea6b5b0f8762922a1d1"
  },
  {
-  "id": "s3_virtual_hall_scope_v2",
+  "id": "s2_rebuild_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "本项目把这里设置为数字讲堂场景；实际历史用途、题刻内容和原物出处仍待现场资料或档案核实。",
-  "file": "zh/s3_virtual_hall_scope_v2.mp3",
-  "bytes": 53359,
-  "md5": "477424161e83b5e82d8237843346df9a"
+  "text": "今天你看到的书院，是二〇〇八年动工重建、二〇一二年竣工的，占地四千多平方米，保留了正门、中堂、奎星楼三进的格局。",
+  "file": "zh/s2_rebuild_v2.mp3",
+  "bytes": 67308,
+  "md5": "986941a73314d9cc7255c4ea83c6bab5"
  },
  {
-  "id": "s4_virtual_scope_v2",
+  "id": "s3_couplet_mean_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "这里是本项目设计的虚拟技艺展陈场景，不代表鳌台书院现场已有相同工坊或展品。火眼金睛先介绍拟展示的鳌台书院主题数字展项，再进入东莞技艺候选（地域与项目名待核）；各项目关系、正式名称和实物来源仍待核实。",
-  "file": "zh/s4_virtual_scope_v2.mp3",
-  "bytes": 125927,
-  "md5": "8e811db6f4d85f646d6f3f489242f6e0"
+  "text": "意思是说，读书贵在顺应时代，通晓古今才算读书人；这片土地本就钟灵毓秀，要在这里培育出栋梁之才。",
+  "file": "zh/s3_couplet_mean_v2.mp3",
+  "bytes": 64487,
+  "md5": "ce2a8524a9050caccfee3436e6ab2f36"
+ },
+ {
+  "id": "s3_couplet_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "柱子上这副对联是：学贵因时，通古今之谓士；地原毓秀，树梁栋以成材。请跟我读一遍。",
+  "file": "zh/s3_couplet_v2.mp3",
+  "bytes": 55867,
+  "md5": "b41bb3f91a04ab0b21955cfc90440d84"
+ },
+ {
+  "id": "s3_gate_couplet_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "书院正门还有一副长联：鳌海澄波看锦鳞而跃浪，彭峰耸翠兆文笔之生花。写的是这里出人才的底气。",
+  "file": "zh/s3_gate_couplet_v2.mp3",
+  "bytes": 61509,
+  "md5": "967b6ed0ef28e3d8a38921307ea7827b"
+ },
+ {
+  "id": "s3_intro_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "我们走进讲堂。古时候，学生就坐在这样的梁柱之间读书、写字、听先生讲学。",
+  "file": "zh/s3_intro_v2.mp3",
+  "bytes": 42858,
+  "md5": "886803e42c9418875eeaf6b4cd8d9c86"
+ },
+ {
+  "id": "s3_three_top_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "状元庄有恭、榜眼冯愿、探花陈伯陶都曾为书院题写匾联，所以它被称为东莞唯一有三甲留墨的书院。",
+  "file": "zh/s3_three_top_v2.mp3",
+  "bytes": 58688,
+  "md5": "bbe31915a0f3fb207d4bce5abd99f0b5"
+ },
+ {
+  "id": "s4_guancao_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "还有莞草编织。咸水草在手里一压一挑，就变成草席、草篮、草帽，这是水乡人家最日常的手艺。",
+  "file": "zh/s4_guancao_v2.mp3",
+  "bytes": 61039,
+  "md5": "74a2d37f707d0b71d21b09abbe58f7c2"
+ },
+ {
+  "id": "s4_workshop_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "这里是非遗工坊。东莞人靠水吃水，一门门老手艺，就是从这样的院子里传下来的。",
+  "file": "zh/s4_workshop_v2.mp3",
+  "bytes": 47246,
+  "md5": "5849231f9eb089360a8abbbd7187655d"
+ },
+ {
+  "id": "s4_xiangyunsha_v2",
+  "lang": "zh",
+  "engine": "qwen",
+  "voice": "Cherry",
+  "text": "香云纱又叫莨纱，用薯莨汁反复浸染，再用河泥覆盖晾晒，正面乌黑发亮，反面棕红，穿起来沙沙作响。",
+  "file": "zh/s4_xiangyunsha_v2.mp3",
+  "bytes": 61979,
+  "md5": "dd2c847654191e504a915a3e51742e32"
  },
  {
   "id": "s5_bye_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "数字导览到这里结束。谢谢你参与，也欢迎继续查看项目中明确标注为候选或待核的内容。",
+  "text": "我是小鳌，谢谢你陪我把这座书院走了一遍。欢迎下次再来，也欢迎再来读一遍那副对联。",
   "file": "zh/s5_bye_v2.mp3",
-  "bytes": 43328,
-  "md5": "32207caca4ea910bdc46efc720f38e65"
+  "bytes": 46619,
+  "md5": "96742fadc134d21e355a1042131cb95e"
  },
  {
   "id": "s5_closing_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "今天我们听了书院故事，也查看了本项目拟展示的候选内容。项目关联、地域、正式名称和实物来源仍待核实，谢谢你陪小鳌走完这一程。",
+  "text": "五关走完，从明清的书声，到今天的手艺，鳌台书院一直守在这里，把文脉一代一代传下去。",
   "file": "zh/s5_closing_v2.mp3",
-  "bytes": 70286,
-  "md5": "8eabb79310c7b19bd3cb40563e4e2cbc"
+  "bytes": 51948,
+  "md5": "f5faa0633be5155ef3b18879d345c8bf"
  },
  {
   "id": "s5_ink_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "你也可以在数字展陈里留下自己的心愿。书院题刻与原物出处仍以核实后的资料为准。",
+  "text": "古人在这里留下墨迹，你也可以留下自己的心愿。愿你像书院的学子一样，读万卷书，行万里路。",
   "file": "zh/s5_ink_v2.mp3",
-  "bytes": 38469,
-  "md5": "8f0ab1ea3140dc5ddbd68d7be671a826"
+  "bytes": 47246,
+  "md5": "2af73eaca7799fc94d9bd4c1a3aa4f37"
  },
  {
-  "id": "s5_virtual_route_v2",
+  "id": "s5_route_v2",
   "lang": "zh",
   "engine": "qwen",
   "voice": "Cherry",
-  "text": "本项目中的数字参观路线依次经过门楼、前院、讲堂、东侧虚拟展陈场景和后园，属于交互设计，不代表现场开放路线或实际展项布局。",
-  "file": "zh/s5_virtual_route_v2.mp3",
-  "bytes": 74988,
-  "md5": "1b07351b785774eb7bde3477e57e8f00"
+  "text": "离馆前给你一条参观路线：正门牌坊，前院天井和假山，讲堂楹联，东侧非遗工坊，最后到后园六角亭。",
+  "file": "zh/s5_route_v2.mp3",
+  "bytes": 60098,
+  "md5": "99c7da9eb8d0c4aab48679f13b0e9eab"
  }
 ]
