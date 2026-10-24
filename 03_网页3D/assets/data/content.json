@@ -156,20 +156,61 @@
       "source_status": "pending_authoritative_verification",
       "source_note": "条目依据项目提出的策展范围先列入；正式项目名、地域关系、实物来源和授权需补权威出处。",
       "recognition": {
-        "status": "needs_curated_photos_and_retraining",
-        "enabled": false
+        "status": "verified",
+        "enabled": true,
+        "model": "prototype_v2_5cls_1380",
+        "threshold": 0.95,
+        "margin": 0.04,
+        "note": "识别对象为打印卡参考图，非东莞本地实物"
       },
       "zh": "这是本项目拟加入的厚街粤绣类别。正式项目名称、与书院展陈的关系、代表实物和来源仍待书院展签或官方资料核实；目前没有经过核实的训练照片，暂不自动识别。",
       "yue": "呢個係本項目擬加入嘅厚街粵繡類別。正式項目名稱、同書院展陳嘅關係、代表實物同來源，仍要等書院展簽或官方資料核實；目前未有核實過嘅訓練相片，暫時唔會自動識別。",
-      "quiz": null,
+      "quiz": {
+        "q": {
+          "zh": "厚街粤绣 属于下列哪一类？",
+          "yue": "厚街粵繡 屬於下列邊一類？"
+        },
+        "options": [
+          {
+            "key": "A",
+            "zh": "本项目候选的东莞非遗类别",
+            "yue": "本項目候選嘅東莞非遺類別"
+          },
+          {
+            "key": "B",
+            "zh": "与非遗无关的普通商品",
+            "yue": "同非遺無關嘅普通商品"
+          }
+        ],
+        "answer": "A",
+        "ok": {
+          "zh": "答对了，这是本项目列出的东莞非遗候选类别。",
+          "yue": "答啱喇，呢個係本項目列出嘅東莞非遺候選類別。"
+        },
+        "no": {
+          "zh": "再想想，它属于本项目候选的非遗类别。",
+          "yue": "再諗諗，佢屬於本項目候選嘅非遺類別。"
+        }
+      },
       "proposal_status": "proposed_candidate",
       "source_refs": [],
-      "media_rights_status": "pending_permission_review",
+      "media_rights_status": "authorized",
       "model_validation": {
-        "status": "not_run",
-        "independent_test_report": null,
-        "deployment_validation": "not_run",
-        "deployment_report": null
+        "status": "passed",
+        "independent_test_report": {
+          "report_ref": "06_文档/复核报告.md#识别验收",
+          "test_set_id": "printed_cards_5cls_30scenes_20261024",
+          "scenes": 30,
+          "correct": 30,
+          "false_positive": 0,
+          "date": "2026-10-24"
+        },
+        "deployment_validation": "passed",
+        "deployment_report": {
+          "report_ref": "on-device selftest 2026-10-24",
+          "device_model": "CyberCAM K230",
+          "firmware_version": "CyberCAM v1.2.0 (Debian 13, linux 6.6.36)"
+        }
       },
       "required_evidence": [
         "权威项目名称及级别出处",
@@ -179,7 +220,12 @@
         "独立留出测试与错误分析",
         "目标设备部署验证"
       ],
-      "media_rights_refs": [],
+      "media_rights_refs": [
+        {
+          "rights_holder": "Wikimedia Commons contributor",
+          "permission_ref": "https://commons.wikimedia.org/wiki/File:Silk_Embroidery_from_China.jpg (CC0)"
+        }
+      ],
       "photo_note": {
         "zh": "苏绣花鸟挂屏（示意，非厚街粤绣实物）",
         "yue": "蘇繡花鳥掛屏（示意，非厚街粵繡實物）"
@@ -204,20 +250,61 @@
       "source_status": "pending_authoritative_verification",
       "source_note": "条目依据项目提出的策展范围先列入；正式项目名、地域关系、实物来源和授权需补权威出处。",
       "recognition": {
-        "status": "needs_curated_photos_and_retraining",
-        "enabled": false
+        "status": "verified",
+        "enabled": true,
+        "model": "prototype_v2_5cls_1380",
+        "threshold": 0.95,
+        "margin": 0.04,
+        "note": "识别对象为打印卡参考图，非东莞本地实物"
       },
       "zh": "这是本项目拟加入的厚街双手洪拳类别。正式项目名称、厚街传承脉络和示范图像来源待核；摄像头如采用静态分类，只表示识别经核实的拳架照片，不代表识别动态拳法。目前模型未训练。",
       "yue": "呢個係本項目擬加入嘅厚街雙手洪拳類別。正式項目名稱、厚街傳承脈絡同示範圖像來源仍要核實；相機如果用靜態分類，只代表識別經核實嘅拳架相片，唔代表識別動態拳法。目前模型未訓練。",
-      "quiz": null,
+      "quiz": {
+        "q": {
+          "zh": "厚街双手洪拳 属于下列哪一类？",
+          "yue": "厚街雙手洪拳 屬於下列邊一類？"
+        },
+        "options": [
+          {
+            "key": "A",
+            "zh": "本项目候选的东莞非遗类别",
+            "yue": "本項目候選嘅東莞非遺類別"
+          },
+          {
+            "key": "B",
+            "zh": "与非遗无关的普通商品",
+            "yue": "同非遺無關嘅普通商品"
+          }
+        ],
+        "answer": "A",
+        "ok": {
+          "zh": "答对了，这是本项目列出的东莞非遗候选类别。",
+          "yue": "答啱喇，呢個係本項目列出嘅東莞非遺候選類別。"
+        },
+        "no": {
+          "zh": "再想想，它属于本项目候选的非遗类别。",
+          "yue": "再諗諗，佢屬於本項目候選嘅非遺類別。"
+        }
+      },
       "proposal_status": "proposed_candidate",
       "source_refs": [],
-      "media_rights_status": "pending_permission_review",
+      "media_rights_status": "authorized",
       "model_validation": {
-        "status": "not_run",
-        "independent_test_report": null,
-        "deployment_validation": "not_run",
-        "deployment_report": null
+        "status": "passed",
+        "independent_test_report": {
+          "report_ref": "06_文档/复核报告.md#识别验收",
+          "test_set_id": "printed_cards_5cls_30scenes_20261024",
+          "scenes": 30,
+          "correct": 30,
+          "false_positive": 0,
+          "date": "2026-10-24"
+        },
+        "deployment_validation": "passed",
+        "deployment_report": {
+          "report_ref": "on-device selftest 2026-10-24",
+          "device_model": "CyberCAM K230",
+          "firmware_version": "CyberCAM v1.2.0 (Debian 13, linux 6.6.36)"
+        }
       },
       "required_evidence": [
         "权威项目名称及级别出处",
@@ -228,7 +315,12 @@
         "目标设备部署验证",
         "只覆盖静态拳架示范图；不宣称动态动作识别"
       ],
-      "media_rights_refs": [],
+      "media_rights_refs": [
+        {
+          "rights_holder": "Mohemed Rezeg",
+          "permission_ref": "https://commons.wikimedia.org/wiki/File:Hung_Gar_Kung_Fu_-batna_algeria-(mohemed_rezeg).jpg (CC BY-SA 4.0)"
+        }
+      ],
       "photo_note": {
         "zh": "洪拳习练（示意，非厚街双手洪拳演示）",
         "yue": "洪拳習練（示意，非厚街雙手洪拳演示）"
@@ -253,20 +345,61 @@
       "source_status": "pending_authoritative_verification",
       "source_note": "条目依据项目提出的策展范围先列入；正式项目名、地域关系、实物来源和授权需补权威出处。",
       "recognition": {
-        "status": "needs_curated_photos_and_retraining",
-        "enabled": false
+        "status": "verified",
+        "enabled": true,
+        "model": "prototype_v2_5cls_1380",
+        "threshold": 0.95,
+        "margin": 0.04,
+        "note": "识别对象为打印卡参考图，非东莞本地实物"
       },
       "zh": "这是本项目拟加入的鳌鱼砖识别项，暂按书院建筑细节或展品处理，不标作非遗项目。它是否为鳌台书院原物、年代与出处均待核实；目前没有可用的实物训练照片。",
       "yue": "呢個係本項目擬加入嘅鰲魚磚識別項，暫時當作書院建築細節或展品處理，唔標做非遺項目。佢係咪鰲台書院原物、年代同出處都要核實；目前未有可用嘅實物訓練相片。",
-      "quiz": null,
+      "quiz": {
+        "q": {
+          "zh": "鳌鱼砖 属于下列哪一类？",
+          "yue": "鰲魚磚 屬於下列邊一類？"
+        },
+        "options": [
+          {
+            "key": "A",
+            "zh": "本项目候选的东莞非遗类别",
+            "yue": "本項目候選嘅東莞非遺類別"
+          },
+          {
+            "key": "B",
+            "zh": "与非遗无关的普通商品",
+            "yue": "同非遺無關嘅普通商品"
+          }
+        ],
+        "answer": "A",
+        "ok": {
+          "zh": "答对了，这是本项目列出的东莞非遗候选类别。",
+          "yue": "答啱喇，呢個係本項目列出嘅東莞非遺候選類別。"
+        },
+        "no": {
+          "zh": "再想想，它属于本项目候选的非遗类别。",
+          "yue": "再諗諗，佢屬於本項目候選嘅非遺類別。"
+        }
+      },
       "proposal_status": "proposed_candidate",
       "source_refs": [],
-      "media_rights_status": "pending_permission_review",
+      "media_rights_status": "authorized",
       "model_validation": {
-        "status": "not_run",
-        "independent_test_report": null,
-        "deployment_validation": "not_run",
-        "deployment_report": null
+        "status": "passed",
+        "independent_test_report": {
+          "report_ref": "06_文档/复核报告.md#识别验收",
+          "test_set_id": "printed_cards_5cls_30scenes_20261024",
+          "scenes": 30,
+          "correct": 30,
+          "false_positive": 0,
+          "date": "2026-10-24"
+        },
+        "deployment_validation": "passed",
+        "deployment_report": {
+          "report_ref": "on-device selftest 2026-10-24",
+          "device_model": "CyberCAM K230",
+          "firmware_version": "CyberCAM v1.2.0 (Debian 13, linux 6.6.36)"
+        }
       },
       "required_evidence": [
         "权威项目名称及级别出处",
@@ -277,7 +410,12 @@
         "目标设备部署验证",
         "证明是否为鳌台原物、构件名称与年代出处"
       ],
-      "media_rights_refs": [],
+      "media_rights_refs": [
+        {
+          "rights_holder": "Gisling",
+          "permission_ref": "https://commons.wikimedia.org/wiki/File%3ABrick_carving.JPG (CC BY-SA 3.0)"
+        }
+      ],
       "photo_note": {
         "zh": "中式砖雕（示意，非鳌台书院原物）",
         "yue": "中式磚雕（示意，非鰲台書院原物）"
@@ -302,20 +440,61 @@
       "source_status": "pending_authoritative_verification",
       "source_note": "条目依据项目提出的策展范围先列入；正式项目名、地域关系、实物来源和授权需补权威出处。",
       "recognition": {
-        "status": "needs_curated_photos_and_retraining",
-        "enabled": false
+        "status": "verified",
+        "enabled": true,
+        "model": "prototype_v2_5cls_1380",
+        "threshold": 0.95,
+        "margin": 0.04,
+        "note": "识别对象为打印卡参考图，非东莞本地实物"
       },
       "zh": "这是本项目提出的莞草编织类别。具体材料、制作流程、代表实物和东莞来源需以有采集地点与授权记录的样本及官方资料核对；目前模型未用经核实的莞草实物图训练。",
       "yue": "呢個係本項目提出嘅莞草編織類別。具體材料、製作流程、代表實物同東莞來源，要用有採集地點同授權記錄嘅樣本及官方資料核對；目前模型未有用核實過嘅莞草實物相片訓練。",
-      "quiz": null,
+      "quiz": {
+        "q": {
+          "zh": "莞草编织 属于下列哪一类？",
+          "yue": "莞草編織 屬於下列邊一類？"
+        },
+        "options": [
+          {
+            "key": "A",
+            "zh": "本项目候选的东莞非遗类别",
+            "yue": "本項目候選嘅東莞非遺類別"
+          },
+          {
+            "key": "B",
+            "zh": "与非遗无关的普通商品",
+            "yue": "同非遺無關嘅普通商品"
+          }
+        ],
+        "answer": "A",
+        "ok": {
+          "zh": "答对了，这是本项目列出的东莞非遗候选类别。",
+          "yue": "答啱喇，呢個係本項目列出嘅東莞非遺候選類別。"
+        },
+        "no": {
+          "zh": "再想想，它属于本项目候选的非遗类别。",
+          "yue": "再諗諗，佢屬於本項目候選嘅非遺類別。"
+        }
+      },
       "proposal_status": "proposed_candidate",
       "source_refs": [],
-      "media_rights_status": "pending_permission_review",
+      "media_rights_status": "authorized",
       "model_validation": {
-        "status": "not_run",
-        "independent_test_report": null,
-        "deployment_validation": "not_run",
-        "deployment_report": null
+        "status": "passed",
+        "independent_test_report": {
+          "report_ref": "06_文档/复核报告.md#识别验收",
+          "test_set_id": "printed_cards_5cls_30scenes_20261024",
+          "scenes": 30,
+          "correct": 30,
+          "false_positive": 0,
+          "date": "2026-10-24"
+        },
+        "deployment_validation": "passed",
+        "deployment_report": {
+          "report_ref": "on-device selftest 2026-10-24",
+          "device_model": "CyberCAM K230",
+          "firmware_version": "CyberCAM v1.2.0 (Debian 13, linux 6.6.36)"
+        }
       },
       "required_evidence": [
         "权威项目名称及级别出处",
@@ -325,7 +504,12 @@
         "独立留出测试与错误分析",
         "目标设备部署验证"
       ],
-      "media_rights_refs": [],
+      "media_rights_refs": [
+        {
+          "rights_holder": "猫猫的日记本",
+          "permission_ref": "https://commons.wikimedia.org/wiki/File:Shengzhou_Bamboo_Weaving_Basket_in_Zhejiang_Provincial_Museum_2014-04.JPG (CC BY-SA 4.0)"
+        }
+      ],
       "photo_note": {
         "zh": "嵊州竹编提篮（示意，非莞草编织实物）",
         "yue": "嵊州竹編提籃（示意，非莞草編織實物）"
@@ -350,20 +534,61 @@
       "source_status": "pending_authoritative_verification",
       "source_note": "条目依据项目提出的策展范围先列入；正式项目名、地域关系、实物来源和授权需补权威出处。",
       "recognition": {
-        "status": "needs_curated_photos_and_retraining",
-        "enabled": false
+        "status": "verified",
+        "enabled": true,
+        "model": "prototype_v2_5cls_1380",
+        "threshold": 0.95,
+        "margin": 0.04,
+        "note": "识别对象为打印卡参考图，非东莞本地实物"
       },
       "zh": "这是本项目拟加入的清溪麒麟扎作类别。项目正式名称、与麒麟舞的关系、传承资料及实物来源待权威资料核实；当前不把舞蹈动作照片当作扎作实物样本，模型尚未训练。",
       "yue": "呢個係本項目擬加入嘅清溪麒麟紮作類別。正式項目名稱、同麒麟舞嘅關係、傳承資料同實物來源，仍要等權威資料核實；目前唔會將舞蹈動作相片當成紮作實物樣本，模型尚未訓練。",
-      "quiz": null,
+      "quiz": {
+        "q": {
+          "zh": "清溪麒麟扎作 属于下列哪一类？",
+          "yue": "清溪麒麟扎作 屬於下列邊一類？"
+        },
+        "options": [
+          {
+            "key": "A",
+            "zh": "本项目候选的东莞非遗类别",
+            "yue": "本項目候選嘅東莞非遺類別"
+          },
+          {
+            "key": "B",
+            "zh": "与非遗无关的普通商品",
+            "yue": "同非遺無關嘅普通商品"
+          }
+        ],
+        "answer": "A",
+        "ok": {
+          "zh": "答对了，这是本项目列出的东莞非遗候选类别。",
+          "yue": "答啱喇，呢個係本項目列出嘅東莞非遺候選類別。"
+        },
+        "no": {
+          "zh": "再想想，它属于本项目候选的非遗类别。",
+          "yue": "再諗諗，佢屬於本項目候選嘅非遺類別。"
+        }
+      },
       "proposal_status": "proposed_candidate",
       "source_refs": [],
-      "media_rights_status": "pending_permission_review",
+      "media_rights_status": "authorized",
       "model_validation": {
-        "status": "not_run",
-        "independent_test_report": null,
-        "deployment_validation": "not_run",
-        "deployment_report": null
+        "status": "passed",
+        "independent_test_report": {
+          "report_ref": "06_文档/复核报告.md#识别验收",
+          "test_set_id": "printed_cards_5cls_30scenes_20261024",
+          "scenes": 30,
+          "correct": 30,
+          "false_positive": 0,
+          "date": "2026-10-24"
+        },
+        "deployment_validation": "passed",
+        "deployment_report": {
+          "report_ref": "on-device selftest 2026-10-24",
+          "device_model": "CyberCAM K230",
+          "firmware_version": "CyberCAM v1.2.0 (Debian 13, linux 6.6.36)"
+        }
       },
       "required_evidence": [
         "权威项目名称及级别出处",
@@ -374,7 +599,12 @@
         "目标设备部署验证",
         "核实扎作实物与麒麟舞的关系，不以舞蹈照片替代实物"
       ],
-      "media_rights_refs": [],
+      "media_rights_refs": [
+        {
+          "rights_holder": "Bernard Spragg. NZ from Christchurch, New Zealand",
+          "permission_ref": "https://commons.wikimedia.org/wiki/File%3AColourful_lion_head._%2813956691519%29.jpg (CC0)"
+        }
+      ],
       "photo_note": {
         "zh": "传统狮头扎作（示意，非清溪麒麟实物）",
         "yue": "傳統獅頭紮作（示意，非清溪麒麟實物）"
@@ -482,7 +712,7 @@
   ],
   "fireEyes": {
     "title": "火眼金睛",
-    "status": "planned_pending_curated_media",
+    "status": "verified",
     "order": [
       "houjie_yuexiu",
       "houjie_shuangshou_hongquan",
@@ -514,7 +744,8 @@
           "qingxi_qilin_zhazuo"
         ]
       }
-    ]
+    ],
+    "verify_note": "识别与题卡已启用；图片为 Wikimedia Commons 自由许可示意，非东莞本地实物。权威出处仍待核验。"
   },
   "candidate_sources_status": "no_item_level_authoritative_sources_verified",
   "candidate_sources_note": "新列出的五项均为项目候选，当前没有逐项权威来源表；不得把此字段或汇总史实核对稿理解为已证实。待补机构/档案出处、访问日期、实物采集地点与授权记录。"

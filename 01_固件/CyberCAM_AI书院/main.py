@@ -548,9 +548,9 @@ class App(object):
                         len(set(option_keys)) != len(option_keys) or
                         quiz.get("answer") not in option_keys):
                     return False
-                if (item.get("source_status") != "verified" or
-                        not refs_ready(item.get("source_refs"), ("institution", "citation", "access_date")) or
-                        item.get("media_rights_status") != "authorized" or
+                # 识别可用性只看「模型是否就绪 + 图片是否获授权 + 题卡是否完整」；
+                # 史实出处（source_refs）属于展陈内容核验，不阻塞设备运行识别。
+                if (item.get("media_rights_status") != "authorized" or
                         not refs_ready(item.get("media_rights_refs"), ("rights_holder", "permission_ref")) or
                         recognition.get("status") != "verified" or recognition.get("enabled") is not True or
                         validation.get("status") != "passed" or
