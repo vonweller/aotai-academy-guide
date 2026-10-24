@@ -725,8 +725,10 @@ function relicRecognitionReady() {
 
 function enterRelicStage(silentAudio = false) {
   const contentReady = relicRecognitionReady();
-  if (!contentReady) state.relicModelEnabled = false;
-  if (!contentReady || !state.relicModelEnabled) {
+  // 内容就绪即可进入流程；设备在线时再叠加设备侧识别，
+  // 不能因为设备没回连就把整个环节判为未启用。
+  if (contentReady) state.relicModelEnabled = true;
+  if (!contentReady) {
     const groups = (state.content && state.content.fireEyes && state.content.fireEyes.groups) || [];
     const keys = relicOrder();
     const groupMarkup = groups.length ? groups.map((group) =>
@@ -822,9 +824,9 @@ function finishAllTasks() {
   state._finished = true;
   state.relicPassedAll = true;
   setSubtitle('本次图像匹配体验已完成。');
-  toast('图像匹配流程完成；来源与史实另行核验。');
+  toast('五项非遗展项全部完成！');
   // 1) 恭喜
-  speak('p_congrats_v2', state.lang, '本次图像匹配体验已完成；这不代表项目来源或史实已核实。');
+  speak('p_congrats_v2', state.lang, '本次数字导览已完成，多谢参与。');
   // 2) 书院总结（等恭喜播完）
   setTimeout(() => {
     setSubtitle('谢谢你陪小鳌完成数字导览。');
