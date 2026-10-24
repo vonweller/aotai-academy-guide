@@ -37,7 +37,7 @@ const FALLBACK_MAP = {
     { stage: 1, key: 'gate', name_cn: '门口迎宾', actorStop: [0, 0, -29.5] },
     { stage: 2, key: 'front_yard', name_cn: '前院溯源', actorStop: [-2.2, 0, -23.0] },
     { stage: 3, key: 'hall', name_cn: '讲堂楹联', actorStop: [-2.2, 0, -23.0] },
-    { stage: 4, key: 'workshop', name_cn: '庭院工坊', actorStop: [-10.5, 0, -8.0] },
+    { stage: 4, key: 'workshop', name_cn: '数字展陈', actorStop: [-10.5, 0, -8.0] },
     { stage: 5, key: 'pavilion', name_cn: '尾声留墨', actorStop: [-11.0, 0, -21.0] },
   ],
   walkPaths: {
@@ -510,7 +510,7 @@ function buildWorkshop(group) {
   door.position.set(7.1, 0.5, 2); door.rotation.y = -Math.PI / 2;
   g.add(door);
   roof(g, 6.6, 7.6, 2.2, 9.5, 4.0, 2, 0.8);
-  const p = plaque('工坊', 1.8, 0.6);
+  const p = plaque('技艺展陈', 1.8, 0.6);
   p.rotation.y = -Math.PI / 2;
   p.position.set(6.38, 3.5, 2);
   g.add(p);

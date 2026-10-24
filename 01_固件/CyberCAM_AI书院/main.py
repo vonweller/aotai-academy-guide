@@ -246,10 +246,11 @@ class App(object):
         elif bid.startswith("ropt_"):
             self.answer_relic(bid.split("_", 1)[1])
         elif bid == "btn_relic_try":
-            self.relic_phase = "recognize"
+            ready = self.relic_recognition_ready()
+            self.relic_phase = "recognize" if ready else "planned"
             self.relic_key = ""
             self.relic.reset_announce()
-            self.say("p_relic_intro")
+            self.say("p_relic_intro_active_v2" if ready else "p_relic_task_v2")
             self.mark_dirty()
 
     def on_key(self):
@@ -262,7 +263,9 @@ class App(object):
         elif self.state == "face":
             self.next_stage()
         elif self.state == "relic":
-            if self.relic_key:
+            if self.relic_phase == "planned":
+                self.say("p_relic_task_v2")
+            elif self.relic_key:
                 self.say_relic(self.relic_key)
             else:
                 self.go_mode()
@@ -321,17 +324,23 @@ class App(object):
         self.stop_audio()
         self.demo = False
         self.state = "relic"
-        self.relic_phase = "recognize"
+        # 新类别素材未核实、旧模型 schema 已过期，先只展示识别计划。
+        ready = self.relic_recognition_ready()
+        self.relic_phase = "recognize" if ready else "planned"
         self.relic_key = ""
         self.relic_quiz = None
         self.relic_quiz_state = {}
         self.relic_view = {}
         self.relic_done = []
         self.relic.reset_announce()
-        self.cam.ensure()
-        self.say("p_relic_intro")
+        if ready:
+            self.cam.ensure()
+            self.say("p_relic_intro_active_v2")
+        else:
+            self.say("p_relic_task_v2")
         self.bus.event("relic_mode", lang=self.lang, done=list(self.relic_done),
-                       need=list(config.RELIC_KEYS))
+                       need=list(config.RELIC_KEYS),
+                       recognition_enabled=bool(ready))
         self.mark_dirty()
 
     def go_stage(self, stage):
@@ -415,8 +424,10 @@ class App(object):
         if self.state == "relic":
             if self.relic_key:
                 self.say_relic(self.relic_key)
+            elif self.relic_phase == "planned":
+                self.say("p_relic_task_v2")
             else:
-                self.say("p_relic_intro")
+                self.say("p_relic_intro_active_v2")
         elif self.state == "stage":
             st = self.content.stage(self.stage)
             lines = st.get("lines") or []
@@ -425,7 +436,7 @@ class App(object):
         elif self.state == "face":
             self.say("s1_prompt", default="请正对摄像头，让我先认一认你。")
         elif self.state == "end":
-            self.say("s5_bye")
+            self.say("s5_bye_v2")
 
     # ================= 积分 ==================
     def award(self, kind, note="", uniq=None):
@@ -482,6 +493,83 @@ class App(object):
         self.mark_dirty()
 
     # ================= 火眼金睛 ==================
+    def relic_recognition_ready(self):
+        if not config.RELIC_RECOGNITION_ENABLED or self.relic.prototypes is None:
+            return False
+        try:
+            data = self.content.data
+            if not isinstance(data, dict):
+                return False
+            fire_eyes = data.get("fireEyes")
+            if not isinstance(fire_eyes, dict) or fire_eyes.get("status") != "verified":
+                return False
+            order = fire_eyes.get("order")
+            if not isinstance(order, list) or order != list(config.RELIC_KEYS):
+                return False
+            raw_items = data.get("relics")
+            if not isinstance(raw_items, list) or len(raw_items) != len(config.RELIC_KEYS):
+                return False
+            items = {}
+            for row in raw_items:
+                if not isinstance(row, dict):
+                    return False
+                row_key = row.get("key")
+                if not isinstance(row_key, str) or row_key in items:
+                    return False
+                items[row_key] = row
+            if set(items) != set(config.RELIC_KEYS):
+                return False
+            model_names = getattr(self.relic, "names", None)
+            if not isinstance(model_names, (list, tuple)):
+                return False
+
+            def refs_ready(refs, fields):
+                return (isinstance(refs, list) and bool(refs) and all(
+                    isinstance(ref, dict) and all(isinstance(ref.get(field), str) and ref[field].strip()
+                        for field in fields) for ref in refs))
+
+            for key in config.RELIC_KEYS:
+                item = items[key]
+                recognition = item.get("recognition")
+                quiz = item.get("quiz")
+                validation = item.get("model_validation")
+                if not isinstance(recognition, dict) or not isinstance(quiz, dict) or not isinstance(validation, dict):
+                    return False
+                question = quiz.get("q")
+                options = quiz.get("options")
+                report = validation.get("independent_test_report")
+                deployment = validation.get("deployment_report")
+                if (not isinstance(question, dict) or not isinstance(options, list) or len(options) < 2 or
+                        any(not isinstance(op, dict) for op in options) or
+                        not isinstance(report, dict) or not isinstance(deployment, dict)):
+                    return False
+                option_keys = [op.get("key") for op in options]
+                if (not all(isinstance(k, str) and k for k in option_keys) or
+                        len(set(option_keys)) != len(option_keys) or
+                        quiz.get("answer") not in option_keys):
+                    return False
+                if (item.get("source_status") != "verified" or
+                        not refs_ready(item.get("source_refs"), ("institution", "citation", "access_date")) or
+                        item.get("media_rights_status") != "authorized" or
+                        not refs_ready(item.get("media_rights_refs"), ("rights_holder", "permission_ref")) or
+                        recognition.get("status") != "verified" or recognition.get("enabled") is not True or
+                        validation.get("status") != "passed" or
+                        not all(isinstance(report.get(field), str) and report[field].strip()
+                            for field in ("report_ref", "test_set_id")) or
+                        validation.get("deployment_validation") != "passed" or
+                        not all(isinstance(deployment.get(field), str) and deployment[field].strip()
+                            for field in ("report_ref", "device_model", "firmware_version")) or
+                        not all(isinstance(question.get(lang), str) and question[lang].strip()
+                            for lang in ("zh", "yue")) or
+                        not all(all(isinstance(op.get(lang), str) and op[lang].strip()
+                            for lang in ("zh", "yue")) for op in options) or
+                        key not in model_names):
+                    return False
+            return True
+        except Exception as exc:
+            print("[relic] readiness failed closed:", exc)
+            return False
+
     def _relic_of(self, key):
         for rel in self.content.relics():
             if rel.get("key") == key or rel.get("id") == key:
@@ -499,12 +587,15 @@ class App(object):
         # spoken=True：音频由相机自己播，网页只显示字幕，别再放一遍（否则叠音）
         self.bus.event("relic", id=rel.get("id"), key=key,
                         name=name, lang=self.lang, spoken=True)
-        quiz = rel.get("quiz")
-        if quiz:
-            self.bus.event("relic_quiz", key=key, quiz={
-                "q": quiz.get("q"), "options": quiz.get("options"),
-                "answer": quiz.get("answer")}, lang=self.lang)
         self.mark_dirty()
+
+    def publish_relic_quiz(self):
+        """在讲解阶段结束后发布题目；标准答案只保留在设备内存。"""
+        quiz = self.relic_quiz
+        if not isinstance(quiz, dict) or not self.relic_key:
+            return
+        self.bus.event("relic_quiz", key=self.relic_key, quiz={
+            "q": quiz.get("q"), "options": quiz.get("options")}, lang=self.lang)
 
     def stop_speaking(self):
         """网页在讲话时，设备端让路，避免两边同时出声。"""
@@ -514,8 +605,15 @@ class App(object):
             pass
 
     def answer_relic(self, key):
+        if self.relic_phase != "answer":
+            return
+        if not self.relic_recognition_ready():
+            return
         quiz = self.relic_quiz or {}
-        if not quiz or self.relic_quiz_state.get("answered"):
+        options = quiz.get("options") if isinstance(quiz, dict) else None
+        if (not isinstance(options, list) or
+                not any(isinstance(option, dict) and option.get("key") == key for option in options) or
+                self.relic_quiz_state.get("answered")):
             return
         correct = quiz.get("answer")
         ok = (key == correct)
@@ -524,22 +622,28 @@ class App(object):
         rel = self._relic_of(self.relic_key) or {}
         rid = rel.get("id") or ""
         if ok:
-            gain = self.award("relic_quiz_right", "火眼金睛答对",
-                              uniq="rq_%s" % self.relic_key)
-            self.say(rid + "_ok", default="答对啦，积分加 %d。" % gain)
+            gain = 0
+            if config.RELIC_REWARDS_ENABLED:
+                gain = self.award("relic_quiz_right", "火眼金睛答对",
+                                  uniq="rq_%s" % self.relic_key)
+            self.say(rid + "_ok", default=("答对啦，积分加 %d。" % gain) if gain else "答对啦。")
             self.relic_phase = "again"
             self.relic.reset_announce()
         else:
             self.say(rid + "_no", default="再想想。")
             self.relic_quiz_state = {"answered": False}
+            # 重发无答案题卡，确保网页在结果消息后仍有可用的重试按钮。
+            self.publish_relic_quiz()
         self.bus.event("relic_quiz_result", key=self.relic_key,
                         ok=ok, lang=self.lang)
         self.mark_dirty()
 
     def pass_relic(self, key):
         """一件过关。记进已完成列表，然后自动进入下一件的识别。"""
-        self.award("relic_quiz_right", "复认通过", uniq="rp_%s" % key)
-        self.say("p_relic_pass")
+        if not self.relic_recognition_ready():
+            return
+        # 答题奖励已在 answer_relic 发放；复认只完成任务，不再重复加同类积分。
+        self.say("p_relic_pass_active_v2")
         if key not in self.relic_done:
             self.relic_done.append(key)
         self.bus.event("relic_pass", key=key, lang=self.lang,
@@ -557,7 +661,7 @@ class App(object):
             self.relic.reset_announce()
             left = [k for k in config.RELIC_KEYS if k not in self.relic_done]
             self.subtitle = "还剩 %d 件，请拿下一件放到镜头前" % len(left)
-            self.say("p_relic_next", default="还剩%d件，请拿下一件放到镜头前。" % len(left))
+            self.say("p_relic_next_active_v2", default="请展示下一类候选图片。")
             self.mark_dirty()
 
     def next_relic_key(self):
@@ -568,11 +672,13 @@ class App(object):
         return ""
 
     def finish_relic_all(self):
-        """三件按顺序都认完 -> 播恭喜 + 总结书院，然后让网页弹兑换。"""
+        """所有候选完成验证流程后播总结；未就绪时不能进入完成态。"""
+        if not self.relic_recognition_ready():
+            return
         self.relic_phase = "all_done"
-        self.subtitle = "恭喜完成！"
+        self.subtitle = "识别任务完成！"
         # 先恭喜，再总结书院
-        self.say("p_congrats", default="恭喜你，三件非遗古物全部认对了！")
+        self.say("p_congrats_v2", default="候选内容清单已列出，来源仍待核实。")
         self.bus.event("relic_all_done", lang=self.lang, done=list(self.relic_done))
         self.mark_dirty()
         # 书院总结晚几秒播，避免和恭喜叠在一起
@@ -586,10 +692,19 @@ class App(object):
         if time.time() < getattr(self, "_summary_at", 0):
             return
         self._summary_done = True
-        self.say("p_summary", default="鳌台书院从明清的书声一路走到今天，把文脉一代代传下来。谢谢你陪小鳌走完这一程。")
+        self.say("p_summary_v2", default="谢谢你陪小鳌走完这一程。")
 
     def update_relic(self, frame):
+        if not self.relic_recognition_ready():
+            self.relic_view = {"level": "disabled"}
+            return
         if self.relic_phase == "answer":
+            return
+        # 讲解计时不依赖下一帧或新的识别命中；相机短暂断流也不能卡住题目发布。
+        if self.relic_phase == "explain" and time.time() >= getattr(self, "_quiz_at", 0):
+            self.relic_phase = "answer"
+            self.publish_relic_quiz()
+            self.mark_dirty()
             return
         if frame is None:
             self.relic_view = {"level": "nocam"}
@@ -615,14 +730,11 @@ class App(object):
             self.say_relic(self.relic_key)
             self.relic_phase = "explain"
             self._quiz_at = time.time() + 9.0
-        elif self.relic_phase == "explain" and time.time() >= getattr(self, "_quiz_at", 0):
-            self.relic_phase = "answer"
-            self.mark_dirty()
         elif self.relic_phase == "again" and hit.get("speak"):
             if hit["id"] == self.relic_key:
                 self.pass_relic(hit["id"])
             else:
-                self.say("p_relic_bring")
+                self.say("p_relic_bring_active_v2")
 
     # ================= 人脸 ==================
     def start_learn(self):
@@ -673,7 +785,7 @@ class App(object):
             self.bind_visitor(name)
             self.award("face", "人脸学习", uniq="face_%s" % name)
             self.subtitle = "学好了，现在能认出你"
-            self.say("s1_welcome_ok")
+            self.say("s1_welcome_ok_v2")
             self.bus.event("face_enrolled", visitor=name,
                             samples=n, lang=self.lang)
             self.bus.state(1, self.lang, face_ok=True, visitor=name)
@@ -715,7 +827,7 @@ class App(object):
             self.face_ok = True
             self.bind_visitor(name)
             self.award("face", "人脸识别", uniq="face_%s" % name)
-            self.say("s1_welcome_ok")
+            self.say("s1_welcome_ok_v2")
             self.bus.event("face_recognized", stage=1, visitor=name, lang=self.lang)
             self.bus.state(1, self.lang, face_ok=True, visitor=name)
             self.schedule_next_stage()      # 欢迎语播完自动进第二关
@@ -736,10 +848,21 @@ class App(object):
             return ui.screen_mode(self.lang)
         if self.state == "relic":
             rel = self._relic_of(self.relic_key) or {}
-            name = (rel.get("name") or {}).get(self.lang) or ""
-            hist = rel.get(self.lang) or rel.get("zh") or ""
+            if self.relic_phase == "planned":
+                candidate_names = []
+                for key in config.RELIC_KEYS:
+                    item = self._relic_of(key) or {}
+                    nm = (item.get("name") or {}).get(self.lang) or (item.get("name") or {}).get("zh") or key
+                    candidate_names.append(nm)
+                name = "候选清单（未启用）" if self.lang == "zh" else "候選清單（未啟用）"
+                hist = ("候选顺序：" if self.lang == "zh" else "候選次序：") + "、".join(candidate_names) + ("。来源、授权图片与模型待核，当前不自动识别或计分。" if self.lang == "zh" else "。來源、授權相片同模型待核，目前唔會自動識別或計分。")
+            else:
+                name = (rel.get("name") or {}).get(self.lang) or ""
+                hist = rel.get(self.lang) or rel.get("zh") or ""
             return ui.screen_relic(
-                self.frame, name, hist,
+                None if self.relic_phase == "planned" else self.frame,
+                name or ("识别计划（未启用）" if self.lang == "zh" else "識別計劃（未啟用）"),
+                hist or self.content.text("p_relic_task_v2", self.lang)[0],
                 self.relic_view.get("level", "none"),
                 self.lang, self.mqtt_ok(),
                 phase=self.relic_phase,
@@ -844,21 +967,24 @@ class App(object):
     # ================= 主循环 ==================
     def step(self):
         t0 = time.time()
-        if not self.demo and self.state in ("face", "relic"):
+        camera_live = (self.state == "face" or
+                       (self.state == "relic" and self.relic_phase != "planned"))
+        if not self.demo and camera_live:
             self.cam.ensure()
-        frame = self.cam.read() if not self.demo else None
+        frame = self.cam.read() if (not self.demo and camera_live) else None
         self.frame = frame
         self.push_frame(frame)
         if self.learning:
             self.learn_feed(frame)
         elif self.state == "face" and not self.demo:
             self.update_face(frame)
-        elif self.state == "relic" and not self.demo:
+        elif self.state == "relic" and not self.demo and self.relic_phase != "planned":
             self.update_relic(frame)
         self.tick_auto()
         self.tick_summary()
         # 只在"脏了"时重画：静态页几乎不耗 CPU，视频页跟着相机刷新
-        live = self.state in ("face", "relic") and not self.demo
+        live = (self.state == "face" or
+                (self.state == "relic" and self.relic_phase != "planned")) and not self.demo
         if live or self.dirty or self._img is None:
             self._img = self.render()
             self.dirty = False
@@ -916,7 +1042,8 @@ class App(object):
             st = int(data.get("stage", 1))
             self.go_face() if st <= 1 else self.go_stage(st)
         elif cmd == "relic_answer":
-            if self.state == "relic":
+            # Bind a remote answer to the currently displayed candidate, not a stale card.
+            if self.state == "relic" and data.get("key") == self.relic_key:
                 self.answer_relic(str(data.get("answer", "")).upper())
 
 

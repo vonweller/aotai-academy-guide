@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从 Wikimedia 筛过的照片训练火眼金睛原型，并做留一验证。"""
+"""从经过来源核验、授权的类别照片训练原型；样本不足时安全拒绝。"""
 import glob
 import os
 import shutil
@@ -17,14 +17,21 @@ MODEL = os.path.join(ROOT, "model.npz")
 sys.path.insert(0, APP)
 import relic
 
-# 香云纱：02.jpg 是件金龙纹黄袍（不是香云纱），会把模型带偏，剔除。
-# 只留 00（晒莨场）和 01（真织物质感）。
+# 旧类素材含泛篮、异地织物等，不能代表这些新类别。
+# 先把每一类经来源核实、授权并在 raw/<key>/ 中准备至少 3 张真实样本，
+# 再由审核者填写索引；默认留空会安全拒绝训练，不覆盖现有 images/model。
+# Supply genuine, permission-cleared positive images for five categories and diverse
+# out-of-scope negative images for `other`; synthetic images are never accepted.
 KEEP = {
-    "xiangyunsha": [0, 1],
-    "guancao": [0, 1, 2, 5, 7],
-    "qianjiaodeng": [0, 1, 9],
-    "other": [0, 1, 2, 6],
+    "houjie_yuexiu": [],
+    "houjie_shuangshou_hongquan": [],
+    "aotai_aoyu_brick": [],
+    "guancao": [],
+    "qingxi_qilin_zhazuo": [],
+    "other": [],
 }
+TRAINABLE_CLASSES = relic.CLASS_ORDER
+MIN_REVIEWED_IMAGES_PER_CLASS = 3
 
 
 def imread(path):
@@ -37,30 +44,10 @@ def imwrite(path, img):
     ok, buf = cv2.imencode(ext, img)
     if ok:
         buf.tofile(path)
+    return bool(ok)
 
 
-def make_silk(kind, rng):
-    h, w = 320, 320
-    yy = np.linspace(0, 1, h)[:, None]
-    xx = np.linspace(0, 1, w)[None, :]
-    if kind == "black":
-        base = np.array([26, 28, 24], np.float32)
-        sheen = (18 + 10 * np.sin(yy * 18 + rng.uniform(0, 3)))[..., None]
-        img = base + sheen + rng.normal(0, 6, (h, w, 1))
-    elif kind == "brown":
-        base = np.array([42, 68, 108], np.float32)
-        band = (12 * np.sin(xx * 40))[..., None]
-        img = base + band + rng.normal(0, 7, (h, w, 1))
-    else:
-        img = np.zeros((h, w, 3), np.float32)
-        img[:] = (70, 90, 140)
-        for i in range(8):
-            y0 = 10 + i * 38
-            img[y0:y0 + 22] = (55, 70, 120)
-        img += rng.normal(0, 8, img.shape)
-    return np.clip(img, 0, 255).astype(np.uint8)
-
-
+# Synthetic fabric generation was intentionally removed: it is not valid class evidence.
 def augment(img, rng):
     out = [img]
     out.append(cv2.flip(img, 1))
@@ -76,36 +63,59 @@ def augment(img, rng):
 
 
 def prepare_images():
-    if os.path.isdir(IMG):
-        shutil.rmtree(IMG)
-    os.makedirs(IMG)
-    items = []
-    for cls, idxs in KEEP.items():
+    # 先完整验证所有来源图片，再写 staging 目录；缺数据时绝不清空现有训练图。
+    selected = {}
+    missing = []
+    for cls in TRAINABLE_CLASSES:
+        indices = KEEP.get(cls, [])
         files = sorted(glob.glob(os.path.join(RAW, cls, "*.*")))
-        folder = os.path.join(IMG, cls)
-        os.makedirs(folder)
-        for n, i in enumerate(idxs):
-            if i >= len(files):
-                continue
-            dst = os.path.join(folder, "%02d.jpg" % n)
-            img = imread(files[i])
-            imwrite(dst, img)
-            items.append((cls, dst, "photo"))
-    # 香云纱补充样本：从 3 张真图取色，生成「更暗 / 更亮」的变化版本。
-    # 之前用纯黑合成图（dark=1.0），和真实晒莨场差距太大，反而把模型带偏了。
-    rng = np.random.RandomState(7)
-    folder = os.path.join(IMG, "xiangyunsha")
-    srcs = sorted(glob.glob(os.path.join(folder, "*.jpg")))
-    for si, sp in enumerate(srcs[:2]):
-        base = imread(sp)
-        if base is None:
+        if len(indices) < MIN_REVIEWED_IMAGES_PER_CLASS:
+            missing.append("%s: 需至少 %d 张经审核真实图像（other 为类外负样本），KEEP 中只有 %d" %
+                           (cls, MIN_REVIEWED_IMAGES_PER_CLASS, len(indices)))
             continue
-        for tag, alpha in (("dark", 0.55), ("lit", 1.35)):
-            img = np.clip(base.astype(np.float32) * alpha, 0, 255).astype(np.uint8)
-            dst = os.path.join(folder, "var_%s_%d.jpg" % (tag, si))
-            imwrite(dst, img)
-            items.append(("xiangyunsha", dst, "synth"))
-    return items
+        if any(i < 0 or i >= len(files) for i in indices):
+            missing.append("%s: KEEP 索引超出素材范围" % cls)
+            continue
+        selected[cls] = [files[i] for i in indices]
+    if missing:
+        raise RuntimeError("训练被安全拦截；请先补齐来源核验、授权与真实样本：\n- " + "\n- ".join(missing))
+
+    staged_items = []
+    staging = IMG + ".candidate"
+    backup = IMG + ".previous"
+    if os.path.isdir(staging):
+        shutil.rmtree(staging)
+    os.makedirs(staging)
+    try:
+        for cls in TRAINABLE_CLASSES:
+            folder = os.path.join(staging, cls)
+            os.makedirs(folder)
+            for n, src in enumerate(selected[cls]):
+                img = imread(src)
+                if img is None or img.size == 0:
+                    raise RuntimeError("无法解码训练素材: " + src)
+                dst = os.path.join(folder, "%02d.jpg" % n)
+                if not imwrite(dst, img) or not os.path.isfile(dst):
+                    raise RuntimeError("无法写入候选训练图: " + dst)
+                staged_items.append((cls, dst, "photo"))
+        if os.path.isdir(backup):
+            raise RuntimeError("上一次训练备份存在，需人工检查: " + backup)
+        if os.path.isdir(IMG):
+            os.replace(IMG, backup)
+        try:
+            os.replace(staging, IMG)
+        except Exception:
+            if os.path.isdir(backup):
+                os.replace(backup, IMG)
+            raise
+        if os.path.isdir(backup):
+            shutil.rmtree(backup)
+        return [(cls, path.replace(staging, IMG), kind)
+                for cls, path, kind in staged_items]
+    except Exception:
+        if os.path.isdir(staging):
+            shutil.rmtree(staging)
+        raise
 
 
 def feats_of(path):
@@ -134,7 +144,8 @@ def score_vec(vec, ratios, prototypes, labels):
 
 
 def predict_with(best, best_s, margin, ratios, th, mar):
-    if best == "other" or best_s < th or margin < mar:
+    # Match relic.py exactly: threshold OR margin, with a shared absolute floor.
+    if best == "other" or not (best_s >= th or margin >= mar) or best_s < 0.55:
         return "other"
     if not relic.gate(best, ratios):
         return "other"
@@ -160,7 +171,9 @@ def main():
     # 留一：每张真实照片拿出去，看原图（不看增强）能不能认对
     correct = 0
     total = 0
-    th, mar = 0.80, 0.03
+    th, mar = 0.80, 0.03  # same default thresholds as relic.py (values are saved to model.npz)
+    if not by_image:
+        raise RuntimeError("无可用训练图像；未触碰现有模型")
     print("--- leave one photo out ---")
     for i, row in enumerate(by_image):
         if row["kind"] != "photo":
@@ -185,15 +198,21 @@ def main():
         pred = predict_with(best, best_s, margin, ratios, th, mar)
         print(row["cls"], "->", pred, "best", best, "s=%.3f m=%.3f" % (best_s, margin))
 
+    # 写到同目录临时文件，训练异常时保留原模型；设备识别开关仍需独立验收后人工开启。
+    candidate = MODEL + ".candidate.npz"
     np.savez(
-        MODEL,
+        candidate,
+        schema_version=np.int32(2),
         prototypes=P,
         labels=L,
         names=np.array(relic.CLASS_ORDER),
         threshold=np.float32(th),
         margin=np.float32(mar),
     )
-    print("saved", MODEL, "prototypes", len(L), "bytes", os.path.getsize(MODEL))
+    os.replace(candidate, MODEL)
+    print("saved candidate model", MODEL, "prototypes", len(L), "LOO", "%d/%d" % (correct, total),
+          "bytes", os.path.getsize(MODEL))
+    print("NOTE: RELIC_RECOGNITION_ENABLED remains False until an independent test set passes.")
 
 
 if __name__ == "__main__":

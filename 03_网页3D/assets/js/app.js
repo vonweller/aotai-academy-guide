@@ -4,7 +4,7 @@
  * 流程：开场 → 第1关门口人脸识别 → 小人走到前院 → 第2关问答
  *      → 讲堂楹联 → 工坊问答 → 亭中结语
  * 输入：键盘 N/P/空格/L/R/1-5、按钮、K10 语音（经 Flask+MQTT → SSE）
- * 语音：本地 audio/{lang}/{id}.mp3 优先，缺失用 speechSynthesis
+ * 语音：播放 content.json 中的本地 audio/{lang}/{id}.mp3；缺失时保留字幕
  */
 import { World, MAP, assetUrl, FALLBACK_MAP } from './scene.js';
 
@@ -13,9 +13,9 @@ const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
 const STAGE_TITLE = {
   1: { zh: '第一关 · 门口迎宾', yue: '第一關 · 門口迎賓' },
-  2: { zh: '第二关 · 鳌台溯源', yue: '第二關 · 鰲台溯源' },
-  3: { zh: '第三关 · 讲堂楹联', yue: '第三關 · 講堂楹聯' },
-  4: { zh: '第四关 · 非遗工坊', yue: '第四關 · 非遺工坊' },
+  2: { zh: '第二关 · 书院资料待核', yue: '第二關 · 書院資料待核' },
+  3: { zh: '第三关 · 题刻待核', yue: '第三關 · 題刻待核' },
+  4: { zh: '第四关 · 数字展陈', yue: '第四關 · 數字展陳' },
   5: { zh: '第五关 · 留墨寄愿', yue: '第五關 · 留墨寄願' },
 };
 // 机位（实机实测）：门楼 z-31 / 讲堂 z-24.7 / 工坊 (-10.5,-8) / 六角亭 (-11,-21)
@@ -27,8 +27,7 @@ const STAGE_CAM = {
   5: { walkOffset: [2.4, 3.2, 5.2], idle: { from: [-4.0, 5.0, -12.0], look: [-11.0, 1.6, -21.5] } },
 };
 
-// 火眼金睛固定顺序：莞草 → 千角灯 → 香云纱
-const RELIC_ORDER = ['guancao', 'qianjiaodeng', 'xiangyunsha'];
+// 顺序与来源状态以 content.json.fireEyes 为准；模型与逐项素材未就绪时只展示计划。
 
 const STAGE_ICON = { 1: '門', 2: '源', 3: '聯', 4: '藝', 5: '願' };
 const LANG_NAME = { zh: '普通话', yue: '粤语' };
@@ -44,9 +43,10 @@ const state = {
   content: null,
   quizAnswered: {},
   relicQuiz: null,
-  // 火眼金睛：三件古物都认过 → 解锁兑换
+  // 火眼金睛：五项候选只有在来源、媒体、测验和模型均验收后才可识别
   relicDone: {},
   relicPassedAll: false,
+  relicModelEnabled: false,
   points: null,
   backend: false,
   mqtt: false,
@@ -370,31 +370,35 @@ function onBackendEvent(payload) {
     } else if (data.type === 'stage_enter' && data.stage) {
       syncTourFromCamera(Number(data.stage), data.lang);
     } else if (data.type === 'relic_mode') {
-      // 相机进入火眼金睛：网页也切到这个环节，保持同步
+      // 相机进入识别环节；禁用期间仅展示候选计划，不启动自动识别。
       state.relicDone = state.relicDone || {};
+      state.relicModelEnabled = data.recognition_enabled === true && relicRecognitionReady();
+      (data.done || []).forEach((k) => { state.relicDone[k] = true; });
       if (data.lang) setLang(data.lang, false);
-      enterRelicStage();
+      enterRelicStage(true);
     } else if (data.type === 'relic') {
+      if (!relicRecognitionReady() || !state.relicModelEnabled) return;
       relicRecognized(data.key, !!data.spoken || !!data.fromCamera);
       // 相机已经发声时不要再播一遍，否则粤语和普通话会叠在一起
       if (!(data.spoken || state.camAudio)) {
-        if (data.id) speak(data.id, data.lang || state.lang, data.name || '');
+        if (data.id) playConfiguredSpeech(data.id, data.lang);
       }
     } else if (data.type === 'relic_quiz') {
-      if (data.quiz) relicQuiz(data.key, data.quiz);
+      if (relicRecognitionReady() && state.relicModelEnabled && data.quiz && !Object.prototype.hasOwnProperty.call(data.quiz, 'answer')) relicQuiz(data.key, data.quiz);
     } else if (data.type === 'relic_quiz_result') {
-      relicQuizResult(data.key, !!data.ok);
+      if (relicRecognitionReady() && state.relicModelEnabled) relicQuizResult(data.key, !!data.ok);
     } else if (data.type === 'relic_pass') {
-      relicPassed(data.key, data.done, data.all);
+      if (relicRecognitionReady() && state.relicModelEnabled) relicPassed(data.key, data.done, data.all);
     } else if (data.type === 'relic_all_done') {
+      if (!relicRecognitionReady() || !state.relicModelEnabled) return;
       state.relicPassedAll = true;
       (data.done || []).forEach((k) => { state.relicDone[k] = true; });
       finishAllTasks();
     } else if (data.type === 'speak_stop') {
       stopSpeak();
-    } else if (data.type === 'speak' && data.id) {
-      speak(data.id, data.lang || state.lang, data.text || '');
-      if (data.text) setSubtitle(data.text);
+    } else if (data.type === 'speak' && typeof data.id === 'string') {
+      // Public MQTT clients must not replay orphaned legacy audio IDs or stale copy.
+      playConfiguredSpeech(data.id, data.lang);
     } else if (data.type === 'reset') {
       resetTour();
     }
@@ -423,7 +427,7 @@ function handleCmd(cmd, data) {
       if (data.stage) gotoStage(Number(data.stage));
       break;
     case 'speak':
-      if (data.id) speak(data.id, data.lang || state.lang, data.text || '');
+      playConfiguredSpeech(data.id, data.lang);
       break;
     case 'reset': resetTour(); break;
     case 'relic_start': hideRelicPanel(); break;
@@ -583,21 +587,183 @@ function nextStage() {
   gotoStage(state.stage + 1);
 }
 
-/** 五关结束 → 火眼金睛：提示把三件非遗古物依次交给 CyberCAM 识别 */
-function enterRelicStage() {
+/** Five stages lead to the planned, disabled candidate-review screen. */
+const RELIC_ORDER_FALLBACK = ['houjie_yuexiu', 'houjie_shuangshou_hongquan', 'aotai_aoyu_brick', 'guancao', 'qingxi_qilin_zhazuo'];
+
+function relicOrder() {
+  const configured = state.content && state.content.fireEyes && state.content.fireEyes.order;
+  if (Array.isArray(configured) && configured.length) return configured.slice();
+  return RELIC_ORDER_FALLBACK.slice();
+}
+
+function configuredSpeechIds() {
+  const content = state.content && typeof state.content === 'object' ? state.content : {};
+  const ids = new Set(['p_points']);
+  const add = (id) => { if (typeof id === 'string' && id.trim()) ids.add(id); };
+  const stages = Array.isArray(content.stages) ? content.stages : [];
+  stages.forEach((stage) => {
+    if (!stage || typeof stage !== 'object') return;
+    add(stage.entry);
+    (Array.isArray(stage.lines) ? stage.lines : []).forEach((line) => add(line && line.id));
+    (Array.isArray(stage.quiz) ? stage.quiz : []).forEach((quiz) => {
+      if (!quiz || typeof quiz !== 'object' || typeof quiz.qid !== 'string') return;
+      add(quiz.qid + '_q'); add(quiz.qid + '_a'); add(quiz.qid + '_wrong');
+      (Array.isArray(quiz.options) ? quiz.options : []).forEach((option) => {
+        if (option && typeof option.key === 'string') add(quiz.qid + '_op' + option.key);
+      });
+    });
+  });
+  (Array.isArray(content.prompts) ? content.prompts : []).forEach((prompt) => add(prompt && prompt.id));
+  (Array.isArray(content.relics) ? content.relics : []).forEach((relic) => {
+    if (!relic || typeof relic !== 'object') return;
+    add(relic.id);
+    const quiz = relic.quiz;
+    if (quiz && typeof quiz === 'object') { add(relic.id + '_q'); add(relic.id + '_ok'); add(relic.id + '_no'); }
+  });
+  return ids;
+}
+
+function configuredSpeechText(id, lang) {
+  const content = state.content && typeof state.content === 'object' ? state.content : {};
+  const language = lang === 'yue' ? 'yue' : 'zh';
+  const textFrom = (pair) => pair && (pair[language] || pair.zh || '');
+  if (id === 'p_points') return language === 'yue' ? '积分又多咗。' : '积分又多了。';
+
+  for (const stage of (Array.isArray(content.stages) ? content.stages : [])) {
+    const line = (Array.isArray(stage.lines) ? stage.lines : []).find((item) => item && item.id === id);
+    if (line) return textFrom(line);
+    for (const quiz of (Array.isArray(stage.quiz) ? stage.quiz : [])) {
+      if (!quiz || typeof quiz.qid !== 'string') continue;
+      if (id === quiz.qid + '_q') return textFrom(quiz.q);
+      if (id === quiz.qid + '_a') return textFrom(quiz.explain);
+      if (id === quiz.qid + '_wrong') return textFrom(quiz.explain_wrong);
+      const optionPrefix = quiz.qid + '_op';
+      if (id.startsWith(optionPrefix)) {
+        const option = (Array.isArray(quiz.options) ? quiz.options : []).find((item) =>
+          item && typeof item.key === 'string' && id === optionPrefix + item.key);
+        if (option) return textFrom(option);
+      }
+    }
+  }
+  const prompt = (Array.isArray(content.prompts) ? content.prompts : []).find((item) => item && item.id === id);
+  if (prompt) return textFrom(prompt);
+  for (const relic of (Array.isArray(content.relics) ? content.relics : [])) {
+    if (!relic || typeof relic !== 'object') continue;
+    if (relic.id === id) return textFrom(relic);
+    const quiz = relic.quiz;
+    if (!quiz || typeof relic.id !== 'string') continue;
+    if (id === relic.id + '_q') return textFrom(quiz.q);
+    if (id === relic.id + '_ok') return textFrom(quiz.ok);
+    if (id === relic.id + '_no') return textFrom(quiz.no);
+  }
+  return '';
+}
+
+function playConfiguredSpeech(id, requestedLang) {
+  if (typeof id !== 'string' || !configuredSpeechIds().has(id)) return false;
+  const lang = requestedLang === 'zh' || requestedLang === 'yue'
+    ? requestedLang
+    : (state.lang === 'yue' ? 'yue' : 'zh');
+  const text = configuredSpeechText(id, lang);
+  if (typeof text !== 'string' || !text.trim()) return false;
+  speak(id, lang, text);
+  setSubtitle(text);
+  return true;
+}
+
+function relicRecognitionReady() {
+  const keys = relicOrder();
+  if (keys.length !== RELIC_ORDER_FALLBACK.length ||
+      keys.some((key, index) => key !== RELIC_ORDER_FALLBACK[index])) return false;
+  const content = state.content;
+  if (!content || typeof content !== 'object' || Array.isArray(content) ||
+      !Array.isArray(content.relics) || content.relics.length !== keys.length) return false;
+  const fireEyes = content.fireEyes;
+  if (!fireEyes || typeof fireEyes !== 'object' || Array.isArray(fireEyes) ||
+      fireEyes.status !== 'verified' || !Array.isArray(fireEyes.order) ||
+      fireEyes.order.length !== keys.length ||
+      fireEyes.order.some((key, index) => key !== keys[index])) return false;
+  const byKey = new Map();
+  for (const row of content.relics) {
+    if (!row || typeof row !== 'object' || Array.isArray(row) ||
+        typeof row.key !== 'string' || byKey.has(row.key)) return false;
+    byKey.set(row.key, row);
+  }
+  if (keys.some((key) => !byKey.has(key))) return false;
+  const isRecord = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
+  const refsReady = (refs, fields) => Array.isArray(refs) && refs.length > 0 && refs.every((ref) =>
+    isRecord(ref) && fields.every((field) => typeof ref[field] === 'string' && ref[field].trim()));
+  return keys.every((key) => {
+    const item = byKey.get(key);
+    const recognition = item.recognition;
+    const quiz = item.quiz;
+    const validation = item.model_validation;
+    if (!isRecord(recognition) || !isRecord(quiz) || !isRecord(validation)) return false;
+    const question = quiz.q;
+    const options = quiz.options;
+    const report = validation.independent_test_report;
+    const deployment = validation.deployment_report;
+    if (!isRecord(question) || !Array.isArray(options) || options.length < 2 ||
+        !isRecord(report) || !isRecord(deployment) || !options.every(isRecord)) return false;
+    const optionKeys = options.map((op) => op.key);
+    const uniqueKeys = new Set(optionKeys);
+    return item.source_status === 'verified' &&
+      refsReady(item.source_refs, ['institution', 'citation', 'access_date']) &&
+      item.media_rights_status === 'authorized' &&
+      refsReady(item.media_rights_refs, ['rights_holder', 'permission_ref']) &&
+      recognition.enabled === true && recognition.status === 'verified' &&
+      validation.status === 'passed' &&
+      ['report_ref', 'test_set_id'].every((field) => typeof report[field] === 'string' && report[field].trim()) &&
+      validation.deployment_validation === 'passed' &&
+      ['report_ref', 'device_model', 'firmware_version'].every((field) => typeof deployment[field] === 'string' && deployment[field].trim()) &&
+      ['zh', 'yue'].every((lang) => typeof question[lang] === 'string' && question[lang].trim()) &&
+      optionKeys.every((optionKey) => typeof optionKey === 'string' && optionKey.trim()) &&
+      uniqueKeys.size === optionKeys.length && options.every((op) =>
+        ['zh', 'yue'].every((lang) => typeof op[lang] === 'string' && op[lang].trim())) &&
+      optionKeys.includes(quiz.answer);
+  });
+}
+
+function enterRelicStage(silentAudio = false) {
+  const contentReady = relicRecognitionReady();
+  if (!contentReady) state.relicModelEnabled = false;
+  if (!contentReady || !state.relicModelEnabled) {
+    const groups = (state.content && state.content.fireEyes && state.content.fireEyes.groups) || [];
+    const keys = relicOrder();
+    const groupMarkup = groups.length ? groups.map((group) =>
+      '<h3 class="rp-group">' + ((group.label || {})[state.lang] || (group.label || {}).zh || group.id) + '</h3>' +
+      '<ul class="rp-list">' + (group.keys || []).map((key) =>
+        '<li>○ ' + relicName(key) + '</li>').join('') + '</ul>'
+    ).join('') : '<ul class="rp-list">' + keys.map((key) => '<li>○ ' + relicName(key) + '</li>').join('') + '</ul>' ;
+    const text = !contentReady
+      ? (state.lang === 'yue'
+        ? '候選清單已列出，但類別來源、實物相片與模型仍待核實，暫不自動識別或計分。'
+        : '候选清单已列出，但类别来源、实物图片与模型仍待核实，暂不自动识别或计分。')
+      : (state.lang === 'yue'
+        ? '候選清單已列出，但設備尚未回報啟用；目前不會識別或計分。'
+        : '候选清单已列出，但设备尚未确认启用；当前不会识别或计分。');
+    state.relicModelEnabled = false;
+    state.relicPassedAll = false;
+    setSubtitle(text);
+    if (!silentAudio) speak('p_relic_task_v2', state.lang, text);
+    showRelicPanel('<p class="rp-name">火眼金睛 · 候选清单（未启用）</p>' +
+      '<p class="rp-line">' + text + '</p>' + groupMarkup +
+      '<p class="rp-tip">补齐权威来源、类别对应的授权示范图片和独立验证模型后，再评估是否启用识别。</p>');
+    return;
+  }
   if (state.relicPassedAll) {
     finishAllTasks();
     return;
   }
-  const need = RELIC_ORDER.filter((k) => !state.relicDone[k]);
+  const need = relicOrder().filter((k) => !state.relicDone[k]);
   const names = need.map(relicName).join('、');
-  setSubtitle('五关走完了！接下来是火眼金睛：请把「' + names + '」依次放到 CyberCAM 镜头前。');
-  speak('p_relic_task', state.lang, '五关走完了，接下来是火眼金睛，请把三件非遗古物依次放到镜头前。');
+  setSubtitle('本次识别流程已启动。请按顺序展示「' + names + '」对应类别的已核验授权图片。');
+  if (!silentAudio) speak('p_relic_intro_active_v2', state.lang, '本次图像识别流程已启动，请按顺序展示授权图片。');
   showRelicPanel(
     '<p class="rp-name">火眼金睛 · 最后一道任务</p>' +
-    '<p class="rp-line">把下面三件古物依次放到 CyberCAM 镜头前，每认对一件就加积分。</p>' +
+    '<p class="rp-line">请按顺序展示各候选类别对应的已核验授权图片。</p>' +
     '<ul class="rp-list">' +
-    RELIC_ORDER.map((k) =>
+    relicOrder().map((k) =>
       '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
       (state.relicDone[k] ? '✓ ' : '○ ') + relicName(k) + '</li>').join('') +
     '</ul>' +
@@ -607,17 +773,18 @@ function enterRelicStage() {
 
 /** 所有任务完成 → 先道喜、再总结书院，最后打开兑换 */
 function finishAllTasks() {
+  if (!relicRecognitionReady() || !state.relicModelEnabled) return;
   if (state._finished) return;
   state._finished = true;
   state.relicPassedAll = true;
-  setSubtitle('恭喜完成！');
-  toast('全部完成！');
+  setSubtitle('本次图像匹配体验已完成。');
+  toast('图像匹配流程完成；来源与史实另行核验。');
   // 1) 恭喜
-  speak('p_congrats', state.lang, '恭喜你，三件非遗古物全部认对了！');
+  speak('p_congrats_v2', state.lang, '本次图像匹配体验已完成；这不代表项目来源或史实已核实。');
   // 2) 书院总结（等恭喜播完）
   setTimeout(() => {
-    setSubtitle('鳌台书院从明清的书声，走到今天的手艺，一直守在这里。');
-    speak('p_summary', state.lang, '鳌台书院从明清的书声走到今天的手艺，把文脉一代代传下来。谢谢你陪小鳌走完这一程。');
+    setSubtitle('谢谢你陪小鳌完成数字导览。');
+    speak('p_summary_v2', state.lang, '谢谢你陪小鳌走完这一程。');
   }, 6200);
   // 3) 总结之后弹出兑换
   setTimeout(() => openShop(), 12000);
@@ -660,6 +827,7 @@ function resetTour() {
   state.quizAnswered = {};
   state.relicDone = {};
   state.relicPassedAll = false;
+  state.relicModelEnabled = false;
   state._finished = false;
   state._maxStage = 1;
   state.stage = 1;
@@ -704,7 +872,7 @@ function simulateFace() {
   state.faceOk = true;
   state.visitor = state.visitor || '预约访客';
   renderStagePanel(1);
-  const line = linesOf(1).find((l) => l.id === 's1_welcome_ok') || linesOf(1)[1];
+  const line = linesOf(1).find((l) => l.id === 's1_welcome_ok_v2') || linesOf(1)[1];
   if (line) speakLine(line);
   toast('识别成功：' + state.visitor);
   pushState({ face_ok: true, visitor: state.visitor });
@@ -795,9 +963,11 @@ function onKey(e) {
 // 火眼金睛（跟随 CyberCAM 上报）
 // ------------------------------------------------------------------
 const RELIC_INFO = {
-  xiangyunsha: { zh: '香云纱', yue: '香雲紗' },
-  guancao: { zh: '莞草编织', yue: '莞草編織' },
-  qianjiaodeng: { zh: '千角灯', yue: '千角燈' },
+  houjie_yuexiu: { zh: '厚街粤绣（候选）', yue: '厚街粵繡（候選）' },
+  houjie_shuangshou_hongquan: { zh: '厚街双手洪拳（候选）', yue: '厚街雙手洪拳（候選）' },
+  aotai_aoyu_brick: { zh: '鳌鱼砖（出处待核）', yue: '鰲魚磚（出處待核）' },
+  guancao: { zh: '莞草编织（候选）', yue: '莞草編織（候選）' },
+  qingxi_qilin_zhazuo: { zh: '清溪麒麟扎作（候选）', yue: '清溪麒麟紮作（候選）' },
 };
 
 function relicOf(key) {
@@ -807,7 +977,12 @@ function relicOf(key) {
 
 function relicName(key) {
   const r = relicOf(key);
-  if (r && r.name) return r.name[state.lang] || r.name.zh || key;
+  if (r && r.name) {
+    const raw = r.name[state.lang] || r.name.zh || key;
+    if (r.proposal_status === 'proposed_candidate')
+      return raw + (key === 'aotai_aoyu_brick' ? '（出处待核）' : '（候选）');
+    return raw;
+  }
   const f = RELIC_INFO[key];
   return f ? (f[state.lang] || f.zh) : key;
 }
@@ -821,6 +996,8 @@ function showRelicPanel(html) {
 }
 
 function relicRecognized(key, silentAudio) {
+  if (!relicRecognitionReady() || !state.relicModelEnabled) return;
+  if (!relicOrder().includes(key)) return;
   const r = relicOf(key);
   const text = r ? (r[state.lang] || r.zh || '') : '';
   const name = relicName(key);
@@ -830,7 +1007,7 @@ function relicRecognized(key, silentAudio) {
     '<img class="rp-photo" src="/assets/relics/' + key + '.jpg" alt="' + name + '" ' +
     'onerror="this.style.display=\'none\'">' +
     '<div class="rp-body">' +
-    '<p class="rp-kicker">AI 识物 · 已认出</p>' +
+    '<p class="rp-kicker">' + (state.lang === 'yue' ? '圖像匹配' : '图像匹配') + '</p>' +
     '<p class="rp-name">' + name + '</p>' +
     '<p class="rp-line">' + text + '</p>' +
     '<p class="rp-tip">讲解结束后会出题，请听题目</p>' +
@@ -842,12 +1019,14 @@ function relicRecognized(key, silentAudio) {
   } else {
     stopSpeak();
   }
-  addPointsLocal('relic_recognize', name);
+  // Recognition rewards are disabled here until one authenticated backend ledger is used.
 }
 
 function relicQuiz(key, quiz) {
+  if (!relicRecognitionReady() || !state.relicModelEnabled || !relicOrder().includes(key)) return;
   const q = (quiz && quiz.q) ? (quiz.q[state.lang] || quiz.q.zh) : '';
-  const opts = (quiz && quiz.options) || [];
+  const opts = (quiz && Array.isArray(quiz.options)) ? quiz.options : [];
+  if (!q || opts.length < 2 || opts.some((op) => !op || typeof op.key !== 'string')) return;
   let html = '<p class="rp-name">' + relicName(key) + '</p>';
   html += '<p class="rp-q">' + q + '</p><div class="rp-opts">';
   opts.forEach((op) => {
@@ -859,38 +1038,35 @@ function relicQuiz(key, quiz) {
   $$('.rp-opt').forEach((b) => {
     b.addEventListener('click', () => sendCmd({ cmd: 'relic_answer', key: key, answer: b.dataset.k }));
   });
-  state.relicQuiz = { key: key, quiz: quiz };
+  state.relicQuiz = { key: key, quiz: { q: quiz.q, options: opts } };
 }
 
 function relicQuizResult(key, ok) {
+  if (!relicRecognitionReady() || !state.relicModelEnabled) return;
   const res = $('#rpRes');
-  $$('.rp-opt').forEach((b) => { b.disabled = true; });
-  if (res) res.textContent = ok ? '✓ 答对了，请再拿一次给摄像头认' : '✗ 再想想，听讲解后重试';
-  if (ok && state.relicQuiz) {
-    const q = state.relicQuiz.quiz;
-    $$('.rp-opt').forEach((b) => {
-      if (b.dataset.k === q.answer) b.classList.add('ok');
-    });
-  }
+  $$('.rp-opt').forEach((b) => { b.disabled = !!ok; });
+  if (res) res.textContent = ok ? '✓ 答对了，请再拿一次给摄像头认' : '✗ 再想想，可以重选';
+  // The answer key stays on the trusted device; the browser only shows the result.
 }
 
 function relicPassed(key, doneFromCam, allFromCam) {
+  if (!relicRecognitionReady() || !state.relicModelEnabled || !relicOrder().includes(key)) return;
   state.relicDone[key] = true;
   // 相机端带来的已完成列表优先（两端进度对齐）
   if (Array.isArray(doneFromCam)) {
     doneFromCam.forEach((k) => { state.relicDone[k] = true; });
   }
-  const need = RELIC_ORDER;
+  const need = relicOrder();
   const left = need.filter((k) => !state.relicDone[k]);
   if (allFromCam || left.length === 0) {
     state.relicPassedAll = true;
-    showRelicPanel('<p class="rp-name">三件全部认完！</p>' +
+    showRelicPanel('<p class="rp-name">五项识别任务完成！</p>' +
       '<p class="rp-line">所有任务完成，正在打开兑换…</p>');
     setTimeout(() => finishAllTasks(), 1200);
     return;
   }
-  showRelicPanel('<p class="rp-name">' + relicName(key) + ' · 过关</p>' +
-    '<p class="rp-line">积分已记上。还剩 ' + left.length + ' 件：' +
+  showRelicPanel('<p class="rp-name">' + relicName(key) + ' · 图像匹配确认</p>' +
+    '<p class="rp-line">本次图像匹配已确认；尚有 ' + left.length + ' 项：' +
     left.map(relicName).join('、') + '</p>' +
     '<ul class="rp-list">' +
     need.map((k) => '<li class="' + (state.relicDone[k] ? 'done' : '') + '">' +
@@ -961,7 +1137,7 @@ async function redeem(id) {
     });
     const d = await r.json();
     if (msg) msg.textContent = d.msg || (d.ok ? '兑换成功' : '积分不够，继续加油');
-    if (d.ok) toast('兑换成功，请到工作人员处领取手办');
+    if (d.ok) toast('兑换成功，请到工作人员处领取兑换品');
   } catch (e) {
     if (msg) msg.textContent = '兑换失败，请检查网页后端';
   }
@@ -970,9 +1146,10 @@ async function redeem(id) {
 }
 
 function addPointsLocal(kind, note) {
+  const body = { kind: kind, note: note || '' };
   fetch('/api/add', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind: kind, note: note || '' }),
+    body: JSON.stringify(body),
   }).then((r) => r.json()).then((d) => {
     loadPoints(true);
     if (d && d.score != null) {

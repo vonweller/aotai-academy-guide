@@ -17,11 +17,14 @@ import os
 import sys
 import random
 import tempfile
+import json
 import mathutils
 
 random.seed(20261020)
 
-OUT_GLB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "out", "aotai_academy.glb")
+DEFAULT_OUT_GLB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "out", "aotai_academy.glb")
+# Tests can redirect the candidate without ever touching the committed GLB.
+OUT_GLB = os.environ.get("AOTAI_OUT_GLB", DEFAULT_OUT_GLB)
 
 # ------------------------------------------------------------------
 # 基础工具
@@ -220,30 +223,91 @@ def build_materials():
 # 构件
 # ------------------------------------------------------------------
 def make_roof(group, w, d, h, x, y, z, overhang=1.0):
-    """四坡庑殿顶 + 屋脊 + 瓦垄（用挤出三角+细条近似）"""
+    """四坡屋顶：矩形屋面、方向一致的屋脊、檐口和低面数瓦垄。"""
+    del group  # 兼容旧调用签名；所有对象仍挂在当前集合。
     objs = []
     W = w + overhang * 2
     D = d + overhang * 2
-    # 主坡（用两个斜面楔形）
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + h * 0.6))
-    ob = bpy.context.object
-    ob.scale = (W, D, h)          # size=1 立方体半边长 0.5 -> scale 即全尺寸
-    ob.name = "roof_body"
+    base_z = z + h * 0.10
+    top_z = base_z + h
+    tile_dark = bpy.data.materials.get("TileDark", M_TILE)
+    long_x = W >= D
+    long_dim = W if long_x else D
+    short_dim = D if long_x else W
+    ridge_len = max(long_dim - short_dim, long_dim * 0.35)
+    ridge_len = min(ridge_len, long_dim * 0.82)
+    if long_x:
+        verts = [
+            (x - W / 2, y - D / 2, base_z), (x + W / 2, y - D / 2, base_z),
+            (x + W / 2, y + D / 2, base_z), (x - W / 2, y + D / 2, base_z),
+            (x - ridge_len / 2, y, top_z), (x + ridge_len / 2, y, top_z),
+            (x - W / 2, y - D / 2, base_z - 0.16), (x + W / 2, y - D / 2, base_z - 0.16),
+            (x + W / 2, y + D / 2, base_z - 0.16), (x - W / 2, y + D / 2, base_z - 0.16),
+        ]
+        faces = [(0, 1, 5, 4), (1, 2, 5), (2, 3, 4, 5), (3, 0, 4),
+                 (9, 8, 7, 6), (0, 6, 7, 1), (1, 7, 8, 2), (2, 8, 9, 3), (3, 9, 6, 0)]
+    else:
+        verts = [
+            (x - W / 2, y - D / 2, base_z), (x + W / 2, y - D / 2, base_z),
+            (x + W / 2, y + D / 2, base_z), (x - W / 2, y + D / 2, base_z),
+            (x, y - ridge_len / 2, top_z), (x, y + ridge_len / 2, top_z),
+            (x - W / 2, y - D / 2, base_z - 0.16), (x + W / 2, y - D / 2, base_z - 0.16),
+            (x + W / 2, y + D / 2, base_z - 0.16), (x - W / 2, y + D / 2, base_z - 0.16),
+        ]
+        # Consistent outward winding: sloped faces up/out, bottom down, side walls outward.
+        faces = [(0, 4, 5, 3), (1, 2, 5, 4), (0, 1, 4), (3, 5, 2),
+                 (9, 8, 7, 6), (0, 3, 9, 6), (1, 7, 8, 2), (0, 6, 7, 1), (3, 2, 8, 9)]
+    me = bpy.data.meshes.new("roof_body_mesh")
+    me.from_pydata(verts, [], faces)
+    me.update()
+    ob = bpy.data.objects.new("roof_body", me)
+    bpy.context.collection.objects.link(ob)
     ob.data.materials.append(M_TILE)
-    # 用 bmesh 把顶部收成脊
-    me = ob.data
-    bm = bmesh.new()
-    bm.from_mesh(me)
-    for v in bm.verts:
-        if v.co.z > 0:
-            v.co.x *= 0.06
-    bm.to_mesh(me)
-    bm.free()
     objs.append(ob)
-    # 屋脊（贴合锥顶，宽度略窄于屋面）
-    objs.append(cube("ridge", (W * 0.52, 0.26, 0.20), (x, y, z + h * 1.02), M_TILE))
 
+    # 檐口压条，在屋面边缘形成明确下缘。
+    fascia_z = base_z + 0.02
+    if long_x:
+        for side in (-1, 1):
+            objs.append(cube("roof_fascia", (W + 0.12, 0.14, 0.16),
+                             (x, y + side * D / 2, fascia_z), tile_dark))
+    else:
+        for side in (-1, 1):
+            objs.append(cube("roof_fascia", (0.14, D + 0.12, 0.16),
+                             (x + side * W / 2, y, fascia_z), tile_dark))
 
+    # 稀疏低面数瓦垄：每道从屋脊顺坡伸向檐口，沿屋脊均匀排布。
+    slope = math.atan2(h, short_dim / 2)
+    slope_length = math.hypot(short_dim / 2, h)
+    rib_count = 9
+    # 轻微嵌入屋面，避免瓦垄与坡面出现可见悬空缝。
+    rib_offset = 0.026
+    for i in range(rib_count):
+        t = (i + 0.5) / rib_count
+        if long_x:
+            rib_x = x + ridge_len * (t - 0.5)
+            for side in (-1, 1):
+                rib_y = y + side * D / 4 + side * math.sin(slope) * rib_offset
+                rib_z = base_z + h / 2 + math.cos(slope) * rib_offset
+                objs.append(cube("roof_tile_rib", (0.055, slope_length, 0.055),
+                                 (rib_x, rib_y, rib_z), tile_dark,
+                                 rot=(-side * slope, 0, 0)))
+        else:
+            rib_y = y + ridge_len * (t - 0.5)
+            for side in (-1, 1):
+                rib_x = x + side * W / 4 + side * math.sin(slope) * rib_offset
+                rib_z = base_z + h / 2 + math.cos(slope) * rib_offset
+                objs.append(cube("roof_tile_rib", (slope_length, 0.055, 0.055),
+                                 (rib_x, rib_y, rib_z), tile_dark,
+                                 rot=(0, side * slope, 0)))
+
+    # 屋脊条与屋面长轴一致。
+    if long_x:
+        objs.append(cube("ridge", (ridge_len, 0.26, 0.20),
+                         (x, y, top_z + 0.04), tile_dark))
+    else:
+        objs.append(cube("ridge", (0.26, ridge_len, 0.20),
+                         (x, y, top_z + 0.04), tile_dark))
     return objs
 
 
@@ -332,9 +396,10 @@ def make_hall():
     for x in (-6.2, -2.2, 2.2, 6.2):
         objs.append(cyl("hall_col", 0.27, 3.9, (x, y + 5.1, 2.65), R, verts=12))
         objs.append(cube("col_base", (0.9, 0.9, 0.16), (x, y + 5.1, 0.78), S))
-    # 门
+    # 木门向两侧敞开，保留讲堂入口的通透视线（参考现场开门照片）。
     for s in (-1, 1):
-        objs.append(cube("hall_door", (1.3, 0.10, 3.4), (s * 1.45, y + 4.8, 2.4), WD))
+        objs.append(cube("hall_door", (1.3, 0.10, 3.4), (s * 1.45, y + 4.8, 2.4),
+                         WD, rot=(0, 0, s * 1.05)))
     # 匾额 + 楹联
     objs.append(cube("hall_plaque", (2.8, 0.12, 0.82), (0, y + 5.05, 4.1), bpy.data.materials["Plaque"]))
     t = text_plane("hall_plaque_text", "講堂", (0, y + 5.02, 4.1), (2.6, 0.76), tex="plaque_hall.png")
@@ -457,6 +522,43 @@ def make_landscape():
 
 
 # ------------------------------------------------------------------
+def _world_bbox(objects):
+    """Return a JSON-safe world-space AABB for mesh objects."""
+    points = []
+    for ob in objects:
+        if ob.type != "MESH":
+            continue
+        points.extend(ob.matrix_world @ vertex.co for vertex in ob.data.vertices)
+    if not points:
+        raise RuntimeError("cannot compute bbox: no mesh objects")
+    mins = [min(float(point[i]) for point in points) for i in range(3)]
+    maxs = [max(float(point[i]) for point in points) for i in range(3)]
+    return {
+        "min": [round(value, 6) for value in mins],
+        "max": [round(value, 6) for value in maxs],
+        "dims": [round(maxs[i] - mins[i], 6) for i in range(3)],
+    }
+
+
+def _assert_bbox_equal(label, left, right, tolerance=1e-5):
+    for key in ("min", "max"):
+        for axis, (a, b) in enumerate(zip(left[key], right[key])):
+            if abs(a - b) > tolerance:
+                raise RuntimeError(
+                    "%s bbox drift on %s[%d]: %.6f -> %.6f"
+                    % (label, key, axis, a, b)
+                )
+
+
+def _assert_identity_transform(ob, tolerance=1e-6):
+    matrix = ob.matrix_world
+    for row in range(4):
+        for col in range(4):
+            expected = 1.0 if row == col else 0.0
+            if abs(float(matrix[row][col]) - expected) > tolerance:
+                raise RuntimeError("%s did not end with identity world transform" % ob.name)
+
+
 def build():
     purge()
     build_materials()
@@ -472,52 +574,96 @@ def build():
     all_objs += make_pavilion()
 
     # 扩建：工坊内部与院落陈设（织机 / 染缸 / 草编工位 / 石桌）
-    try:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        import workshop_detail
-        all_objs += workshop_detail.build_workshop_detail()
-        print("[build] workshop detail added")
-    except Exception as e:
-        print("[build] workshop detail FAILED:", e)
+    # 扩建模块是交付内容；导入或构建失败必须终止，不能静默导出缺件 GLB。
+    module_dir = os.path.dirname(os.path.abspath(__file__))
+    if module_dir not in sys.path:
+        sys.path.insert(0, module_dir)
+    import workshop_detail
+    detail_objs = workshop_detail.build_workshop_detail()
+    if not detail_objs:
+        raise RuntimeError("workshop_detail.build_workshop_detail() returned no objects")
+    all_objs += detail_objs
+    print("[build] workshop detail added:", len(detail_objs))
 
     # 扩建：前院碑廊 / 讲堂内景 / 后园曲水
-    try:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        import scene_extra
-        all_objs += scene_extra.build_forecourt()
-        print("[build] forecourt added")
-        all_objs += scene_extra.build_hall_inside()
-        print("[build] hall inside added")
-        all_objs += scene_extra.build_back_garden()
-        print("[build] back garden added")
-    except Exception as e:
-        print("[build] scene extra FAILED:", e)
+    import scene_extra
+    forecourt_objs = scene_extra.build_forecourt()
+    hall_inside_objs = scene_extra.build_hall_inside()
+    back_garden_objs = scene_extra.build_back_garden()
+    for label, extra_objs in (("forecourt", forecourt_objs),
+                              ("hall inside", hall_inside_objs),
+                              ("back garden", back_garden_objs)):
+        if not extra_objs:
+            raise RuntimeError("scene_extra.%s returned no objects" % label)
+        all_objs += extra_objs
+        print("[build] %s added: %d" % (label, len(extra_objs)))
 
     # 合并成一个对象（减少 draw call，含地面）
-    # 注意：join 只能合并"选中的网格"，而 bpy.ops 需要正确上下文。
-    # 先按 API 逐对象选中，再确认选中数与场景网格数一致，否则会漏合。
+    # 注意：join 后顶点位于活动对象的局部空间；活动对象必须是世界原点锚点，
+    # 且不能先盲目清零 location/rotation，否则会把整场景平移到道具原点。
     scene_objs = [o for o in bpy.data.objects if o.type == 'MESH']
-    print("[build] mesh objects before join:", len(scene_objs))
+    if not scene_objs:
+        raise RuntimeError("no mesh objects before join")
+    ground = bpy.data.objects.get("ground")
+    if ground is None or ground.type != 'MESH':
+        raise RuntimeError("required identity ground anchor 'ground' is missing")
+    # ground 在 make_landscape() 中以 size=80、world identity 创建；显式恢复该契约。
+    ground.matrix_world = mathutils.Matrix.Identity(4)
+    bpy.context.view_layer.update()
+    ground_bbox = _world_bbox([ground])
+    expected_ground_bbox = {
+        "min": [-40.0, -40.0, 0.0],
+        "max": [40.0, 40.0, 0.0],
+        "dims": [80.0, 80.0, 0.0],
+    }
+    _assert_bbox_equal("ground", ground_bbox, expected_ground_bbox)
+    overall_before_join = _world_bbox(scene_objs)
+    print("[build][bbox] " + json.dumps({
+        "ground": ground_bbox,
+        "overall_before_join": overall_before_join,
+        "mesh_objects": len(scene_objs),
+    }, ensure_ascii=False, sort_keys=True))
+
     bpy.ops.object.select_all(action='DESELECT')
     for o in scene_objs:
         o.select_set(True)
-    bpy.context.view_layer.objects.active = scene_objs[0]
+    bpy.context.view_layer.objects.active = ground
     n_before = len([o for o in bpy.data.objects if o.type == 'MESH'])
     bpy.ops.object.join()
     joined = bpy.context.object
+    if joined is not ground:
+        raise RuntimeError("join did not preserve the identity ground anchor")
     joined.name = "AotaiAcademy"
     n_after = len([o for o in bpy.data.objects if o.type == 'MESH'])
+    if n_after != 1:
+        raise RuntimeError("join left %d mesh objects" % n_after)
     print("[build] join: %d -> %d meshes, verts %d" % (n_before, n_after, len(joined.data.vertices)))
-    # 保险：把漏网的网格删掉，避免导出时混进去
+
+    # 保险：把漏网的网格删掉，避免导出时混进去；正常路径应已由 join 消除。
     for o in list(bpy.data.objects):
         if o.type == 'MESH' and o is not joined:
             print("[build] removing leftover mesh:", o.name)
             bpy.data.objects.remove(o, do_unlink=True)
 
-    # 清空变换：所有顶点已在世界坐标，导出即无节点位移
-    joined.rotation_euler = (0, 0, 0)
-    joined.location = (0, 0, 0)
+    # 保留当前 world transform，再 apply；不再把活动对象的原点强制改成 0。
+    joined_world_before_apply = joined.matrix_world.copy()
+    bpy.context.view_layer.update()
+    joined_bbox_before_apply = _world_bbox([joined])
+    _assert_bbox_equal("join", overall_before_join, joined_bbox_before_apply)
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    bpy.context.view_layer.update()
+    joined_bbox_after_apply = _world_bbox([joined])
+    _assert_bbox_equal("transform_apply", overall_before_join, joined_bbox_after_apply)
+    _assert_identity_transform(joined)
+    print("[build][bbox] " + json.dumps({
+        "ground": ground_bbox,
+        "overall_before_join": overall_before_join,
+        "overall_after_join": joined_bbox_after_apply,
+        "joined_world_before_apply": [
+            [round(float(joined_world_before_apply[row][col]), 6) for col in range(4)]
+            for row in range(4)
+        ],
+    }, ensure_ascii=False, sort_keys=True))
 
     # 法定法线
     bpy.ops.object.mode_set(mode='EDIT')
@@ -538,7 +684,8 @@ def build():
 
     print("[build] objects:", len(bpy.data.objects), "verts:", len(joined.data.vertices), "polys:", len(joined.data.polygons))
 
-    # 导出 GLB（已在上面应用 180° Z 旋转：Blender +Y(前) -> glTF +Z）
+    # 导出 GLB：源场景仍保持 Blender Z-up / +Y 门前；export_yup 只负责 glTF 轴转换。
+    # 不在此处隐式旋转，网页与 QC 必须共享同一份源坐标契约。
     bpy.ops.object.select_all(action='SELECT')
     os.makedirs(os.path.dirname(OUT_GLB), exist_ok=True)
     bpy.ops.export_scene.gltf(

@@ -321,8 +321,8 @@ class UI(object):
         for b in self.buttons:
             b.draw(img, time.time())
         draw_text(img, "功能一  跟着 AI 走一遍书院", (173, 330), 16, C_TEXT_DIM, anchor="ct")
-        draw_text(img, "功能二  认出非遗古物就讲历史", (467, 330), 16, C_GOLD, anchor="ct")
-        draw_text(img, "香云纱 · 莞草编织 · 千角灯", (self.W // 2, 360), 18, C_TEXT, anchor="ct")
+        draw_text(img, "功能二  查看在地技艺识别计划", (467, 330), 16, C_GOLD, anchor="ct")
+        draw_text(img, "新类别实物与模型待核实；当前不自动识别", (self.W // 2, 360), 17, C_TEXT, anchor="ct")
         self.buttons.append(Button("lang_zh", (36, 390, 168, 446), "普通话", size=18,
                                    style="primary" if lang == "zh" else "ghost"))
         self.buttons.append(Button("lang_yue", (180, 390, 312, 446), "粤语", size=18,
@@ -337,12 +337,13 @@ class UI(object):
                      phase="recognize", quiz=None, quiz_state=None, score=0):
         img = self.begin()
         title = {
-            "recognize": "火眼金睛 · 对准古物",
+            "recognize": "火眼金睛 · 展示授权图片",
             "explain": "火眼金睛 · 讲解中",
             "answer": "火眼金睛 · 答题",
             "again": "火眼金睛 · 再认一次",
             "done": "火眼金睛 · 过关",
-        }.get(phase, "火眼金睛 · 非遗识物")
+            "planned": "火眼金睛 · 识别计划（未启用）",
+        }.get(phase, "火眼金睛 · 识别计划")
         sub = "积分 %d" % int(score or 0)
         self.header(img, title, sub, lang=lang, stage=0, mqtt_ok=mqtt_ok)
         view = (16, 76, 400, 400)
@@ -358,10 +359,11 @@ class UI(object):
             rect_outline(img, view, C_GOLD if level == "hit" else C_LINE, 2)
         else:
             fill_rect(img, view, (24, 22, 20))
-            draw_text(img, "摄像头未连接", ((view[0] + view[2]) // 2, (view[1] + view[3]) // 2), 22, C_TEXT_DIM, anchor="cm")
-        draw_text(img, relic_name or "请把古物放在画面中间", (416, 92), 22, C_GOLD if relic_name else C_TEXT_DIM)
+            msg = "识别未启用；来源、授权图片与模型待核" if phase == "planned" else "摄像头未连接"
+            draw_text(img, msg, ((view[0] + view[2]) // 2, (view[1] + view[3]) // 2), 22, C_TEXT_DIM, anchor="cm")
+        draw_text(img, relic_name or "候选计划（未启用）", (416, 92), 22, C_GOLD if relic_name else C_TEXT_DIM)
         y = 132
-        for seg in _wrap(history or "可以认：香云纱、莞草编织、千角灯。认准了就用你选的语言讲它的历史。", 12)[:8]:
+        for seg in _wrap(history or "候选类别按顺序展示；授权实物图片、来源与识别模型核验完成前，不启用自动识别。", 12)[:8]:
             draw_text(img, seg, (416, y), 16, C_TEXT)
             y += 24
         # 答题阶段：整屏重排，选项放在 footer 之上，保证看得见点得到
@@ -411,8 +413,8 @@ class UI(object):
         hint = {
             "recognize": "认准后自动讲解，再出题考你",
             "explain": "听完讲解就出题",
-            "again": "把刚才那件再拿近一点",
-            "done": "这一件过关了，积分已记上",
+            "again": "展示同类授权示范图片",
+            "done": "图像匹配体验已完成；来源与史实仍待核验",
         }.get(phase, "")
         self.footer_bar(img, hint, "K 键重听")
         return img

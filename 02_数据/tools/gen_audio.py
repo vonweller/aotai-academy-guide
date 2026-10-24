@@ -81,21 +81,13 @@ def collect_lines():
             add(rid + "_no", (q.get("no") or {}).get("zh"), (q.get("no") or {}).get("yue"))
     # 固定提示语
     fixed = {
-        "p_relic_intro": ("火眼金睛开始了。请把香云纱、莞草编织或者千角灯，放到画面中间让我认一认。",
-                          "火眼金睛開始喇。請將香雲紗、莞草編織或者千角燈，放喺畫面中間畀我認一認。"),
-        "p_relic_ask": ("认出来了。现在我出个题目考考你，请在上面点答案。",
-                        "認得喇。而家我出條題目考考你，請喺上面點答案。"),
-        "p_relic_bring": ("答完了。请把刚才那件东西拿近一点，我再认一次，认对了就给你加分。",
-                          "答完喇。請將啱啱嗰件嘢攞近啲，我再認一次，認啱就同你加分。"),
-        "p_relic_pass": ("又认对了，这题过关，积分记上。",
-                         "又認啱喇，呢題過關，積分記低。"),
         "p_points": ("积分又多了。", "積分又多咗。"),
     }
-    for lid, (zh, yue) in fixed.items():
-        add(lid, zh, yue)
-    # 顶层 prompts（网页用的系统提示语）
+    # 顶层 prompts（网页用的系统提示语）优先于旧固定文案。
     for pr in data.get("prompts") or []:
         add(pr.get("id"), pr.get("zh"), pr.get("yue"))
+    for lid, (zh, yue) in fixed.items():
+        add(lid, zh, yue)
     return out
 
 
@@ -176,6 +168,7 @@ def main():
     ap.add_argument("--voice", action="append", default=[],
                     help="覆盖音色，如 --voice zh:Serena --voice yue:WanLung")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--id", action="append", default=[], help="只合成指定 line ID，可重复传入")
     a = ap.parse_args()
 
     langs = ["zh", "yue"] if a.lang == "all" else [a.lang]
@@ -191,6 +184,12 @@ def main():
             cfg[L]["voice"] = EDGE_VOICES.get(L, {}).get(V, V)
 
     lines = collect_lines()
+    if a.id:
+        selected = set(a.id)
+        lines = [(lid, line) for lid, line in lines if lid in selected]
+        missing = selected - {lid for lid, _ in lines}
+        if missing:
+            raise SystemExit("unknown line ID(s): %s" % ", ".join(sorted(missing)))
     manifest_path = os.path.join(AUDIO, "manifest.json")
     old = []
     if os.path.exists(manifest_path):
@@ -199,7 +198,13 @@ def main():
                 old = json.load(f)
         except Exception:
             old = []
-    merged = {(m["id"], m["lang"]): m for m in old if isinstance(m, dict)}
+    current_text = {(lid, lang): (line.get(lang) or "").strip()
+                    for lid, line in collect_lines() for lang in ("zh", "yue")}
+    # Drop orphaned IDs and cached text that no longer matches the current script.
+    merged = {(m["id"], m["lang"]): m for m in old if isinstance(m, dict)
+              and isinstance(m.get("id"), str) and isinstance(m.get("lang"), str)
+              and (m.get("id"), m.get("lang")) in current_text
+              and m.get("text") == current_text[(m.get("id"), m.get("lang"))]}
 
     total = 0
     for lang in langs:
@@ -213,7 +218,10 @@ def main():
             if not text:
                 continue
             path = os.path.join(d, lid + ".mp3")
-            need = a.force or (not os.path.exists(path)) or os.path.getsize(path) < 1200
+            prior = merged.get((lid, lang)) or {}
+            # A changed script invalidates its cached mp3 even when the filename is unchanged.
+            need = (a.force or not os.path.exists(path) or os.path.getsize(path) < 1200 or
+                    prior.get("text") != text)
             if not need:
                 continue
             ok, info = (synth_qwen(text, voice, path) if engine == "qwen"

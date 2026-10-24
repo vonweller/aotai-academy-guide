@@ -14,7 +14,10 @@ try:
 except Exception:
     import config
 
-CLASS_ORDER = ("xiangyunsha", "guancao", "qianjiaodeng", "other")
+# 标签顺序必须与训练输出 names 完全一致。新旧 schema 不兼容；旧 model.npz 会被拒绝加载。
+CLASS_ORDER = ("houjie_yuexiu", "houjie_shuangshou_hongquan",
+               "aotai_aoyu_brick", "guancao",
+               "qingxi_qilin_zhazuo", "other")
 
 
 def center_crop(bgr, keep=0.72):
@@ -53,20 +56,8 @@ def embed(bgr):
 
 
 def gate(cls, ratios):
-    """颜色门：只拦住明显不对的，别把实物挡住。
-
-    阈值按现场拍实物的实测放宽过：室内光下颜色饱和度、暗部比例
-    都比训练图低，卡太严会出现「分数 0.99 却不报」的情况。
-    """
-    red, straw, dark, brown = ratios["red"], ratios["straw"], ratios["dark"], ratios["brown"]
-    if cls == "qianjiaodeng":
-        return red >= 0.12 or (red + straw) >= 0.30
-    if cls == "guancao":
-        return straw >= 0.20 or (straw + brown) >= 0.35
-    if cls == "xiangyunsha":
-        black_cloth = dark >= 0.15 or brown >= 0.10
-        return black_cloth or (red + brown) >= 0.20
-    return True
+    """Accept only configured keys; no unvalidated legacy color heuristics remain."""
+    return cls in config.RELIC_KEYS
 
 
 class RelicEngine(object):
@@ -92,22 +83,34 @@ class RelicEngine(object):
             return
         try:
             z = np.load(self.path, allow_pickle=False)
+            if "schema_version" not in z or int(z["schema_version"]) != 2:
+                raise ValueError("缺少新类别模型 schema_version=2；拒绝使用旧模型")
             self.prototypes = z["prototypes"].astype(np.float32)
             self.labels = z["labels"].astype(np.int32)
             raw = z["names"]
             self.names = [str(x) for x in raw.tolist()]
+            if self.names != list(CLASS_ORDER):
+                raise ValueError("类别 schema 过期: %s; 需要 %s" % (self.names, list(CLASS_ORDER)))
+            if self.prototypes.ndim != 2 or self.labels.ndim != 1 or len(self.labels) != len(self.prototypes):
+                raise ValueError("原型/标签维度不匹配")
+            if self.labels.size == 0 or int(self.labels.min()) < 0 or int(self.labels.max()) >= len(self.names):
+                raise ValueError("标签索引越界或为空")
             self.threshold = float(z["threshold"])
             self.margin = float(z["margin"])
             print("[relic] 模型", self.path, "原型", len(self.labels), "阈值", round(self.threshold, 3))
         except Exception as e:
             print("[relic] 模型读取失败", e)
             self.prototypes = None
+            self.labels = None
+            self.names = list(CLASS_ORDER)
 
     def reset_announce(self):
         self.announced = ""
         self._hits = {}
 
     def predict(self, bgr):
+        if not getattr(config, "RELIC_RECOGNITION_ENABLED", False):
+            return "", 0.0, {}
         if self.prototypes is None or bgr is None:
             return "", 0.0, {}
         vec, ratios = embed(bgr)

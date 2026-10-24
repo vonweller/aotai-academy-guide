@@ -14,9 +14,7 @@ checks = [
   ('lang', u.screen_language()),
   ('mode', u.screen_mode('zh')),
   ('face', u.screen_face(None, 'none', None, 'zh', 1, True, learning=True, cam_err='busy')),
-  ('relic', u.screen_relic(None, '香云纱', '历史', 'hit', 'zh', True, phase='answer',
-      quiz={'q':'题','options':[{'key':'A','text':'甲'},{'key':'B','text':'乙'},{'key':'C','text':'丙'}],'answer':'B'},
-      quiz_state={}, score=15)),
+  ('relic', u.screen_relic(None, '候选清单（未启用）', '五项候选；来源、授权与模型待核。', 'none', 'zh', True, phase='planned', score=0)),
   ('stage', u.screen_stage(2, '第二关', ['讲解一','讲解二'], {'q':'题','options':[{'key':'A','text':'甲'}],'answer':'A'}, {}, 'zh', True)),
   ('end', u.screen_end('zh', True)),
 ]

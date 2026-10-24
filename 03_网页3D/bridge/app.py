@@ -328,17 +328,23 @@ def api_content():
 
 # ---------------- 积分与兑换 ----------------
 POINTS_PATH = os.path.join(DATA_ROOT, "points.json")
+EXPECTED_RELIC_KEYS = ("houjie_yuexiu", "houjie_shuangshou_hongquan",
+                       "aotai_aoyu_brick", "guancao", "qingxi_qilin_zhazuo")
+POINTS_LOCK = threading.Lock()
+RELIC_REWARD_KINDS = frozenset(("relic_recognize", "relic_quiz_right"))
+# No authenticated camera-to-ledger event protocol exists yet; recognition rewards stay disabled.
+RELIC_REWARDS_ENABLED = False
 
 POINT_REWARDS = {
     "face": 10, "stage_clear": 10, "quiz_right": 15,
     "relic_recognize": 8, "relic_quiz_right": 20, "finish": 50,
 }
 SHOP_ITEMS = [
-    {"id": "pin_xiangyunsha", "name": "香云纱徽章", "cost": 30, "icon": "badge"},
-    {"id": "pin_guancao", "name": "莞草纹书签", "cost": 45, "icon": "bookmark"},
-    {"id": "pin_qianjiaodeng", "name": "千角灯挂饰", "cost": 60, "icon": "lantern"},
-    {"id": "figure_xiangyunsha", "name": "香云纱手办", "cost": 90, "icon": "figure"},
-    {"id": "figure_qianjiaodeng", "name": "千角灯手办", "cost": 120, "icon": "figure"},
+    {"id": "pin_xiangyunsha", "name": "项目纪念徽章", "cost": 30, "icon": "badge"},
+    {"id": "pin_guancao", "name": "导览纪念书签", "cost": 45, "icon": "bookmark"},
+    {"id": "pin_qianjiaodeng", "name": "展陈主题挂饰", "cost": 60, "icon": "lantern"},
+    {"id": "figure_xiangyunsha", "name": "数字导览摆件", "cost": 90, "icon": "figure"},
+    {"id": "figure_qianjiaodeng", "name": "项目纪念摆件", "cost": 120, "icon": "figure"},
 ]
 
 
@@ -366,6 +372,67 @@ def _points_save(d):
         print("[points] save fail", e)
 
 
+def relic_rewards_ready():
+    if not RELIC_REWARDS_ENABLED:
+        return False
+    try:
+        with open(os.path.join(DATA_ROOT, "content.json"), "r", encoding="utf-8") as f:
+            content = json.load(f)
+        fire_eyes = content.get("fireEyes") or {}
+        order = fire_eyes.get("order") or []
+        if tuple(order) != EXPECTED_RELIC_KEYS:
+            return False
+        raw_items = content.get("relics")
+        if not isinstance(raw_items, list) or len(raw_items) != len(EXPECTED_RELIC_KEYS):
+            return False
+        if any(not isinstance(row, dict) or not isinstance(row.get("key"), str) for row in raw_items):
+            return False
+        items = {r.get("key"): r for r in raw_items}
+        if len(items) != len(EXPECTED_RELIC_KEYS) or set(items) != set(EXPECTED_RELIC_KEYS):
+            return False
+        def item_ready(key):
+            item = items.get(key) or {}
+            recognition = item.get("recognition") or {}
+            quiz = item.get("quiz") or {}
+            options = quiz.get("options") or []
+            option_keys = [op.get("key") for op in options if isinstance(op, dict) and isinstance(op.get("key"), str) and op.get("key")]
+            question = quiz.get("q")
+            refs = item.get("source_refs") or []
+            rights_refs = item.get("media_rights_refs") or []
+            report = (item.get("model_validation") or {}).get("independent_test_report") or {}
+            deployment = (item.get("model_validation") or {}).get("deployment_report") or {}
+            source_refs_ok = (isinstance(refs, list) and bool(refs) and all(
+                isinstance(ref, dict) and all(isinstance(ref.get(k), str) and ref[k].strip()
+                    for k in ("institution", "citation", "access_date")) for ref in refs))
+            rights_refs_ok = (isinstance(rights_refs, list) and bool(rights_refs) and all(
+                isinstance(ref, dict) and all(isinstance(ref.get(k), str) and ref[k].strip()
+                    for k in ("rights_holder", "permission_ref")) for ref in rights_refs))
+            validation = item.get("model_validation") or {}
+            return (item.get("source_status") == "verified" and source_refs_ok and rights_refs_ok and
+                    item.get("media_rights_status") == "authorized" and
+                    recognition.get("status") == "verified" and
+                    recognition.get("enabled") is True and
+                    validation.get("status") == "passed" and
+                    validation.get("independent_test_report") and
+                    isinstance(report, dict) and all(isinstance(report.get(k), str) and report[k].strip()
+                        for k in ("report_ref", "test_set_id")) and
+                    validation.get("deployment_validation") == "passed" and
+                    isinstance(deployment, dict) and all(isinstance(deployment.get(k), str) and deployment[k].strip()
+                        for k in ("report_ref", "device_model", "firmware_version")) and
+                    isinstance(question, dict) and
+                    all(isinstance(question.get(lang), str) and question[lang].strip() for lang in ("zh", "yue")) and
+                    isinstance(options, list) and len(options) >= 2 and
+                    len(option_keys) == len(options) and len(set(option_keys)) == len(option_keys) and
+                    all(all(isinstance(op.get(lang), str) and op[lang].strip() for lang in ("zh", "yue"))
+                        for op in options if isinstance(op, dict)) and
+                    quiz.get("answer") in option_keys)
+        return (fire_eyes.get("status") == "verified" and bool(order) and
+                all(item_ready(key) for key in order))
+    except Exception as e:
+        print("[points] relic readiness unavailable -> disabled", e)
+        return False
+
+
 def _points_rec(d, who):
     v = d["visitors"].setdefault(
         who, {"score": 0, "log": [], "redeemed": [], "first": int(time.time())}
@@ -386,26 +453,43 @@ def points_snapshot():
         "shop": SHOP_ITEMS,
         "redeemed": list(v.get("redeemed", []))[-20:],
         "log": list(v.get("log", []))[-10:],
-        "rewards": POINT_REWARDS,
+        "rewards": {**POINT_REWARDS, **{k: 0 for k in RELIC_REWARD_KINDS}},
     }
 
 
-def points_add(kind, note="", who=None):
+def points_add(kind, note="", who=None, event_id=None, trusted_event=False):
+    # Browser POSTs cannot prove a camera classification; only a future trusted server-side event may award it.
+    if not isinstance(kind, str):
+        return 0
+    if kind in RELIC_REWARD_KINDS and (not trusted_event or not relic_rewards_ready()):
+        return None
     gain = int(POINT_REWARDS.get(kind, 0))
     if gain <= 0:
         return 0
-    d = _points_load()
-    name = who or STATE.get("visitor") or d.get("last") or "预约访客"
-    v = _points_rec(d, name)
-    v["score"] = int(v.get("score", 0)) + gain
-    v["log"].append({"k": kind, "n": note, "p": gain, "t": int(time.time())})
-    v["log"] = v["log"][-40:]
-    d["last"] = name
-    _points_save(d)
+    if kind in RELIC_REWARD_KINDS and (not isinstance(event_id, str) or
+            not event_id.startswith("relic:") or len(event_id) < 14 or len(event_id) > 128):
+        return None
+    with POINTS_LOCK:
+        d = _points_load()
+        name = who or STATE.get("visitor") or d.get("last") or "预约访客"
+        v = _points_rec(d, name)
+        if kind in RELIC_REWARD_KINDS:
+            events = v.setdefault("events", [])
+            if not isinstance(events, list):
+                return None
+            if event_id in events:
+                return int(v.get("score", 0))
+            events.append(event_id)
+        v["score"] = int(v.get("score", 0)) + gain
+        v["log"].append({"k": kind, "n": note, "p": gain, "t": int(time.time())})
+        v["log"] = v["log"][-40:]
+        d["last"] = name
+        _points_save(d)
+        score = v["score"]
     broadcast({"topic": "aotai/points",
-               "data": {"who": name, "score": v["score"], "gain": gain, "k": kind},
+               "data": {"who": name, "score": score, "gain": gain, "k": kind},
                "ts": int(time.time())})
-    return v["score"]
+    return score
 
 
 @app.route("/api/points")
@@ -415,30 +499,40 @@ def api_points():
 
 @app.route("/api/add", methods=["POST"])
 def api_add_points():
-    body = request.get_json(silent=True) or {}
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"ok": False, "msg": "请求格式错误"}), 400
     kind = body.get("kind")
-    score = points_add(kind, body.get("note", ""))
+    if not isinstance(kind, str) or kind not in POINT_REWARDS:
+        return jsonify({"ok": False, "msg": "未知积分事件"}), 400
+    score = points_add(kind, body.get("note", ""), event_id=body.get("event_id"))
+    if score is None:
+        return jsonify({"ok": False, "msg": "火眼金睛识别奖励尚未启用"}), 409
     return jsonify({"ok": True, "score": score})
 
 
 @app.route("/api/redeem", methods=["POST"])
 def api_redeem():
-    body = request.get_json(silent=True) or {}
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({"ok": False, "msg": "请求格式错误"}), 400
     item_id = body.get("id")
     item = next((it for it in SHOP_ITEMS if it["id"] == item_id), None)
     if not item:
         return jsonify({"ok": False, "msg": "没有这个兑换品"}), 404
-    d = _points_load()
-    name = STATE.get("visitor") or d.get("last") or "预约访客"
-    v = _points_rec(d, name)
-    if int(v.get("score", 0)) < item["cost"]:
-        lack = item["cost"] - int(v.get("score", 0))
-        return jsonify({"ok": False, "msg": "还差 %d 积分，继续闯关吧" % lack})
-    v["score"] = int(v["score"]) - int(item["cost"])
-    v["redeemed"].append({"id": item_id, "t": int(time.time())})
-    d["last"] = name
-    _points_save(d)
-    return jsonify({"ok": True, "msg": "兑换成功：" + item["name"], "score": v["score"]})
+    with POINTS_LOCK:
+        d = _points_load()
+        name = STATE.get("visitor") or d.get("last") or "预约访客"
+        v = _points_rec(d, name)
+        if int(v.get("score", 0)) < item["cost"]:
+            lack = item["cost"] - int(v.get("score", 0))
+            return jsonify({"ok": False, "msg": "还差 %d 积分，继续闯关吧" % lack})
+        v["score"] = int(v.get("score", 0)) - int(item["cost"])
+        v["redeemed"].append({"id": item_id, "t": int(time.time())})
+        d["last"] = name
+        _points_save(d)
+        score = v["score"]
+    return jsonify({"ok": True, "msg": "兑换成功：" + item["name"], "score": score})
 
 
 @app.route("/api/stream")

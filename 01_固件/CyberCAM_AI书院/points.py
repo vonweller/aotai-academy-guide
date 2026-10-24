@@ -23,11 +23,11 @@ REWARDS = {
 
 # 兑换品：名字与所需积分（网页与板子一致）
 SHOP = [
-    {"id": "pin_xiangyunsha", "name": "香云纱徽章", "cost": 30, "icon": "badge"},
-    {"id": "pin_guancao", "name": "莞草纹书签", "cost": 45, "icon": "bookmark"},
-    {"id": "pin_qianjiaodeng", "name": "千角灯挂饰", "cost": 60, "icon": "lantern"},
-    {"id": "figure_xiangyunsha", "name": "香云纱手办", "cost": 90, "icon": "figure"},
-    {"id": "figure_qianjiaodeng", "name": "千角灯手办", "cost": 120, "icon": "figure"},
+    {"id": "pin_xiangyunsha", "name": "项目纪念徽章", "cost": 30, "icon": "badge"},
+    {"id": "pin_guancao", "name": "导览纪念书签", "cost": 45, "icon": "bookmark"},
+    {"id": "pin_qianjiaodeng", "name": "展陈主题挂饰", "cost": 60, "icon": "lantern"},
+    {"id": "figure_xiangyunsha", "name": "数字导览摆件", "cost": 90, "icon": "figure"},
+    {"id": "figure_qianjiaodeng", "name": "项目纪念摆件", "cost": 120, "icon": "figure"},
 ]
 
 
@@ -91,6 +91,8 @@ class Points(object):
 
     def add(self, kind, note="", uniq=None):
         """记一笔；uniq 用来防止重复加分。返回 (当前总分, 本次加了多少)"""
+        if kind in ("relic_recognize", "relic_quiz_right") and not config.RELIC_REWARDS_ENABLED:
+            return self.score, 0
         v = self._rec()
         if uniq and uniq in v.get("log_keys", []):
             return v.get("score", 0), 0

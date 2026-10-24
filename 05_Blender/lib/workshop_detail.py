@@ -53,6 +53,10 @@ def build_workshop_detail(cx=8.2, cy=9.5):
     BLUE = _mat('WsIndigo', (0.05, 0.09, 0.22), 0.85)
     STRAW = _mat('WsStraw', (0.62, 0.50, 0.24), 0.95)
     GREEN = _mat('WsGreen', (0.16, 0.30, 0.12), 0.95)
+    LOOM_W = _mat('WsLoomWood', (0.30, 0.18, 0.09), 0.8)
+    LOOM_WL = _mat('WsLoomWoodLight', (0.48, 0.31, 0.16), 0.75)
+    LOOM_ROPE = _mat('WsLoomRope', (0.62, 0.54, 0.38), 0.9)
+    LOOM_CLOTH = _mat('WsLoomCloth', (0.12, 0.10, 0.09), 0.92)
 
     inner_x = cx - 0.4
 
@@ -95,26 +99,50 @@ def build_workshop_detail(cx=8.2, cy=9.5):
         objs.append(_cyl('wsbasket_%d' % i, 0.30, 0.34, (bx + 0.95, by + 0.2, 0.17),
                          STRAW, verts=14))
 
-    # ---- 4) 靠墙：织机（简化立式）----
-    loom_x = cx + 2.9
-    loom_y = cy + 1.3
-    # 四根立柱
-    for dx, dy in ((-0.55, -0.45), (0.55, -0.45), (-0.55, 0.55), (0.55, 0.55)):
-        objs.append(_cyl('wsloom_leg', 0.055, 1.75,
-                         (loom_x + dx, loom_y + dy, 0.87), W, verts=8))
-    # 上横梁 / 下横梁
-    objs.append(_cube('wsloom_top', (1.3, 0.09, 0.09), (loom_x, loom_y, 1.72), W))
-    objs.append(_cube('wsloom_bottom', (1.3, 0.09, 0.09), (loom_x, loom_y, 0.42), W))
-    # 经线（细密竖条）
+    # ---- 4) 靠东侧：织机（简化立式；留出墙体净空）----
+    # 工坊东墙内侧约 x=10.9；织机最东缘保持在 x<10.7，避免横梁穿墙。
+    # 地坪顶面 z=0.58，织机立柱和下梁均以此为统一基准。
+    floor_top = 0.58
+    loom_x = cx + 1.75
+    loom_y = cy + 1.35
+    loom_height = 1.55
+    # 四根立柱：底面落在室内地坪，顶部与上横梁下缘接触。
+    front_dy, rear_dy = -0.45, 0.55
+    leg_x = (-0.52, 0.52)
+    for dx in leg_x:
+        for dy in (front_dy, rear_dy):
+            objs.append(_cyl('wsloom_leg', 0.055, loom_height,
+                             (loom_x + dx, loom_y + dy, floor_top + loom_height / 2), LOOM_W, verts=8))
+    top_z = floor_top + loom_height - 0.045
+    bottom_z = floor_top + 0.30
+    # 两排横梁与两侧纵梁组成真正闭合的长方框架，避免横梁悬在四柱之间。
+    for dy in (front_dy, rear_dy):
+        objs.append(_cube('wsloom_top_crossbar', (1.3, 0.09, 0.09),
+                          (loom_x, loom_y + dy, top_z), LOOM_W))
+        objs.append(_cube('wsloom_bottom_crossbar', (1.3, 0.09, 0.09),
+                          (loom_x, loom_y + dy, bottom_z), LOOM_W))
+    for dx in leg_x:
+        objs.append(_cube('wsloom_top_sidebar', (0.09, 1.1, 0.09),
+                          (loom_x + dx, loom_y + 0.05, top_z), LOOM_W))
+        objs.append(_cube('wsloom_bottom_sidebar', (0.09, 1.1, 0.09),
+                          (loom_x + dx, loom_y + 0.05, bottom_z), LOOM_W))
+    # 经线跨接上下横梁并嵌入朝向工坊 -Y 入口的前框。
+    warp_height = top_z - bottom_z + 0.02
+    warp_z = (top_z + bottom_z) / 2
+    warp_y = loom_y + front_dy
     for k in range(14):
         lx = loom_x - 0.55 + k * 0.084
-        objs.append(_cube('wsloom_warp_%d' % k, (0.010, 0.010, 1.22),
-                          (lx, loom_y - 0.02, 1.05), ROPE))
-    # 卷布轴
-    objs.append(_cyl('wsloom_roll', 0.10, 1.25, (loom_x, loom_y + 0.30, 0.62),
-                     WL, verts=12, rot=(0, math.pi / 2, 0)))
-    objs.append(_cube('wsloom_cloth', (1.05, 0.02, 0.52),
-                      (loom_x, loom_y + 0.30, 0.95), CLOTH))
+        objs.append(_cube('wsloom_warp_%d' % k, (0.010, 0.010, warp_height),
+                          (lx, warp_y, warp_z), LOOM_ROPE))
+    # 卷布轴与布面固定在后框：布面跨接上下梁及左右侧梁，卷轴与下梁相接。
+    roll_z = bottom_z - 0.10
+    cloth_z = (top_z + bottom_z) / 2
+    cloth_height = top_z - bottom_z
+    rear_y = loom_y + rear_dy
+    objs.append(_cyl('wsloom_roll', 0.10, 1.25, (loom_x, rear_y, roll_z),
+                     LOOM_WL, verts=12, rot=(0, math.pi / 2, 0)))
+    objs.append(_cube('wsloom_cloth', (1.05, 0.02, cloth_height),
+                      (loom_x, rear_y, cloth_z), LOOM_CLOTH))
 
     # ---- 5) 工坊后墙：工具挂板 + 匾额感小牌 ----
     backy = cy + 3.35

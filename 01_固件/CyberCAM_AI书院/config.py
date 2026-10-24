@@ -64,7 +64,7 @@ STAGE_NAMES = {
     1: {"zh": "第一关 · 门口迎宾", "yue": "第一關 · 門口迎賓"},
     2: {"zh": "第二关 · 鳌台溯源", "yue": "第二關 · 鰲台溯源"},
     3: {"zh": "第三关 · 讲堂楹联", "yue": "第三關 · 講堂楹聯"},
-    4: {"zh": "第四关 · 非遗工坊", "yue": "第四關 · 非遺工坊"},
+    4: {"zh": "第四关 · 数字展陈", "yue": "第四關 · 數字展陳"},
     5: {"zh": "第五关 · 留墨寄愿", "yue": "第五關 · 留墨寄願"},
 }
 
@@ -78,5 +78,11 @@ FONT_PATH = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"
 UI_FPS = 20          # 有摄像头的页面（人脸/火眼金睛）
 UI_FPS_IDLE = 8      # 静态页面（语言/功能/关卡），省 CPU
 
-# 火眼金睛固定顺序：莞草 → 千角灯 → 香云纱（现场要求的顺序）
-RELIC_KEYS = ("guancao", "qianjiaodeng", "xiangyunsha")
+# 火眼金睛候选顺序：鳌台主题优先展示候选三项（关联待核）→ 东莞技艺候选两项（地域待核）。
+# 缺少来源可核验的实物样本或类别模型时，main.py 会安全停用自动识别。
+RELIC_KEYS = ("houjie_yuexiu", "houjie_shuangshou_hongquan", "aotai_aoyu_brick",
+              "guancao", "qingxi_qilin_zhazuo")
+# 新分类无经核实的真实样本与验证报告前，关闭自动识别和识别积分。
+RELIC_RECOGNITION_ENABLED = False
+# Keep device-side FireEye rewards off until the bridge has one authenticated ledger authority.
+RELIC_REWARDS_ENABLED = False

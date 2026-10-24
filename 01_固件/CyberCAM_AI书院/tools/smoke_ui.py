@@ -12,11 +12,11 @@ cases = []
 for phase in ('recognize', 'explain', 'answer', 'again', 'done'):
     q = quiz if phase == 'answer' else None
     cases.append(('relic-' + phase, lambda ph=phase, qq=q: u.screen_relic(
-        None, '香云纱', '历史讲解文本', 'hit', 'zh', True,
+        None, '厚街粤绣（候选）', '来源与授权待核', 'none', 'zh', True,
         phase=ph, quiz=qq, quiz_state={}, score=20)))
 # 答案已选状态
 cases.append(('relic-answered', lambda: u.screen_relic(
-    None, '香云纱', '历史', 'hit', 'yue', True,
+    None, '候选清单（未启用）', '来源与授权待核', 'none', 'yue', True,
     phase='answer', quiz=quiz, quiz_state={'answered': True, 'picked': 'A', 'answer': 'B'}, score=5)))
 # 人脸各状态
 for lv in ('none', 'detected', 'recognized', 'unknown', 'nocam'):
@@ -26,10 +26,10 @@ for lv in ('none', 'detected', 'recognized', 'unknown', 'nocam'):
 # 关卡页（带题）
 st = c.stage(2)
 lines = [ln.get('zh') for ln in st.get('lines', [])]
-q = c.quiz(2)
-qv = {'q': c.quiz_text(q, 'zh'), 'options': c.quiz_options(q, 'zh'), 'answer': q.get('answer')}
+# History quiz is deliberately unavailable until its source has been verified.
+qv = None
 cases.append(('stage-zh', lambda: u.screen_stage(2, '第二关', lines, qv, {}, 'zh', True)))
-cases.append(('stage-yue', lambda: u.screen_stage(4, '第四关', lines, qv, {'answered': True, 'picked': 'A', 'answer': 'B'}, 'yue', False)))
+cases.append(('stage-yue', lambda: u.screen_stage(4, '第四关', lines, qv, {}, 'yue', False)))
 cases.append(('lang', lambda: u.screen_language()))
 cases.append(('mode', lambda: u.screen_mode('yue')))
 cases.append(('calib', lambda: u.screen_calib(2, [(120,210),(520,210),(200,400),(440,390)], '提示')))
