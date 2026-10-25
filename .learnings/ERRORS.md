@@ -211,3 +211,22 @@ Normalize both slash styles explicitly and compare manifest paths against a rela
 - Related Files: 02_数据/audio/manifest.json
 
 ---
+
+## [ERR-20261025-REPORT-TOOLS] report generation preparation
+
+**Logged**: 2026-10-25T09:55:00+08:00
+**Priority**: low
+**Status**: resolved
+**Area**: docs
+
+### Summary
+A missing source path, a PowerShell Copy-Item wildcard passed through LiteralPath, an edit before reading the copied file, and probing Node outside the declared dependency directory interrupted preparation.
+
+### Suggested Fix
+Check copied files with read before editing, enumerate files before Copy-Item, tolerate independent inspection failures, and resolve docx from .tmp/report-aotai/work or the supplied runtime package path.
+
+### Metadata
+- Reproducible: yes
+- Related Files: .tmp/report-aotai
+
+---
